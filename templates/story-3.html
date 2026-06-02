@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1080px; height: 1920px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #0A1628 0%, #163D5C 100%);
+    color: white;
+    overflow: hidden;
+    position: relative;
+  }
+  .accent-top {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #D4A843, #E8C96A, #D4A843);
+  }
+  .logo-area {
+    position: absolute; top: 60px; left: 60px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .logo-icon {
+    width: 50px; height: 50px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 24px; color: #0A1628;
+  }
+  .logo-text { font-size: 28px; font-weight: 700; }
+  .logo-text span { color: #D4A843; }
+  .content {
+    position: absolute; top: 200px; left: 60px; right: 60px;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(212,168,67,0.15);
+    border: 1px solid rgba(212,168,67,0.3);
+    color: #E8C96A;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 15px; font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  h1 {
+    font-size: 76px; font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 40px;
+    letter-spacing: -2px;
+  }
+  h1 span { color: #D4A843; }
+  .subtitle {
+    font-size: 28px; color: rgba(255,255,255,0.65);
+    line-height: 1.5; margin-bottom: 50px;
+  }
+  .steps {
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .step {
+    display: flex; align-items: flex-start; gap: 24px;
+  }
+  .step-num {
+    width: 60px; height: 60px; min-width: 60px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 900; color: #0A1628;
+  }
+  .step-content h3 {
+    font-size: 26px; font-weight: 700; margin-bottom: 8px;
+  }
+  .step-content p {
+    font-size: 20px; color: rgba(255,255,255,0.5);
+  }
+  .cta {
+    position: absolute; bottom: 160px; left: 60px; right: 60px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    color: #0A1628;
+    padding: 28px;
+    border-radius: 60px;
+    font-size: 26px; font-weight: 700;
+  }
+  .swipe {
+    position: absolute; bottom: 80px; left: 0; right: 0;
+    text-align: center;
+    font-size: 18px; color: rgba(255,255,255,0.4);
+    letter-spacing: 3px; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="accent-top"></div>
+
+  <div class="logo-area">
+    <div class="logo-icon">Ix</div>
+    <div class="logo-text">inmo<span>xil</span></div>
+  </div>
+
+  <div class="content">
+    <div class="badge">Story 03</div>
+    <h1>¿Cómo<br><span>funciona?</span></h1>
+    <p class="subtitle">En 3 pasos tenés tu inmobiliaria automatizada.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Pegá la URL</h3>
+          <p>Copiá el link de la propiedad desde cualquier portal</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Scrapeo automático</h3>
+          <p>Inmoxil detecta el portal y extrae toda la info</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Data lista</h3>
+          <p>JSON normalizado con fotos, precio, m² y más</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta">Empezá ahora →</div>
+  <div class="swipe">↑ Deslizá para ver más</div>
+</body>
+</html>

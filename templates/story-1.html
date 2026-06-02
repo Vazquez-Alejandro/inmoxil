@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1080px; height: 1920px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #0A1628 0%, #0F2B46 50%, #163D5C 100%);
+    color: white;
+    overflow: hidden;
+    position: relative;
+  }
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(212,168,67,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,168,67,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .accent-top {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #D4A843, #E8C96A, #D4A843);
+  }
+  .logo-area {
+    position: absolute; top: 60px; left: 60px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .logo-icon {
+    width: 50px; height: 50px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 24px; color: #0A1628;
+  }
+  .logo-text { font-size: 28px; font-weight: 700; }
+  .logo-text span { color: #D4A843; }
+  .content {
+    position: absolute; top: 200px; left: 60px; right: 60px;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(212,168,67,0.15);
+    border: 1px solid rgba(212,168,67,0.3);
+    color: #E8C96A;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 15px; font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  h1 {
+    font-size: 80px; font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 30px;
+    letter-spacing: -2px;
+  }
+  h1 span { color: #D4A843; }
+  .subtitle {
+    font-size: 28px; color: rgba(255,255,255,0.65);
+    line-height: 1.5; margin-bottom: 60px;
+  }
+  .feature-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(212,168,67,0.15);
+    border-radius: 20px;
+    padding: 36px;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .feature-icon {
+    width: 64px; height: 64px; min-width: 64px;
+    background: linear-gradient(135deg, rgba(212,168,67,0.2), rgba(212,168,67,0.05));
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+  }
+  .feature-text h3 {
+    font-size: 24px; font-weight: 700; margin-bottom: 6px;
+  }
+  .feature-text p {
+    font-size: 18px; color: rgba(255,255,255,0.5);
+  }
+  .cta {
+    position: absolute; bottom: 160px; left: 60px; right: 60px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    color: #0A1628;
+    padding: 28px;
+    border-radius: 60px;
+    font-size: 26px; font-weight: 700;
+  }
+  .swipe {
+    position: absolute; bottom: 80px; left: 0; right: 0;
+    text-align: center;
+    font-size: 18px; color: rgba(255,255,255,0.4);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="accent-top"></div>
+
+  <div class="logo-area">
+    <div class="logo-icon">Ix</div>
+    <div class="logo-text">inmo<span>xil</span></div>
+  </div>
+
+  <div class="content">
+    <div class="badge">Story 01</div>
+    <h1>Scrapéa<br>propiedades<br><span>automáticamente</span></h1>
+    <p class="subtitle">Detectamos el portal y extraemos la data limpia de cada propiedad.</p>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-text">
+        <h3>Detección inteligente</h3>
+        <p>Zillow, Realtor, Zonaprop y más</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-text">
+        <h3>JSON normalizado</h3>
+        <p>Fotos, precio, m², ambientes, todo listo</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta">Empezá gratis ahora →</div>
+  <div class="swipe">↑ Deslizá para ver más</div>
+</body>
+</html>

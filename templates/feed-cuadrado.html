@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1080px; height: 1080px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(145deg, #0A1628 0%, #0F2B46 40%, #163D5C 100%);
+    color: white;
+    overflow: hidden;
+    position: relative;
+  }
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(212,168,67,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,168,67,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .accent-line {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #D4A843, #E8C96A, #D4A843);
+  }
+  .logo-area {
+    position: absolute; top: 50px; left: 60px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .logo-icon {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 28px; color: #0A1628;
+  }
+  .logo-text {
+    font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+  }
+  .logo-text span { color: #D4A843; }
+  .content {
+    position: absolute; top: 180px; left: 60px; right: 60px;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(212,168,67,0.15);
+    border: 1px solid rgba(212,168,67,0.3);
+    color: #E8C96A;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 16px; font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  h1 {
+    font-size: 72px; font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 30px;
+    letter-spacing: -2px;
+  }
+  h1 span { color: #D4A843; }
+  .subtitle {
+    font-size: 28px; font-weight: 400;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+    max-width: 700px;
+    margin-bottom: 50px;
+  }
+  .cta {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    color: #0A1628;
+    padding: 20px 48px;
+    border-radius: 60px;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .cta-arrow {
+    width: 28px; height: 28px;
+    background: #0A1628;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #D4A843;
+    font-size: 18px;
+  }
+  .mockup {
+    position: absolute; right: -40px; bottom: -40px;
+    width: 520px; height: 420px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 24px;
+    border: 1px solid rgba(212,168,67,0.15);
+    transform: rotate(-5deg);
+    display: flex; flex-direction: column;
+    padding: 30px; gap: 16px;
+  }
+  .mock-row {
+    display: flex; gap: 12px; align-items: center;
+  }
+  .mock-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #D4A843;
+  }
+  .mock-line {
+    height: 10px; border-radius: 5px;
+    background: rgba(255,255,255,0.08);
+  }
+  .mock-line.w1 { width: 60%; }
+  .mock-line.w2 { width: 80%; }
+  .mock-line.w3 { width: 45%; }
+  .mock-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 10px;
+    flex: 1;
+  }
+  .mock-card-header {
+    display: flex; gap: 12px; margin-bottom: 16px;
+  }
+  .mock-img {
+    width: 60px; height: 60px; border-radius: 10px;
+    background: linear-gradient(135deg, rgba(212,168,67,0.3), rgba(212,168,67,0.1));
+  }
+  .mock-text-group { flex: 1; }
+  .mock-text-sm {
+    height: 8px; border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+  }
+  .mock-text-sm.w4 { width: 70%; }
+  .mock-text-sm.w5 { width: 50%; }
+  .mock-price {
+    font-size: 20px; font-weight: 700; color: #D4A843;
+  }
+  .footer {
+    position: absolute; bottom: 40px; left: 60px; right: 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+  }
+  .footer-text {
+    font-size: 16px; color: rgba(255,255,255,0.4);
+  }
+  .footer-url {
+    font-size: 18px; font-weight: 600; color: #D4A843;
+  }
+</style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="accent-line"></div>
+
+  <div class="logo-area">
+    <div class="logo-icon">Ix</div>
+    <div class="logo-text">inmo<span>xil</span></div>
+  </div>
+
+  <div class="content">
+    <div class="badge">Plataforma SaaS</div>
+    <h1>Tu inmobiliaria,<br><span>potenciada</span><br>por IA</h1>
+    <p class="subtitle">Automatizá la gestión de propiedades, captá más clientes y cerrá más operaciones con una sola plataforma.</p>
+    <div class="cta">
+      Empezá gratis
+      <div class="cta-arrow">→</div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mock-row">
+      <div class="mock-dot"></div>
+      <div class="mock-line w1"></div>
+    </div>
+    <div class="mock-row">
+      <div class="mock-line w2"></div>
+    </div>
+    <div class="mock-card">
+      <div class="mock-card-header">
+        <div class="mock-img"></div>
+        <div class="mock-text-group">
+          <div class="mock-text-sm w4"></div>
+          <div class="mock-text-sm w5"></div>
+          <div class="mock-price">$ 185.000</div>
+        </div>
+      </div>
+      <div class="mock-text-sm w2"></div>
+      <div class="mock-text-sm w1"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-text">Gestión inteligente de propiedades</span>
+    <span class="footer-url">inmoxil.com</span>
+  </div>
+</body>
+</html>

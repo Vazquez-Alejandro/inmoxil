@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1080px; height: 1920px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(160deg, #0A1628 0%, #0F2B46 40%, #1A4A6E 100%);
+    color: white;
+    overflow: hidden;
+    position: relative;
+  }
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(212,168,67,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,168,67,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .accent-top {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #D4A843, #E8C96A, #D4A843);
+  }
+  .logo-area {
+    position: absolute; top: 60px; left: 60px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .logo-icon {
+    width: 50px; height: 50px;
+    background: linear-gradient(135deg, #D4A843, #E8C96A);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 24px; color: #0A1628;
+  }
+  .logo-text { font-size: 28px; font-weight: 700; }
+  .logo-text span { color: #D4A843; }
+  .center-content {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 900px;
+  }
+  .play-btn {
+    width: 120px; height: 120px;
+    background: rgba(212,168,67,0.15);
+    border: 3px solid #D4A843;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 50px;
+  }
+  .play-triangle {
+    width: 0; height: 0;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-left: 40px solid #D4A843;
+    margin-left: 8px;
+  }
+  h1 {
+    font-size: 88px; font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 30px;
+    letter-spacing: -3px;
+  }
+  h1 span { color: #D4A843; }
+  .subtitle {
+    font-size: 30px; color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    max-width: 700px;
+    margin: 0 auto 60px;
+  }
+  .tags {
+    display: flex; justify-content: center; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-size: 18px; font-weight: 600;
+    color: rgba(255,255,255,0.7);
+  }
+  .bottom-cta {
+    position: absolute; bottom: 120px; left: 60px; right: 60px;
+    text-align: center;
+  }
+  .cta-text {
+    font-size: 28px; font-weight: 700; color: #D4A843;
+    margin-bottom: 16px;
+  }
+  .cta-sub {
+    font-size: 20px; color: rgba(255,255,255,0.4);
+  }
+</style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="accent-top"></div>
+
+  <div class="logo-area">
+    <div class="logo-icon">Ix</div>
+    <div class="logo-text">inmo<span>xil</span></div>
+  </div>
+
+  <div class="center-content">
+    <div class="play-btn">
+      <div class="play-triangle"></div>
+    </div>
+    <h1>Tu inmobiliaria<br><span>potenciada</span><br>por IA</h1>
+    <p class="subtitle">Scraping automático de propiedades multi-portal con data normalizada.</p>
+    <div class="tags">
+      <span class="tag">Zillow</span>
+      <span class="tag">Realtor</span>
+      <span class="tag">Zonaprop</span>
+      <span class="tag">VivaReal</span>
+      <span class="tag">+10 portales</span>
+    </div>
+  </div>
+
+  <div class="bottom-cta">
+    <div class="cta-text">Mirá cómo funciona →</div>
+    <div class="cta-sub">inmoxil.com</div>
+  </div>
+</body>
+</html>
