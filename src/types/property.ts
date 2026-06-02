@@ -1,24 +1,34 @@
-export interface Property {
+export interface NormalizedProperty {
   id: string
+  portal: string
   title: string
-  price: number
+  price: number | null
   currency: string
+  priceUsd: number | null
+  monthlyExpenses: number | null
   address: string
+  street: string
+  neighborhood: string
   city: string
   state: string
+  country: string
   zipCode: string
-  beds: number
-  baths: number
-  sqft: number
+  lat: number | null
+  lng: number | null
+  beds: number | null
+  baths: number | null
+  sqm: number | null
+  lotSqm: number | null
   propertyType: string
   status: string
   url: string
   photos: string[]
-  description?: string
-  yearBuilt?: number
-  lotSize?: number
-  garage?: number
-  features?: string[]
+  description: string
+  features: string[]
+  yearBuilt: number | null
+  garage: number | null
+  publisher: string
+  publisherPhone: string
   scrapedAt: string
 }
 
@@ -29,6 +39,8 @@ export interface ScrapeRequest {
 
 export interface ScrapeResponse {
   success: boolean
-  data: Property[]
+  portal: string
+  count: number
+  data: NormalizedProperty[]
   error?: string
 }
