@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function Header({ title, subtitle }: { title: string; subtitle?: string }) {
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -43,11 +44,11 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
             <>
               <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl border border-gray-200 shadow-corporate-lg z-50 py-1">
-                <a href="/dashboard" className="block px-4 py-2.5 text-sm text-navy-700 hover:bg-navy-50">Dashboard</a>
-                <a href="/dashboard/billing" className="block px-4 py-2.5 text-sm text-navy-700 hover:bg-navy-50">Billing</a>
-                <a href="/dashboard/brand" className="block px-4 py-2.5 text-sm text-navy-700 hover:bg-navy-50">Settings</a>
+                <Link href="/dashboard" className="block px-4 py-2.5 text-sm text-navy-700 hover:bg-navy-50" onClick={() => setShowUserMenu(false)}>Dashboard</Link>
+                <Link href="/dashboard/billing" className="block px-4 py-2.5 text-sm text-navy-700 hover:bg-navy-50" onClick={() => setShowUserMenu(false)}>Billing</Link>
+                <Link href="/dashboard/brand" className="block px-4 py-2.5 text-sm text-navy-700 hover:bg-navy-50" onClick={() => setShowUserMenu(false)}>Brand Kit</Link>
                 <div className="divider my-1" />
-                <a href="/login" className="block px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">Cerrar sesión</a>
+                <Link href="/login" className="block px-4 py-2.5 text-sm text-red-600 hover:bg-red-50" onClick={() => setShowUserMenu(false)}>Cerrar sesión</Link>
               </div>
             </>
           )}

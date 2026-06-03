@@ -54,6 +54,17 @@ export default function ScrapePage() {
     }
   }
 
+  const downloadJSON = () => {
+    if (!results?.data) return
+    const blob = new Blob([JSON.stringify(results.data, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `propiedades-${results.portal || 'mixed'}-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <>
       <Header
@@ -62,26 +73,26 @@ export default function ScrapePage() {
       />
 
       {/* Portal Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8">
         {PORTALS.map((portal) => (
-          <div key={portal.slug} className="card p-4 text-center hover:shadow-corporate-md transition-all">
-            <div className={`w-12 h-12 rounded-xl ${portal.color} flex items-center justify-center mx-auto mb-2`}>
-              <span className="text-lg font-bold">{portal.name[0]}</span>
+          <div key={portal.slug} className="card p-3 sm:p-4 text-center hover:shadow-corporate-md transition-all">
+            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${portal.color} flex items-center justify-center mx-auto mb-2`}>
+              <span className="text-base sm:text-lg font-bold">{portal.name[0]}</span>
             </div>
-            <p className="text-sm font-medium text-navy-700">{portal.name}</p>
-            <p className="text-xs text-navy-400 mt-1">Activo</p>
+            <p className="text-xs sm:text-sm font-medium text-navy-700">{portal.name}</p>
+            <p className="text-[10px] sm:text-xs text-navy-400 mt-1">Activo</p>
           </div>
         ))}
       </div>
 
       {/* Scrape Form */}
-      <div className="card p-6 mb-8">
+      <div className="card p-4 sm:p-6 mb-8">
         <h3 className="text-lg font-bold text-navy-900 mb-4">Nueva consulta</h3>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <label className="label">URLs de propiedades (una por línea)</label>
             <textarea
-              className="input min-h-[160px] font-mono text-sm"
+              className="input min-h-[120px] sm:min-h-[160px] font-mono text-sm"
               placeholder={`https://www.zonaprop.com.ar/propiedades/venta-departamento-palermo-12345.html\nhttps://www.zillow.com/homedetails/123-Main-St/12345_zpid/\nhttps://www.realtor.com/realestateandhomes-detail/123-Main-St`}
               value={urls}
               onChange={(e) => setUrls(e.target.value)}
@@ -139,11 +150,33 @@ export default function ScrapePage() {
         </div>
       )}
 
+      {/* Loading skeleton */}
+      {loading && (
+        <div className="card p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="w-4 h-4 bg-navy-200 rounded animate-pulse" />
+            <div className="h-4 bg-navy-200 rounded w-48 animate-pulse" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="card overflow-hidden">
+                <div className="h-48 bg-gray-200 animate-pulse" />
+                <div className="p-4 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
+                  <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse" />
+                  <div className="h-3 bg-gray-200 rounded w-1/3 animate-pulse" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Results */}
-      {results && (
+      {results && !loading && (
         <div className="card">
-          <div className="p-6 border-b border-gray-100">
-            <div className="flex items-center justify-between">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-lg font-bold text-navy-900">
                   {results.count} propiedades encontradas
@@ -152,7 +185,7 @@ export default function ScrapePage() {
                   Portal: {results.portal} • Crédito utilizado
                 </p>
               </div>
-              <button className="btn-outline text-sm">
+              <button onClick={downloadJSON} className="btn-outline text-sm self-start">
                 <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
@@ -160,7 +193,7 @@ export default function ScrapePage() {
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6">
             {results.data?.map((property: any, idx: number) => (
               <div key={idx} className="card-hover overflow-hidden">
                 <div className="relative h-48">
@@ -223,6 +256,21 @@ export default function ScrapePage() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!results && !loading && !error && (
+        <div className="card p-12 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-navy-50 flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9 9 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-bold text-navy-900 mb-2">Empezá a scrapear</h3>
+          <p className="text-sm text-navy-500 max-w-md mx-auto">
+            Ingresá URLs de propiedades de cualquier portal y nosotros las normalizamos y deduplicamos automáticamente.
+          </p>
         </div>
       )}
     </>

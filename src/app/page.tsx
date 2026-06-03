@@ -114,11 +114,11 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-white/10 py-8">
         <div className="max-w-6xl mx-auto px-8 flex items-center justify-between">
-          <p className="text-navy-500 text-sm">© 2024 Inmoxil. Todos los derechos reservados.</p>
+          <p className="text-navy-500 text-sm">© {new Date().getFullYear()} Inmoxil. Todos los derechos reservados.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-navy-400 hover:text-white text-sm transition-colors">Términos</a>
-            <a href="#" className="text-navy-400 hover:text-white text-sm transition-colors">Privacidad</a>
-            <a href="#" className="text-navy-400 hover:text-white text-sm transition-colors">Contacto</a>
+            <span className="text-navy-500 text-sm">Términos</span>
+            <span className="text-navy-500 text-sm">Privacidad</span>
+            <span className="text-navy-500 text-sm">Contacto</span>
           </div>
         </div>
       </footer>

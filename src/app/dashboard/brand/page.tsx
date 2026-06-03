@@ -11,11 +11,29 @@ export default function BrandPage() {
     companyName: 'Mi Inmobiliaria',
   })
   const [saved, setSaved] = useState(false)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
 
   const handleSave = () => {
     // TODO: integrate with brand API
     setSaved(true)
     setTimeout(() => setSaved(false), 3000)
+  }
+
+  const handleRestore = () => {
+    setBrand({
+      primaryColor: '#0F2B46',
+      secondaryColor: '#D4A843',
+      accentColor: '#E85D3A',
+      companyName: 'Mi Inmobiliaria',
+    })
+    setLogoFile(null)
+  }
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setLogoFile(file)
+    }
   }
 
   return (
@@ -89,18 +107,32 @@ export default function BrandPage() {
             <h3 className="text-lg font-bold text-navy-900 mb-6">Logo</h3>
             <div className="flex items-center gap-6">
               <div
-                className="w-24 h-24 rounded-2xl flex items-center justify-center text-3xl font-black border-2 border-dashed border-gray-300"
+                className="w-24 h-24 rounded-2xl flex items-center justify-center text-3xl font-black border-2 border-dashed border-gray-300 overflow-hidden"
                 style={{ backgroundColor: brand.primaryColor, color: brand.secondaryColor }}
               >
-                {brand.companyName[0] || 'I'}
+                {logoFile ? (
+                  <img
+                    src={URL.createObjectURL(logoFile)}
+                    alt="Logo preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  brand.companyName[0] || 'I'
+                )}
               </div>
               <div>
-                <button className="btn-outline mb-2">
+                <label className="btn-outline mb-2 cursor-pointer inline-flex items-center justify-center">
                   <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                   </svg>
                   Subir logo
-                </button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    className="hidden"
+                  />
+                </label>
                 <p className="text-xs text-navy-400">PNG, SVG o JPG. Máx 2MB.</p>
               </div>
             </div>
@@ -129,7 +161,7 @@ export default function BrandPage() {
                 'Guardar cambios'
               )}
             </button>
-            <button className="btn-ghost">Restaurar defaults</button>
+            <button onClick={handleRestore} className="btn-ghost">Restaurar defaults</button>
           </div>
         </div>
 

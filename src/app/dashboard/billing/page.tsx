@@ -107,7 +107,7 @@ export default function BillingPage() {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`card p-6 relative ${
+              className={`card p-6 relative flex flex-col ${
                 plan.current
                   ? 'border-gold-400 shadow-gold-glow'
                   : plan.popular
@@ -146,7 +146,7 @@ export default function BillingPage() {
               <button
                 onClick={() => handleUpgrade(plan.id)}
                 disabled={plan.current || loading === plan.id}
-                className={`w-full ${
+                className={`w-full mt-auto ${
                   plan.current
                     ? 'btn-outline opacity-50 cursor-not-allowed'
                     : plan.popular

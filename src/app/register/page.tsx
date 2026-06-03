@@ -12,9 +12,22 @@ export default function RegisterPage() {
     confirmPassword: '',
   })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden')
+      return
+    }
+
+    if (formData.password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres')
+      return
+    }
+
     setLoading(true)
     // TODO: integrate with Supabase auth + workspace creation
     setTimeout(() => {
@@ -84,6 +97,12 @@ export default function RegisterPage() {
           <p className="text-navy-500 mb-8">Registrate para empezar a usar Inmoxil</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            )}
+
             <div>
               <label className="label">Nombre de la inmobiliaria</label>
               <input
