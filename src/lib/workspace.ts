@@ -3,10 +3,12 @@ import { Database } from '@/types/database'
 
 type Workspace = Database['public']['Tables']['workspaces']['Row']
 
-const supabase = createServiceClient()
+function getDb() {
+  return createServiceClient()
+}
 
 export async function getWorkspace(id: string): Promise<Workspace | null> {
-  const { data, error } = await supabase
+  const { data, error } = await getDb()
     .from('workspaces')
     .select('*')
     .eq('id', id)
@@ -17,7 +19,7 @@ export async function getWorkspace(id: string): Promise<Workspace | null> {
 }
 
 export async function getWorkspaceBySlug(slug: string): Promise<Workspace | null> {
-  const { data, error } = await supabase
+  const { data, error } = await getDb()
     .from('workspaces')
     .select('*')
     .eq('slug', slug)
@@ -32,7 +34,7 @@ export async function createWorkspace(
   slug: string,
   ownerId: string
 ): Promise<Workspace> {
-  const { data: workspace, error: wsError } = await supabase
+  const { data: workspace, error: wsError } = await getDb()
     .from('workspaces')
     .insert({ name, slug })
     .select()
@@ -40,7 +42,7 @@ export async function createWorkspace(
 
   if (wsError) throw wsError
 
-  const { error: userError } = await supabase
+  const { error: userError } = await getDb()
     .from('users')
     .insert({
       id: ownerId,
@@ -62,7 +64,7 @@ export async function updateWorkspaceBrand(
     accent_color?: string
   }
 ): Promise<Workspace> {
-  const { data, error } = await supabase
+  const { data, error } = await getDb()
     .from('workspaces')
     .update(brand)
     .eq('id', workspaceId)
@@ -74,7 +76,7 @@ export async function updateWorkspaceBrand(
 }
 
 export async function checkCredits(workspaceId: string): Promise<number> {
-  const { data, error } = await supabase
+  const { data, error } = await getDb()
     .from('workspaces')
     .select('credits_remaining')
     .eq('id', workspaceId)
@@ -85,7 +87,7 @@ export async function checkCredits(workspaceId: string): Promise<number> {
 }
 
 export async function deductCredit(workspaceId: string, adId: string): Promise<boolean> {
-  const { data, error } = await supabase.rpc('deduct_credit', {
+  const { data, error } = await getDb().rpc('deduct_credit', {
     p_workspace_id: workspaceId,
     p_ad_id: adId,
   })
@@ -99,7 +101,7 @@ export async function addCredits(
   amount: number,
   description: string
 ): Promise<boolean> {
-  const { data, error } = await supabase.rpc('add_credits', {
+  const { data, error } = await getDb().rpc('add_credits', {
     p_workspace_id: workspaceId,
     p_amount: amount,
     p_description: description,
@@ -110,7 +112,7 @@ export async function addCredits(
 }
 
 export async function getCreditHistory(workspaceId: string, limit = 50) {
-  const { data, error } = await supabase
+  const { data, error } = await getDb()
     .from('credit_transactions')
     .select('*')
     .eq('workspace_id', workspaceId)
@@ -126,7 +128,7 @@ export async function setStripeIds(
   customerId: string,
   subscriptionId: string
 ) {
-  const { error } = await supabase
+  const { error } = await getDb()
     .from('workspaces')
     .update({
       stripe_customer_id: customerId,

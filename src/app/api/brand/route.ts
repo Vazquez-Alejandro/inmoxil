@@ -16,6 +16,13 @@ export async function GET(request: NextRequest) {
 
     const workspace = await getWorkspace(workspaceId)
 
+    if (!workspace) {
+      return NextResponse.json(
+        { error: 'Workspace no encontrado' },
+        { status: 404 }
+      )
+    }
+
     return NextResponse.json({
       success: true,
       brand: {
@@ -52,6 +59,13 @@ export async function PUT(request: NextRequest) {
       secondary_color,
       accent_color,
     })
+
+    if (!workspace) {
+      return NextResponse.json(
+        { error: 'Workspace no encontrado' },
+        { status: 404 }
+      )
+    }
 
     return NextResponse.json({
       success: true,

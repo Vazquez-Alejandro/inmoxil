@@ -3,14 +3,13 @@ import { constructWebhookEvent, PLANS } from '@/lib/stripe'
 import { createServiceClient } from '@/lib/supabase'
 import { addCredits } from '@/lib/workspace'
 
-const supabase = createServiceClient()
-
 export async function POST(request: NextRequest) {
+  const supabase = createServiceClient()
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')!
 
-    const event = constructWebhookEvent(Buffer.from(body), signature)
+    const event = await constructWebhookEvent(Buffer.from(body), signature)
 
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -57,7 +56,7 @@ export async function POST(request: NextRequest) {
 
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object
-        const subscriptionId = invoice.subscription as string
+        const subscriptionId = (invoice as unknown as Record<string, unknown>).subscription as string
 
         if (subscriptionId) {
           const { data: workspace } = await supabase

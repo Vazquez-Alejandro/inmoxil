@@ -1,7 +1,22 @@
 import Stripe from 'stripe'
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
+let _stripe: Stripe | null = null
+
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY
+    if (!key) throw new Error('Missing STRIPE_SECRET_KEY')
+    _stripe = new Stripe(key, {
+      apiVersion: '2026-05-27.dahlia',
+    })
+  }
+  return _stripe
+}
+
+export const stripe = new Proxy({} as Stripe, {
+  get(_, prop) {
+    return (getStripe() as any)[prop]
+  },
 })
 
 export const PLANS = {
@@ -31,7 +46,7 @@ export const PLANS = {
 export type PlanType = keyof typeof PLANS
 
 export async function createCustomer(email: string, name: string) {
-  return stripe.customers.create({ email, name })
+  return getStripe().customers.create({ email, name })
 }
 
 export async function createCheckoutSession(
@@ -41,7 +56,7 @@ export async function createCheckoutSession(
   successUrl: string,
   cancelUrl: string
 ) {
-  return stripe.checkout.sessions.create({
+  return getStripe().checkout.sessions.create({
     customer: customerId,
     payment_method_types: ['card'],
     line_items: [{ price: priceId, quantity: 1 }],
@@ -56,21 +71,21 @@ export async function createCheckoutSession(
 }
 
 export async function createPortalSession(customerId: string, returnUrl: string) {
-  return stripe.billingPortal.sessions.create({
+  return getStripe().billingPortal.sessions.create({
     customer: customerId,
     return_url: returnUrl,
   })
 }
 
 export async function cancelSubscription(subscriptionId: string) {
-  return stripe.subscriptions.cancel(subscriptionId)
+  return getStripe().subscriptions.cancel(subscriptionId)
 }
 
 export async function constructWebhookEvent(
   payload: Buffer,
   signature: string
 ) {
-  return stripe.webhooks.constructEvent(
+  return getStripe().webhooks.constructEventAsync(
     payload,
     signature,
     process.env.STRIPE_WEBHOOK_SECRET!
