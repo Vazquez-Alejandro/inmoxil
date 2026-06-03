@@ -1,3 +1,148 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  body {
+    @apply font-sans antialiased text-navy-900 bg-gray-50;
+  }
+
+  ::selection {
+    @apply bg-gold-400/30 text-navy-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm
+           bg-navy-900 text-white hover:bg-navy-800 
+           transition-all duration-200 ease-out
+           shadow-corporate hover:shadow-corporate-md
+           active:scale-[0.98];
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm
+           bg-gold-400 text-navy-900 hover:bg-gold-500
+           transition-all duration-200 ease-out
+           shadow-corporate hover:shadow-corporate-md hover:shadow-gold-glow
+           active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm
+           border-2 border-navy-200 text-navy-700 hover:border-navy-900 hover:text-navy-900
+           transition-all duration-200 ease-out
+           active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-sm
+           text-navy-600 hover:text-navy-900 hover:bg-navy-50
+           transition-all duration-150;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm
+           bg-red-600 text-white hover:bg-red-700
+           transition-all duration-200 ease-out
+           active:scale-[0.98];
+  }
+
+  .card {
+    @apply bg-white rounded-xl border border-gray-200/80 shadow-corporate
+           transition-all duration-200 hover:shadow-corporate-md;
+  }
+
+  .card-hover {
+    @apply card hover:border-navy-200 hover:-translate-y-0.5;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-300 bg-white
+           text-navy-900 placeholder:text-navy-400
+           focus:outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900
+           transition-all duration-200;
+  }
+
+  .input-gold {
+    @apply input focus:ring-gold-400/30 focus:border-gold-400;
+  }
+
+  .label {
+    @apply block text-sm font-semibold text-navy-700 mb-2;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-gold {
+    @apply badge bg-gold-100 text-gold-700;
+  }
+
+  .badge-navy {
+    @apply badge bg-navy-100 text-navy-700;
+  }
+
+  .badge-green {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+
+  .badge-red {
+    @apply badge bg-red-100 text-red-700;
+  }
+
+  .stat-card {
+    @apply card p-6 flex flex-col gap-2;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium
+           text-navy-400 hover:text-white hover:bg-white/10
+           transition-all duration-150;
+  }
+
+  .sidebar-link-active {
+    @apply sidebar-link text-gold-400 bg-white/10;
+  }
+
+  .page-header {
+    @apply flex items-center justify-between mb-8;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-navy-900 tracking-tight;
+  }
+
+  .page-subtitle {
+    @apply text-sm text-navy-500 mt-1;
+  }
+
+  .table-header {
+    @apply px-6 py-3 text-left text-xs font-semibold text-navy-500 uppercase tracking-wider;
+  }
+
+  .table-cell {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-navy-700;
+  }
+
+  .divider {
+    @apply border-t border-gray-200;
+  }
+
+  .logo-mark {
+    @apply w-10 h-10 rounded-xl bg-gold-400 flex items-center justify-center
+           text-navy-900 font-black text-lg tracking-tighter;
+  }
+
+  .price-tag {
+    @apply text-2xl font-bold text-navy-900 tracking-tight;
+  }
+
+  .portal-badge {
+    @apply absolute top-3 left-3 badge text-[10px] uppercase tracking-wider;
+  }
+}

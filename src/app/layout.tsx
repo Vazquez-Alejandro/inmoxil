@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Inmoxil',
-  description: 'Plataforma SaaS para inmobiliarias',
+  title: 'Inmoxil - Plataforma SaaS para Inmobiliarias',
+  description: 'Scraping multi-portal, generación de ads con tu marca, billing por créditos y todo lo que necesitás para escalar tu negocio inmobiliario.',
 }
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body className="min-h-screen bg-gray-50">{children}</body>
     </html>
   )
 }
