@@ -41,7 +41,7 @@ export default function PropertiesPage() {
     return matchesSearch && matchesFilter
   })
 
-  const portals = Array.from(new Set(properties.map(p => p.portal)))
+  const portals = [...new Set(properties.map(p => p.portal))]
 
   return (
     <>
