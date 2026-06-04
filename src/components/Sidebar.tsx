@@ -2,17 +2,21 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useAuth } from '@/lib/auth'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: DashboardIcon },
   { name: 'Scraping', href: '/dashboard/scrape', icon: ScrapingIcon },
   { name: 'Propiedades', href: '/dashboard/properties', icon: PropertiesIcon },
+  { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon },
   { name: 'Billing', href: '/dashboard/billing', icon: BillingIcon },
   { name: 'Brand Kit', href: '/dashboard/brand', icon: BrandIcon },
 ]
 
 export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname()
+  const { user } = useAuth()
+  const isOwner = user?.user_metadata?.role === 'owner'
 
   return (
     <aside className="w-64 h-full bg-gradient-dark flex flex-col">
@@ -50,6 +54,16 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             </Link>
           )
         })}
+        {isOwner && (
+          <Link
+            href="/dashboard/admin"
+            onClick={onClose}
+            className={pathname === '/dashboard/admin' ? 'sidebar-link-active' : 'sidebar-link'}
+          >
+            <ShieldIcon className="w-5 h-5" />
+            Admin
+          </Link>
+        )}
       </nav>
 
       <div className="px-3 py-4 border-t border-white/10">
@@ -109,6 +123,22 @@ function PropertiesIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+    </svg>
+  )
+}
+
+function AdsIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V5.25a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v14.25a1.5 1.5 0 001.5 1.5z" />
+    </svg>
+  )
+}
+
+function ShieldIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
     </svg>
   )
 }

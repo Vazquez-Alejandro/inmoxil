@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Header from '@/components/Header'
 import { useWorkspace } from '@/lib/workspace-context'
+import { useToast } from '@/lib/toast-context'
 
 const plans = [
   {
@@ -49,6 +50,7 @@ const plans = [
 
 export default function BillingPage() {
   const { workspace, refresh } = useWorkspace()
+  const { toast } = useToast()
   const [loading, setLoading] = useState<string | null>(null)
   const [creditHistory, setCreditHistory] = useState<any[]>([])
 
@@ -75,16 +77,16 @@ export default function BillingPage() {
       const res = await fetch('/api/billing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'checkout', planId, workspaceId: workspace?.id }),
+        body: JSON.stringify({ action: 'checkout', plan: planId, workspaceId: workspace?.id }),
       })
       const data = await res.json()
       if (data.url) {
         window.location.href = data.url
       } else {
-        alert(data.error || 'Error al crear sesión de checkout')
+        toast({ type: 'error', message: data.error || 'Error al crear sesión de checkout' })
       }
     } catch (err) {
-      alert('Error al procesar el pago')
+      toast({ type: 'error', message: 'Error al procesar el pago' })
     } finally {
       setLoading(null)
     }
@@ -100,9 +102,11 @@ export default function BillingPage() {
       const data = await res.json()
       if (data.url) {
         window.location.href = data.url
+      } else {
+        toast({ type: 'error', message: data.error || 'Error al abrir portal de billing' })
       }
     } catch (err) {
-      alert('Error al abrir portal de billing')
+      toast({ type: 'error', message: 'Error al abrir portal de billing' })
     }
   }
 

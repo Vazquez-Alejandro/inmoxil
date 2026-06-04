@@ -1,42 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createWorkspace, getWorkspace } from '@/lib/workspace'
+import { createWorkspace, getWorkspace, getWorkspaceBySlug } from '@/lib/workspace'
 import { createCustomer } from '@/lib/stripe'
+import { createServiceClient } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
     const { name, slug, email, userId } = await request.json()
 
     if (!name || !slug || !email || !userId) {
-      return NextResponse.json(
-        { error: 'Faltan campos requeridos: name, slug, email, userId' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Faltan campos requeridos: name, slug, email, userId' }, { status: 400 })
     }
 
-    const cleanSlug = slug
-      .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '')
-
+    const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
     const workspace = await createWorkspace(name, cleanSlug, userId)
 
     const customer = await createCustomer(email, name)
-
-    const { createServiceClient } = await import('@/lib/supabase')
-    const supabase = createServiceClient()
-    await supabase
-      .from('workspaces')
-      .update({ stripe_customer_id: customer.id })
-      .eq('id', workspace.id)
+    const supabase: any = createServiceClient()
+    await supabase.from('workspaces').update({ stripe_customer_id: customer.id }).eq('id', workspace.id)
 
     return NextResponse.json({ success: true, workspace: { ...workspace, stripe_customer_id: customer.id } })
   } catch (error) {
     console.error('[Workspace] Error:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Error creando workspace' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Error creando workspace' }, { status: 500 })
   }
 }
 
@@ -47,33 +32,12 @@ export async function GET(request: NextRequest) {
     const slug = searchParams.get('slug')
 
     if (!id && !slug) {
-      return NextResponse.json(
-        { error: 'Se requiere id o slug' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Se requiere id o slug' }, { status: 400 })
     }
 
-    const workspace = slug
-      ? await getWorkspaceBySlug(slug)
-      : await getWorkspace(id!)
-
+    const workspace = slug ? await getWorkspaceBySlug(slug) : await getWorkspace(id!)
     return NextResponse.json({ success: true, workspace })
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Workspace no encontrado' },
-      { status: 404 }
-    )
+    return NextResponse.json({ error: 'Workspace no encontrado' }, { status: 404 })
   }
-}
-
-async function getWorkspaceBySlug(slug: string) {
-  const { createServiceClient } = await import('@/lib/supabase')
-  const supabase = createServiceClient()
-  const { data, error } = await supabase
-    .from('workspaces')
-    .select('*')
-    .eq('slug', slug)
-    .single()
-  if (error) throw error
-  return data
 }

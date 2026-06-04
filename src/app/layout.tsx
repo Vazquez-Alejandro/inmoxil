@@ -3,8 +3,39 @@ import { AuthProvider } from '@/lib/auth'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Inmoxil - Plataforma SaaS para Inmobiliarias',
-  description: 'Scraping multi-portal, generación de ads con tu marca, billing por créditos y todo lo que necesitás para escalar tu negocio inmobiliario.',
+  title: 'Inmoxil — Scraping y Marketing para Inmobiliarias',
+  description:
+    'Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con tu marca, billing por créditos.',
+  keywords: [
+    'inmobiliaria',
+    'scraping inmobiliario',
+    'propiedades',
+    'marketing digital',
+    'generación de ads',
+    'ZonaProp',
+    'Argenprop',
+    'SaaS',
+    'billing',
+    'créditos',
+    'inmuebles',
+    'real estate',
+    'Argentina',
+  ],
+  openGraph: {
+    title: 'Inmoxil — Scraping y Marketing para Inmobiliarias',
+    description:
+      'Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con tu marca, billing por créditos.',
+    url: 'https://inmoxil.com',
+    siteName: 'Inmoxil',
+    locale: 'es_AR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Inmoxil — Scraping y Marketing para Inmobiliarias',
+    description:
+      'Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con tu marca, billing por créditos.',
+  },
 }
 
 export default function RootLayout({
