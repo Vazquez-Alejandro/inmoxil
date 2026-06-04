@@ -1,7 +1,10 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Header from '@/components/Header'
+import { useAuth } from '@/lib/auth'
+import { useWorkspace } from '@/lib/workspace-context'
 
 function PropertyIcon({ className }: { className?: string }) {
   return (
@@ -36,72 +39,6 @@ function PortalIcon({ className }: { className?: string }) {
   )
 }
 
-const stats = [
-  { label: 'Propiedades scrapear', value: '247', change: '+12%', up: true, icon: PropertyIcon },
-  { label: 'Créditos disponibles', value: '50', change: 'Starter', up: true, icon: CreditIcon },
-  { label: 'Ads generados', value: '18', change: '+5 esta semana', up: true, icon: AdIcon },
-  { label: 'Portales activos', value: '4', change: 'Configurar más', up: false, icon: PortalIcon },
-]
-
-const recentProperties = [
-  {
-    id: '1',
-    title: 'Departamento 3 ambientes - Palermo',
-    price: 350000,
-    currency: 'USD',
-    beds: 3,
-    baths: 2,
-    sqm: 85,
-    neighborhood: 'Palermo',
-    city: 'Buenos Aires',
-    portal: 'ZonaProp',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop',
-    publishedAt: '2h atrás',
-  },
-  {
-    id: '2',
-    title: 'Casa duplex - Belgrano',
-    price: 520000,
-    currency: 'USD',
-    beds: 4,
-    baths: 3,
-    sqm: 180,
-    neighborhood: 'Belgrano',
-    city: 'Buenos Aires',
-    portal: 'ZonaProp',
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop',
-    publishedAt: '5h atrás',
-  },
-  {
-    id: '3',
-    title: 'Loft moderno - Puerto Madero',
-    price: 280000,
-    currency: 'USD',
-    beds: 2,
-    baths: 1,
-    sqm: 65,
-    neighborhood: 'Puerto Madero',
-    city: 'Buenos Aires',
-    portal: 'Argenprop',
-    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop',
-    publishedAt: '1d atrás',
-  },
-  {
-    id: '4',
-    title: 'PH con terrace - San Telmo',
-    price: 195000,
-    currency: 'USD',
-    beds: 2,
-    baths: 1,
-    sqm: 70,
-    neighborhood: 'San Telmo',
-    city: 'Buenos Aires',
-    portal: 'MercadoLibre',
-    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop',
-    publishedAt: '2d atrás',
-  },
-]
-
 const formatPrice = (price: number, currency: string) => {
   return new Intl.NumberFormat('es-AR', {
     style: 'currency',
@@ -111,11 +48,34 @@ const formatPrice = (price: number, currency: string) => {
 }
 
 export default function DashboardPage() {
+  const { user } = useAuth()
+  const { workspace } = useWorkspace()
+  const [properties, setProperties] = useState<any[]>([])
+  const [creditHistory, setCreditHistory] = useState<any[]>([])
+
+  useEffect(() => {
+    if (workspace) {
+      fetch(`/api/credits?workspaceId=${workspace.id}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.history) setCreditHistory(data.history)
+        })
+        .catch(() => {})
+    }
+  }, [workspace])
+
+  const stats = [
+    { label: 'Propiedades', value: properties.length.toString(), change: workspace?.plan || 'Starter', up: true, icon: PropertyIcon },
+    { label: 'Créditos disponibles', value: (workspace?.credits_remaining ?? 50).toString(), change: `${workspace?.credits_used ?? 0} usados`, up: true, icon: CreditIcon },
+    { label: 'Ads generados', value: creditHistory.filter((t: any) => t.type === 'consumption').length.toString(), change: 'Total', up: true, icon: AdIcon },
+    { label: 'Portales activos', value: '8', change: 'Configurar', up: false, icon: PortalIcon },
+  ]
+
   return (
     <>
       <Header
         title="Dashboard"
-        subtitle="Resumen de tu cuenta y actividad reciente"
+        subtitle={`Bienvenido, ${user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario'}`}
       />
 
       {/* Stats Grid */}
@@ -148,6 +108,12 @@ export default function DashboardPage() {
             </svg>
             Nuevo scraping
           </Link>
+          <Link href="/dashboard/properties" className="btn-outline">
+            <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+            </svg>
+            Ver propiedades
+          </Link>
           <Link href="/dashboard/brand" className="btn-outline">
             <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
@@ -163,44 +129,27 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Recent Properties */}
-      <div className="card">
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-navy-900">Propiedades recientes</h3>
-            <Link href="/dashboard/scrape" className="text-sm text-gold-600 hover:text-gold-700 font-medium">
-              Ver todas →
-            </Link>
+      {/* Workspace Info */}
+      {workspace && (
+        <div className="card p-6">
+          <h3 className="text-lg font-bold text-navy-900 mb-4">Tu empresa</h3>
+          <div className="flex items-center gap-6">
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black"
+              style={{ backgroundColor: workspace.primary_color, color: workspace.secondary_color }}
+            >
+              {workspace.name[0]}
+            </div>
+            <div>
+              <h4 className="font-bold text-navy-900 text-lg">{workspace.name}</h4>
+              <p className="text-sm text-navy-500">
+                Plan <span className="font-semibold capitalize">{workspace.plan}</span> • 
+                Slug: <code className="text-xs bg-navy-50 px-1.5 py-0.5 rounded">{workspace.slug}</code>
+              </p>
+            </div>
           </div>
         </div>
-        <div className="divide-y divide-gray-100">
-          {recentProperties.map((property) => (
-            <div key={property.id} className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors">
-              <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                <img
-                  src={property.image}
-                  alt={property.title}
-                  className="w-full h-full object-cover"
-                />
-                <span className="portal-badge bg-navy-900/80 text-white">{property.portal}</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-navy-900 truncate">{property.title}</h4>
-                <p className="text-sm text-navy-500">{property.neighborhood}, {property.city}</p>
-                <div className="flex items-center gap-4 mt-1 text-xs text-navy-400">
-                  <span>{property.beds} amb</span>
-                  <span>{property.baths} baños</span>
-                  <span>{property.sqm} m²</span>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="price-tag">{formatPrice(property.price, property.currency)}</p>
-                <p className="text-xs text-navy-400 mt-1">{property.publishedAt}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
     </>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Header from '@/components/Header'
+import { useWorkspace } from '@/lib/workspace-context'
 
 const PORTALS = [
   { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700' },
@@ -21,6 +22,7 @@ const formatPrice = (price: number, currency: string) => {
 }
 
 export default function ScrapePage() {
+  const { workspace } = useWorkspace()
   const [urls, setUrls] = useState('')
   const [maxItems, setMaxItems] = useState(50)
   const [loading, setLoading] = useState(false)
@@ -47,6 +49,15 @@ export default function ScrapePage() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al scrapear')
       setResults(data)
+
+      // Save to DB if workspace exists
+      if (workspace?.id && data.data?.length > 0) {
+        fetch('/api/properties', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workspaceId: workspace.id, properties: data.data }),
+        }).catch(() => {})
+      }
     } catch (err: any) {
       setError(err.message)
     } finally {

@@ -2,19 +2,29 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/auth'
 
 export default function LoginPage() {
+  const { signIn } = useAuth()
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    // TODO: integrate with Supabase auth
-    setTimeout(() => {
-      window.location.href = '/dashboard'
-    }, 1000)
+    setError('')
+
+    const result = await signIn(email, password)
+    if (result.error) {
+      setError(result.error)
+      setLoading(false)
+    } else {
+      router.push('/dashboard')
+    }
   }
 
   return (
@@ -67,6 +77,12 @@ export default function LoginPage() {
           <h2 className="text-2xl font-bold text-navy-900 mb-2">Iniciar sesión</h2>
           <p className="text-navy-500 mb-8">Accedé a tu panel de control</p>
 
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-5">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="label">Email</label>
@@ -83,9 +99,9 @@ export default function LoginPage() {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="label mb-0">Contraseña</label>
-                <a href="#" className="text-xs text-gold-600 hover:text-gold-700 font-medium">
+                <span className="text-xs text-navy-400">
                   ¿Olvidaste tu contraseña?
-                </a>
+                </span>
               </div>
               <input
                 type="password"
@@ -103,7 +119,7 @@ export default function LoginPage() {
               className="btn-gold w-full disabled:opacity-50"
             >
               {loading ? (
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2 justify-center">
                   <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
