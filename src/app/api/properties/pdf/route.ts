@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase'
+import { queryOne } from '@/lib/db'
 import { generatePropertyPDF } from '@/lib/pdf-generator'
 
 export async function POST(request: NextRequest) {
@@ -10,28 +10,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Se requiere propertyId y workspaceId' }, { status: 400 })
     }
 
-    const supabase: any = createServiceClient()
-    const { data: property, error } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('id', propertyId)
-      .eq('workspace_id', workspaceId)
-      .single()
+    const property = await queryOne(
+      'SELECT * FROM properties WHERE id=$1 AND workspace_id=$2',
+      [propertyId, workspaceId]
+    )
 
-    if (error || !property) {
+    if (!property) {
       return NextResponse.json({ error: 'Propiedad no encontrada' }, { status: 404 })
     }
 
-    const { data: brand } = await supabase
-      .from('workspaces')
-      .select('brand_name, brand_primary, brand_secondary')
-      .eq('id', workspaceId)
-      .single()
+    const brand = await queryOne(
+      'SELECT name, primary_color, secondary_color FROM workspaces WHERE id=$1',
+      [workspaceId]
+    )
 
     const brandConfig = {
-      name: brand?.brand_name || 'Ix',
-      primaryColor: brand?.brand_primary || '#0F2B46',
-      secondaryColor: brand?.brand_secondary || '#D4A843',
+      name: brand?.name || 'Ix',
+      primaryColor: brand?.primary_color || '#0F2B46',
+      secondaryColor: brand?.secondary_color || '#D4A843',
     }
 
     const pdfBuffer = await generatePropertyPDF(property, brandConfig)

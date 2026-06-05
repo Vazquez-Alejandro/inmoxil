@@ -62,14 +62,16 @@ export interface Database {
         Row: {
           id: string
           email: string
+          password_hash: string | null
           full_name: string | null
           workspace_id: string
           role: 'owner' | 'admin' | 'member'
           created_at: string
         }
         Insert: {
-          id: string
+          id?: string
           email: string
+          password_hash?: string | null
           full_name?: string | null
           workspace_id: string
           role?: 'owner' | 'admin' | 'member'
@@ -78,6 +80,7 @@ export interface Database {
         Update: {
           id?: string
           email?: string
+          password_hash?: string | null
           full_name?: string | null
           workspace_id?: string
           role?: 'owner' | 'admin' | 'member'

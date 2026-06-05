@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase'
+import { query, queryOne } from '@/lib/db'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,42 +10,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 })
     }
 
-    const supabase = createServiceClient() as any
-
-    const [propertiesResult, adsResult, creditsResult, workspaceResult, transactionsResult] = await Promise.all([
-      supabase
-        .from('properties')
-        .select('id, portal, created_at')
-        .eq('workspace_id', workspaceId),
-      supabase
-        .from('generated_ads')
-        .select('id, created_at')
-        .eq('workspace_id', workspaceId),
-      supabase
-        .from('workspaces')
-        .select('credits_remaining, credits_used, plan')
-        .eq('id', workspaceId)
-        .single(),
-      supabase
-        .from('workspaces')
-        .select('plan')
-        .eq('id', workspaceId)
-        .single(),
-      supabase
-        .from('credit_transactions')
-        .select('*')
-        .eq('workspace_id', workspaceId)
-        .order('created_at', { ascending: false })
-        .limit(10),
+    const [properties, ads, credits, transactions] = await Promise.all([
+      query('SELECT id, portal, created_at FROM properties WHERE workspace_id=$1', [workspaceId]),
+      query('SELECT id, created_at FROM generated_ads WHERE workspace_id=$1', [workspaceId]),
+      queryOne('SELECT credits_remaining, credits_used, plan FROM workspaces WHERE id=$1', [workspaceId]),
+      query('SELECT * FROM credit_transactions WHERE workspace_id=$1 ORDER BY created_at DESC LIMIT 10', [workspaceId]),
     ])
 
-    const properties = propertiesResult.data || []
-    const ads = adsResult.data || []
-    const credits = creditsResult.data || { credits_remaining: 0, credits_used: 0 }
-    const transactions = transactionsResult.data || []
+    const propertiesArr = properties || []
+    const adsArr = ads || []
+    const creditsRow = credits || { credits_remaining: 0, credits_used: 0 }
+    const transactionsArr = transactions || []
 
     const propertiesByPortal: Record<string, number> = {}
-    properties.forEach((p: any) => {
+    propertiesArr.forEach((p: any) => {
       const portal = p.portal || 'unknown'
       propertiesByPortal[portal] = (propertiesByPortal[portal] || 0) + 1
     })
@@ -54,7 +32,7 @@ export async function GET(request: NextRequest) {
       .map(([portal, count]) => ({ portal, count }))
       .sort((a, b) => b.count - a.count)
 
-    const topProperties = properties.slice(0, 10).map((p: any) => ({
+    const topProperties = propertiesArr.slice(0, 10).map((p: any) => ({
       id: p.id,
       portal: p.portal,
       created_at: p.created_at,
@@ -62,13 +40,13 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       stats: {
-        totalProperties: properties.length,
-        totalAds: ads.length,
-        creditsUsed: credits.credits_used || 0,
-        creditsRemaining: credits.credits_remaining || 0,
+        totalProperties: propertiesArr.length,
+        totalAds: adsArr.length,
+        creditsUsed: creditsRow.credits_used || 0,
+        creditsRemaining: creditsRow.credits_remaining || 0,
       },
       portalStats,
-      transactions: transactions.map((t: any) => ({
+      transactions: transactionsArr.map((t: any) => ({
         id: t.id,
         type: t.type,
         amount: t.amount,

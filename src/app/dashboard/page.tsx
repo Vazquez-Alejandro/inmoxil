@@ -75,7 +75,7 @@ export default function DashboardPage() {
     <>
       <Header
         title="Dashboard"
-        subtitle={`Bienvenido, ${user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario'}`}
+        subtitle={`Bienvenido, ${user?.name || user?.email?.split('@')[0] || 'Usuario'}`}
       />
 
       {/* Stats Grid */}

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase'
+import { query } from '@/lib/db'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,15 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 })
     }
 
-    const supabase = createServiceClient()
-    const { data, error } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('workspace_id', workspaceId)
-      .order('created_at', { ascending: false })
-      .limit(100)
-
-    if (error) throw error
+    const data = await query('SELECT * FROM properties WHERE workspace_id=$1 ORDER BY created_at DESC LIMIT 100', [workspaceId])
 
     return NextResponse.json({ properties: data || [] })
   } catch (error) {
@@ -36,39 +28,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'workspaceId and properties required' }, { status: 400 })
     }
 
-    const supabase = createServiceClient()
+    let count = 0
+    for (const p of properties) {
+      await query(
+        `INSERT INTO properties (workspace_id, portal, title, price, currency, address, neighborhood, city, state, country, beds, baths, sqm, property_type, status, url, photos, description, features, source_url)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)`,
+        [
+          workspaceId,
+          p.portal || 'unknown',
+          p.title || '',
+          p.price || null,
+          p.currency || 'USD',
+          p.address || '',
+          p.neighborhood || '',
+          p.city || '',
+          p.state || '',
+          p.country || '',
+          p.features?.beds || null,
+          p.features?.baths || null,
+          p.features?.area || null,
+          p.propertyType || 'apartment',
+          'active',
+          p.url || '',
+          JSON.stringify(p.photos || []),
+          p.description || '',
+          JSON.stringify(p.features ? Object.values(p.features).filter(Boolean).map(String) : []),
+          p.url || '',
+        ]
+      )
+      count++
+    }
 
-    const inserts = properties.map((p: any) => ({
-      workspace_id: workspaceId,
-      portal: p.portal || 'unknown',
-      title: p.title || '',
-      price: p.price || null,
-      currency: p.currency || 'USD',
-      address: p.address || '',
-      neighborhood: p.neighborhood || '',
-      city: p.city || '',
-      state: p.state || '',
-      country: p.country || '',
-      beds: p.features?.beds || null,
-      baths: p.features?.baths || null,
-      sqm: p.features?.area || null,
-      property_type: p.propertyType || 'apartment',
-      status: 'active',
-      url: p.url || '',
-      photos: p.photos || [],
-      description: p.description || '',
-      features: p.features ? Object.values(p.features).filter(Boolean).map(String) : [],
-      source_url: p.url || '',
-    }))
-
-    const { data, error } = await supabase
-      .from('properties')
-      .insert(inserts)
-      .select()
-
-    if (error) throw error
-
-    return NextResponse.json({ success: true, count: data?.length || 0 })
+    return NextResponse.json({ success: true, count })
   } catch (error) {
     console.error('[Properties] Error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

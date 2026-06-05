@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase'
 import { generateAd, getTemplateList, type AdType, type TemplateId } from '@/lib/ad-generator'
-import { checkCredits } from '@/lib/workspace'
+import { checkCredits, deductCredit } from '@/lib/workspace'
+import { queryOne, insertOne, query } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,8 +24,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Tipo de ad inválido' }, { status: 400 })
     }
 
-    const supabase = createServiceClient()
-
     const credits = await checkCredits(workspaceId)
     if (credits <= 0) {
       return NextResponse.json(
@@ -34,23 +32,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: property, error: propError } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('id', propertyId)
-      .single()
-
-    if (propError || !property) {
+    const property = await queryOne('SELECT * FROM properties WHERE id=$1', [propertyId])
+    if (!property) {
       return NextResponse.json({ error: 'Propiedad no encontrada' }, { status: 404 })
     }
 
-    const { data: workspace, error: wsError } = await supabase
-      .from('workspaces')
-      .select('*')
-      .eq('id', workspaceId)
-      .single()
-
-    if (wsError || !workspace) {
+    const workspace = await queryOne('SELECT * FROM workspaces WHERE id=$1', [workspaceId])
+    if (!workspace) {
       return NextResponse.json({ error: 'Workspace no encontrado' }, { status: 404 })
     }
 
@@ -62,20 +50,16 @@ export async function POST(request: NextRequest) {
       logo_url: workspace.logo_url || null,
     }
 
-    const { data: adRecord, error: adError } = await supabase
-      .from('generated_ads')
-      .insert({
-        workspace_id: workspaceId,
-        property_id: propertyId,
-        type: adType as AdType,
-        image_url: '',
-        template_id: templateId,
-        credits_used: 1,
-      })
-      .select()
-      .single()
+    const adRecord = await insertOne('generated_ads', {
+      workspace_id: workspaceId,
+      property_id: propertyId,
+      type: adType,
+      image_url: '',
+      template_id: templateId,
+      credits_used: 1,
+    })
 
-    if (adError || !adRecord) {
+    if (!adRecord) {
       return NextResponse.json({ error: 'Error creando registro del ad' }, { status: 500 })
     }
 
@@ -92,7 +76,7 @@ export async function POST(request: NextRequest) {
           baths: property.baths,
           sqm: property.sqm,
           property_type: property.property_type,
-          photos: property.photos || [],
+          photos: typeof property.photos === 'string' ? JSON.parse(property.photos) : (property.photos || []),
           description: property.description || '',
           neighborhood: property.neighborhood,
           city: property.city,
@@ -103,7 +87,7 @@ export async function POST(request: NextRequest) {
       )
     } catch (genError) {
       console.error('[Ads] Generation error:', genError)
-      await supabase.from('generated_ads').delete().eq('id', adRecord.id)
+      await query('DELETE FROM generated_ads WHERE id=$1', [adRecord.id])
       return NextResponse.json(
         { error: 'Error generando la imagen del ad' },
         { status: 500 }
@@ -112,18 +96,11 @@ export async function POST(request: NextRequest) {
 
     const imageUrl = `/api/ads/image?path=${encodeURIComponent(imagePath)}`
 
-    await supabase
-      .from('generated_ads')
-      .update({ image_url: imageUrl })
-      .eq('id', adRecord.id)
+    await query('UPDATE generated_ads SET image_url=$1 WHERE id=$2', [imageUrl, adRecord.id])
 
-    const { error: deductError } = await supabase.rpc('deduct_credit', {
-      p_workspace_id: workspaceId,
-      p_ad_id: adRecord.id,
-    })
-
-    if (deductError) {
-      console.error('[Ads] Credit deduction error:', deductError)
+    const deductResult = await deductCredit(workspaceId, adRecord.id)
+    if (!deductResult) {
+      console.error('[Ads] Credit deduction failed')
     }
 
     const newCredits = await checkCredits(workspaceId)
@@ -155,15 +132,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'workspaceId es requerido' }, { status: 400 })
     }
 
-    const supabase = createServiceClient()
-    const { data, error } = await supabase
-      .from('generated_ads')
-      .select('*')
-      .eq('workspace_id', workspaceId)
-      .order('created_at', { ascending: false })
-      .limit(50)
-
-    if (error) throw error
+    const data = await query(
+      'SELECT * FROM generated_ads WHERE workspace_id=$1 ORDER BY created_at DESC LIMIT 50',
+      [workspaceId]
+    )
 
     return NextResponse.json({ ads: data || [] })
   } catch (error) {

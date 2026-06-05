@@ -1,113 +1,113 @@
 'use client'
 
-import { useState, useEffect, createContext, useContext, type ReactNode } from 'react'
-import { getSupabase } from './supabase-browser'
-import type { User } from '@supabase/supabase-js'
+import { useState, useEffect, createContext, useContext, useCallback, type ReactNode } from 'react'
+import { SessionProvider, signIn as nextAuthSignIn, signOut as nextAuthSignOut, useSession } from 'next-auth/react'
+
+interface AuthUser {
+  id: string
+  email: string
+  name: string | null
+  role: string
+  workspace_id: string
+}
 
 interface AuthContextType {
-  user: User | null
+  user: AuthUser | null
   loading: boolean
-  signUp: (email: string, password: string, companyName: string, fullName: string) => Promise<{ error?: string }>
   signIn: (email: string, password: string) => Promise<{ error?: string }>
   signOut: () => Promise<void>
+  signUp: (email: string, password: string, companyName: string, fullName: string) => Promise<{ error?: string }>
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  signUp: async () => ({}),
   signIn: async () => ({}),
   signOut: async () => {},
+  signUp: async () => ({}),
 })
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+function AuthInner({ children }: { children: ReactNode }) {
+  const { data: session, status } = useSession()
+  const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (status === 'loading') {
+      setLoading(true)
+      return
+    }
+    if (session?.user) {
+      setUser({
+        id: (session.user as any).id,
+        email: session.user.email || '',
+        name: session.user.name ?? null,
+        role: (session.user as any).role || 'user',
+        workspace_id: (session.user as any).workspace_id || '',
+      })
+    } else {
+      setUser(null)
+    }
+    setLoading(false)
+  }, [session, status])
+
+  const signIn = useCallback(async (email: string, password: string) => {
     try {
-      const supabase = getSupabase()
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setUser(session?.user ?? null)
-        setLoading(false)
+      const res = await nextAuthSignIn('credentials', {
+        email,
+        password,
+        redirect: false,
       })
-
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user ?? null)
-        setLoading(false)
-      })
-
-      return () => subscription.unsubscribe()
-    } catch {
-      setLoading(false)
+      if (res?.error) {
+        return { error: res.error }
+      }
+      return {}
+    } catch (err: any) {
+      return { error: err.message || 'Sign in failed' }
     }
   }, [])
 
-  const signUp = async (email: string, password: string, companyName: string, fullName: string) => {
+  const signUp = useCallback(async (email: string, password: string, companyName: string, fullName: string) => {
     try {
-      const supabase = getSupabase()
-      const { data, error } = await supabase.auth.signUp({
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name: fullName, companyName }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        return { error: data.error || 'Registration failed' }
+      }
+      const loginRes = await nextAuthSignIn('credentials', {
         email,
         password,
-        options: {
-          data: { company_name: companyName, full_name: fullName },
-        },
+        redirect: false,
       })
-
-      if (error) return { error: error.message }
-
-      if (data.user) {
-        const { error: wsError } = await (supabase.from('workspaces') as any).insert({
-          name: companyName,
-          slug: companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-        })
-
-        if (!wsError && data.user) {
-          const { data: ws } = await (supabase.from('workspaces') as any)
-            .select('id')
-            .eq('slug', companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))
-            .single()
-
-          if (ws) {
-            await (supabase.from('users') as any).insert({
-              id: data.user.id,
-              email: data.user.email!,
-              full_name: fullName,
-              workspace_id: ws.id,
-              role: 'owner',
-            })
-          }
-        }
+      if (loginRes?.error) {
+        return { error: loginRes.error }
       }
-
       return {}
     } catch (err: any) {
-      return { error: err.message }
+      return { error: err.message || 'Registration failed' }
     }
-  }
+  }, [])
 
-  const signIn = async (email: string, password: string) => {
-    try {
-      const supabase = getSupabase()
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) return { error: error.message }
-      return {}
-    } catch (err: any) {
-      return { error: err.message }
-    }
-  }
-
-  const signOut = async () => {
-    try {
-      const supabase = getSupabase()
-      await supabase.auth.signOut()
-    } catch {}
-  }
+  const signOut = useCallback(async () => {
+    await nextAuthSignOut({ redirect: false })
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut, signUp }}>
       {children}
     </AuthContext.Provider>
+  )
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  return (
+    <SessionProvider>
+      <AuthInner>{children}</AuthInner>
+    </SessionProvider>
   )
 }
 

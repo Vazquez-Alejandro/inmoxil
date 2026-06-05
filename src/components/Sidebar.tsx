@@ -26,7 +26,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname()
   const { user } = useAuth()
   const { workspace } = useWorkspace()
-  const isOwner = user?.user_metadata?.role === 'owner'
+  const isOwner = user?.role === 'owner'
 
   const plan = PLAN_LABELS[workspace?.plan || 'starter'] || PLAN_LABELS.starter
   const creditsUsed = workspace?.credits_used ?? 0

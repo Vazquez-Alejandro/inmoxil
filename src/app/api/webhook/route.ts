@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { constructWebhookEvent, PLANS } from '@/lib/stripe'
-import { createServiceClient } from '@/lib/supabase'
+import { query, queryOne, insertOne } from '@/lib/db'
 import { sendPaymentConfirmation } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
-  const supabase: any = createServiceClient()
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')!
@@ -17,9 +16,10 @@ export async function POST(request: NextRequest) {
         const workspaceId = session.metadata?.workspaceId
 
         if (workspaceId && session.subscription) {
-          await supabase.from('workspaces').update({
-            stripe_subscription_id: session.subscription as string,
-          }).eq('id', workspaceId)
+          await query(
+            'UPDATE workspaces SET stripe_subscription_id=$1 WHERE id=$2',
+            [session.subscription as string, workspaceId]
+          )
 
           const subscription = await import('@/lib/stripe').then((m) =>
             m.stripe.subscriptions.retrieve(session.subscription as string)
@@ -30,24 +30,19 @@ export async function POST(request: NextRequest) {
 
           if (planEntry) {
             const [planName, planConfig] = planEntry
-            await supabase.from('workspaces').update({
-              plan: planName,
-              credits_remaining: planConfig.credits,
-              credits_used: 0,
-            }).eq('id', workspaceId)
+            await query(
+              'UPDATE workspaces SET plan=$1, credits_remaining=$2, credits_used=0 WHERE id=$3',
+              [planName, planConfig.credits, workspaceId]
+            )
 
-            await supabase.from('credit_transactions').insert({
+            await insertOne('credit_transactions', {
               workspace_id: workspaceId,
               amount: planConfig.credits,
               type: 'purchase',
               description: `Membresía ${planConfig.name} activada`,
             })
 
-            const { data: ws } = await supabase
-              .from('workspaces')
-              .select('name')
-              .eq('id', workspaceId)
-              .single()
+            const ws = await queryOne('SELECT name FROM workspaces WHERE id=$1', [workspaceId])
             try {
               await sendPaymentConfirmation(
                 session.customer_details?.email || session.customer_email || '',
@@ -68,9 +63,10 @@ export async function POST(request: NextRequest) {
         const subscriptionId = invoice.subscription as string
 
         if (subscriptionId) {
-          const { data: workspace } = await supabase
-            .from('workspaces').select('*')
-            .eq('stripe_subscription_id', subscriptionId).single()
+          const workspace = await queryOne(
+            'SELECT * FROM workspaces WHERE stripe_subscription_id=$1',
+            [subscriptionId]
+          )
 
           if (workspace) {
             const subscription = await import('@/lib/stripe').then((m) =>
@@ -82,9 +78,9 @@ export async function POST(request: NextRequest) {
 
             if (planEntry) {
               const [planName, planConfig] = planEntry
-              await supabase.from('workspaces').update({ plan: planName }).eq('id', workspace.id)
+              await query('UPDATE workspaces SET plan=$1 WHERE id=$2', [planName, workspace.id])
 
-              await supabase.from('credit_transactions').insert({
+              await insertOne('credit_transactions', {
                 workspace_id: workspace.id,
                 amount: planConfig.credits,
                 type: 'purchase',
@@ -98,11 +94,10 @@ export async function POST(request: NextRequest) {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as any
-        await supabase.from('workspaces').update({
-          plan: 'starter',
-          credits_remaining: 0,
-          stripe_subscription_id: null,
-        }).eq('stripe_subscription_id', subscription.id)
+        await query(
+          `UPDATE workspaces SET plan='starter', credits_remaining=0, stripe_subscription_id=NULL WHERE stripe_subscription_id=$1`,
+          [subscription.id]
+        )
         break
       }
     }

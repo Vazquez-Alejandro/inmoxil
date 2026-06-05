@@ -43,7 +43,7 @@ export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
 
-  const isOwner = user?.user_metadata?.role === 'owner'
+  const isOwner = user?.role === 'owner'
 
   useEffect(() => {
     if (!loading && !isOwner) {

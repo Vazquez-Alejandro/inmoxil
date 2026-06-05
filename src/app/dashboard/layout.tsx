@@ -7,7 +7,7 @@ import { WorkspaceProvider } from '@/lib/workspace-context'
 import { ToastProvider } from '@/lib/toast-context'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import Sidebar from '@/components/Sidebar'
-import { getSupabase } from '@/lib/supabase-browser'
+import { queryOne } from '@/lib/db'
 
 export default function DashboardLayout({
   children,
@@ -30,17 +30,10 @@ export default function DashboardLayout({
 
     const checkOnboarding = async () => {
       try {
-        const supabase = getSupabase()
-        const { data: userData } = await (supabase.from('users') as any)
-          .select('workspace_id')
-          .eq('id', user.id)
-          .single()
+        const userData = await queryOne('SELECT workspace_id FROM users WHERE id = $1', [user.id])
 
         if (userData?.workspace_id) {
-          const { data: ws } = await (supabase.from('workspaces') as any)
-            .select('name')
-            .eq('id', userData.workspace_id)
-            .single()
+          const ws = await queryOne('SELECT name FROM workspaces WHERE id = $1', [userData.workspace_id])
 
           if (ws && ws.name === 'Mi Inmobiliaria') {
             router.push('/onboarding')

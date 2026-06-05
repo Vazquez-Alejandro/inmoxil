@@ -29,10 +29,10 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
             className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <div className="w-8 h-8 rounded-full bg-navy-900 flex items-center justify-center text-gold-400 font-bold text-xs">
-              {user?.user_metadata?.full_name?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
+              {user?.name?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
             </div>
             <div className="text-left hidden sm:block">
-              <p className="text-sm font-medium text-navy-900">{user?.user_metadata?.full_name || 'Usuario'}</p>
+              <p className="text-sm font-medium text-navy-900">{user?.name || 'Usuario'}</p>
               <p className="text-xs text-navy-500">{user?.email}</p>
             </div>
             <svg className="w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

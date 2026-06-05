@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createCheckoutSession, createPortalSession, createCustomer, PLANS, type PlanType } from '@/lib/stripe'
 import { getWorkspace } from '@/lib/workspace'
-import { createServiceClient } from '@/lib/supabase'
+import { query } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,8 +16,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Workspace no encontrado' }, { status: 404 })
     }
 
-    const supabase = createServiceClient()
-
     if (action === 'checkout') {
       const selectedPlan = (plan || workspace.plan) as PlanType
       const planConfig = PLANS[selectedPlan]
@@ -30,7 +28,7 @@ export async function POST(request: NextRequest) {
       if (!customerId) {
         const customer = await createCustomer(workspace.name, workspace.name)
         customerId = customer.id
-        await supabase.from('workspaces').update({ stripe_customer_id: customerId }).eq('id', workspaceId)
+        await query('UPDATE workspaces SET stripe_customer_id=$1 WHERE id=$2', [customerId, workspaceId])
       }
 
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'

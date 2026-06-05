@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createWorkspace, getWorkspace, getWorkspaceBySlug } from '@/lib/workspace'
 import { createCustomer } from '@/lib/stripe'
-import { createServiceClient } from '@/lib/supabase'
+import { query } from '@/lib/db'
 import { sendWelcomeEmail } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
@@ -16,8 +16,7 @@ export async function POST(request: NextRequest) {
     const workspace = await createWorkspace(name, cleanSlug, userId)
 
     const customer = await createCustomer(email, name)
-    const supabase: any = createServiceClient()
-    await supabase.from('workspaces').update({ stripe_customer_id: customer.id }).eq('id', workspace.id)
+    await query('UPDATE workspaces SET stripe_customer_id=$1 WHERE id=$2', [customer.id, workspace.id])
 
     try {
       await sendWelcomeEmail(email, name)

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
-import { getSupabase } from '@/lib/supabase-browser'
+import { queryOne } from '@/lib/db'
 
 const STEPS = [
   'Bienvenido',
@@ -57,12 +57,8 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (!user) return
-    const supabase = getSupabase()
-    ;(supabase.from('users') as any)
-      .select('workspace_id')
-      .eq('id', user.id)
-      .single()
-      .then(({ data }: any) => {
+    queryOne('SELECT workspace_id FROM users WHERE id = $1', [user.id])
+      .then((data: any) => {
         if (data?.workspace_id) setWorkspaceId(data.workspace_id)
       })
   }, [user])
@@ -100,10 +96,10 @@ export default function OnboardingPage() {
           accent_color: colors.accent,
         }),
       })
-      const supabase = getSupabase()
-      await (supabase.from('workspaces') as any)
-        .update({ name: companyName })
-        .eq('id', workspaceId)
+      await queryOne(
+        'UPDATE workspaces SET name = $1 WHERE id = $2 RETURNING *',
+        [companyName, workspaceId]
+      )
       goTo(4)
     } catch (e) {
       console.error(e)

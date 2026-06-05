@@ -2,7 +2,7 @@
 
 import { useState, useEffect, createContext, useContext, type ReactNode } from 'react'
 import { useAuth } from './auth'
-import { getSupabase } from './supabase-browser'
+import { queryOne } from '@/lib/db'
 
 interface Workspace {
   id: string
@@ -44,18 +44,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const supabase = getSupabase()
-      const { data: userData } = await (supabase.from('users') as any)
-        .select('workspace_id')
-        .eq('id', user.id)
-        .single()
+      const userData = await queryOne('SELECT workspace_id FROM users WHERE id = $1', [user.id])
 
       if (userData?.workspace_id) {
-        const { data: ws } = await (supabase.from('workspaces') as any)
-          .select('*')
-          .eq('id', userData.workspace_id)
-          .single()
-
+        const ws = await queryOne('SELECT * FROM workspaces WHERE id = $1', [userData.workspace_id])
         setWorkspace(ws)
       }
     } catch (err) {
