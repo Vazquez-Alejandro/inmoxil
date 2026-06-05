@@ -158,7 +158,7 @@ export default function HomePage() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-sm text-navy-300">Plataforma en desarrollo activo</span>
+            <span className="text-sm text-navy-300">Plataforma SaaS para inmobiliarias</span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
             Automatizá la captación de<br />

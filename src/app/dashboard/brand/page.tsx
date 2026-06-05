@@ -1,9 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '@/components/Header'
+import { useWorkspace } from '@/lib/workspace-context'
+import { useToast } from '@/lib/toast-context'
 
 export default function BrandPage() {
+  const { workspace, refresh } = useWorkspace()
+  const { toast } = useToast()
   const [brand, setBrand] = useState({
     primaryColor: '#0F2B46',
     secondaryColor: '#D4A843',
@@ -11,12 +15,48 @@ export default function BrandPage() {
     companyName: 'Mi Inmobiliaria',
   })
   const [saved, setSaved] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [logoFile, setLogoFile] = useState<File | null>(null)
 
-  const handleSave = () => {
-    // TODO: integrate with brand API
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
+  useEffect(() => {
+    if (workspace) {
+      setBrand({
+        primaryColor: workspace.primary_color || '#0F2B46',
+        secondaryColor: workspace.secondary_color || '#D4A843',
+        accentColor: workspace.accent_color || '#E85D3A',
+        companyName: workspace.name || 'Mi Inmobiliaria',
+      })
+    }
+  }, [workspace])
+
+  const handleSave = async () => {
+    if (!workspace?.id) return
+    setSaving(true)
+    try {
+      const res = await fetch('/api/brand', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          workspaceId: workspace.id,
+          primary_color: brand.primaryColor,
+          secondary_color: brand.secondaryColor,
+          accent_color: brand.accentColor,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setSaved(true)
+        await refresh()
+        toast({ type: 'success', message: 'Brand guardado correctamente' })
+        setTimeout(() => setSaved(false), 3000)
+      } else {
+        toast({ type: 'error', message: data.error || 'Error al guardar' })
+      }
+    } catch {
+      toast({ type: 'error', message: 'Error de conexión' })
+    } finally {
+      setSaving(false)
+    }
   }
 
   const handleRestore = () => {
@@ -24,7 +64,7 @@ export default function BrandPage() {
       primaryColor: '#0F2B46',
       secondaryColor: '#D4A843',
       accentColor: '#E85D3A',
-      companyName: 'Mi Inmobiliaria',
+      companyName: workspace?.name || 'Mi Inmobiliaria',
     })
     setLogoFile(null)
   }
@@ -44,7 +84,6 @@ export default function BrandPage() {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Brand Settings */}
         <div className="lg:col-span-2 space-y-6">
           <div className="card p-6">
             <h3 className="text-lg font-bold text-navy-900 mb-6">Colores de marca</h3>
@@ -138,19 +177,9 @@ export default function BrandPage() {
             </div>
           </div>
 
-          <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-6">Nombre de la empresa</h3>
-            <input
-              type="text"
-              className="input max-w-md"
-              value={brand.companyName}
-              onChange={(e) => setBrand({ ...brand, companyName: e.target.value })}
-            />
-          </div>
-
           <div className="flex items-center gap-4">
-            <button onClick={handleSave} className="btn-gold">
-              {saved ? (
+            <button onClick={handleSave} disabled={saving} className="btn-gold">
+              {saving ? 'Guardando...' : saved ? (
                 <span className="flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -165,13 +194,11 @@ export default function BrandPage() {
           </div>
         </div>
 
-        {/* Preview */}
         <div className="space-y-6">
           <div className="card p-6">
             <h3 className="text-lg font-bold text-navy-900 mb-4">Vista previa</h3>
             <p className="text-sm text-navy-500 mb-6">Así se verán tus ads con tu marca</p>
 
-            {/* Feed Ad Preview */}
             <div className="rounded-xl overflow-hidden shadow-corporate-lg mb-4">
               <div
                 className="p-6 text-white"
@@ -208,7 +235,6 @@ export default function BrandPage() {
               </div>
             </div>
 
-            {/* Story Ad Preview */}
             <div className="rounded-xl overflow-hidden shadow-corporate-lg aspect-[9/16] max-h-[300px]">
               <div
                 className="h-full p-4 text-white flex flex-col justify-between"

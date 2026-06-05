@@ -3,6 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
+import { useWorkspace } from '@/lib/workspace-context'
+
+const PLAN_LABELS: Record<string, { name: string; credits: number }> = {
+  starter: { name: 'Starter', credits: 50 },
+  pro: { name: 'Pro', credits: 200 },
+  enterprise: { name: 'Enterprise', credits: 1000 },
+}
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: DashboardIcon },
@@ -16,7 +23,13 @@ const navigation = [
 export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname()
   const { user } = useAuth()
+  const { workspace } = useWorkspace()
   const isOwner = user?.user_metadata?.role === 'owner'
+
+  const plan = PLAN_LABELS[workspace?.plan || 'starter'] || PLAN_LABELS.starter
+  const creditsUsed = workspace?.credits_used ?? 0
+  const creditsTotal = workspace?.credits_remaining ?? plan.credits
+  const creditsPercent = creditsTotal > 0 ? Math.min((creditsUsed / (plan.credits)) * 100, 100) : 0
 
   return (
     <aside className="w-64 h-full bg-gradient-dark flex flex-col">
@@ -70,17 +83,17 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         <div className="card bg-white/5 border-white/10 p-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-8 h-8 rounded-full bg-gold-400 flex items-center justify-center text-navy-900 font-bold text-xs">
-              Ix
+              {workspace?.name?.[0] || 'Ix'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-medium truncate">Plan Starter</p>
-              <p className="text-navy-400 text-xs">50 créditos</p>
+              <p className="text-white text-sm font-medium truncate">Plan {plan.name}</p>
+              <p className="text-navy-400 text-xs">{workspace?.credits_remaining ?? plan.credits} créditos</p>
             </div>
           </div>
           <div className="w-full bg-white/10 rounded-full h-1.5">
-            <div className="bg-gold-400 h-1.5 rounded-full" style={{ width: '100%' }} />
+            <div className="bg-gold-400 h-1.5 rounded-full transition-all" style={{ width: `${100 - creditsPercent}%` }} />
           </div>
-          <p className="text-navy-400 text-[10px] mt-2">Créditos disponibles</p>
+          <p className="text-navy-400 text-[10px] mt-2">{workspace?.credits_remaining ?? plan.credits} de {plan.credits} disponibles</p>
         </div>
       </div>
     </aside>
