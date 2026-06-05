@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { constructWebhookEvent, PLANS } from '@/lib/stripe'
 import { createServiceClient } from '@/lib/supabase'
+import { sendPaymentConfirmation } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   const supabase: any = createServiceClient()
@@ -41,6 +42,22 @@ export async function POST(request: NextRequest) {
               type: 'purchase',
               description: `Membresía ${planConfig.name} activada`,
             })
+
+            const { data: ws } = await supabase
+              .from('workspaces')
+              .select('name')
+              .eq('id', workspaceId)
+              .single()
+            try {
+              await sendPaymentConfirmation(
+                session.customer_details?.email || session.customer_email || '',
+                ws?.name || '',
+                planConfig.name,
+                planConfig.price
+              )
+            } catch (e) {
+              console.error('[Webhook] Failed to send payment email:', e)
+            }
           }
         }
         break
