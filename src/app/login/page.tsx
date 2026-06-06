@@ -100,7 +100,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-between mb-2">
                 <label className="label mb-0">Contraseña</label>
                 <span className="text-xs text-navy-400">
-                  ¿Olvidaste tu contraseña?
+                  <a href="/forgot-password" className="hover:text-gold-600">¿Olvidaste tu contraseña?</a>
                 </span>
               </div>
               <input
