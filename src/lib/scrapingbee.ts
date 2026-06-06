@@ -153,9 +153,12 @@ function extractArgenprop(html: string): any[] {
     const expensesMatch = rawPrice.match(/\+\s*\$[\d.]+/)
     const expensesText = expensesMatch ? expensesMatch[0] : ''
 
+    // Extract address from URL slug: /departamento-en-venta-en-palermo-chico-5-ambientes--18799423
+    const slug = href.split('--')[0] || ''
+    const addressFromUrl = slug.replace(/.*-en-venta-en-/, '').replace(/-\d+$/, '').replace(/-/g, ' ')
+
     const title = card.find('h2.card__title, h2').first().text().trim()
     const specsText = card.find('.card__main-features').text().trim() || card.text()
-    const address = card.find('.card__info, p[class*="info"]').first().text().trim()
     const img = card.find('img').first().attr('data-src') || card.find('img').first().attr('src') || ''
 
     if (priceLine || title) {
@@ -166,7 +169,7 @@ function extractArgenprop(html: string): any[] {
         expenses: expensesText,
         url: fullUrl,
         image: img.includes('listing-camera') ? '' : img,
-        address: address.substring(0, 300),
+        address: addressFromUrl || 'Capital Federal',
         beds, baths, sqm,
       })
     }
@@ -273,6 +276,7 @@ function extractMercadoLibre(html: string): any[] {
 
 function normalize(raw: any, portal: string): NormalizedProperty {
   const { price, currency } = parsePrice(raw.price || '')
+  const expenses = raw.expenses ? parsePrice(raw.expenses).price : null
   return {
     id: Math.random().toString(36).slice(2, 10),
     portal,
@@ -280,7 +284,7 @@ function normalize(raw: any, portal: string): NormalizedProperty {
     price,
     currency,
     priceUsd: price,
-    monthlyExpenses: null,
+    monthlyExpenses: expenses,
     address: raw.address || '',
     street: '',
     neighborhood: '',
