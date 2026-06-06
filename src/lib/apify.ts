@@ -1,10 +1,16 @@
 import { ApifyClient } from 'apify-client'
 
-const client = new ApifyClient({
-  token: process.env.APIFY_TOKEN,
-})
+let _client: ApifyClient | null = null
 
-// ─── Tipos ────────────────────────────────────────────────────────
+function getClient() {
+  if (!_client) {
+    const token = process.env.APIFY_TOKEN
+    if (!token) throw new Error('APIFY_TOKEN not set')
+    _client = new ApifyClient({ token })
+  }
+  return _client
+}
+
 export interface NormalizedProperty {
   id: string
   portal: string
@@ -43,262 +49,235 @@ type Portal =
   | 'zillow'
   | 'realtor'
   | 'vivareal'
-  | 'zapimoveis'
   | 'zonaprop'
   | 'argenprop'
   | 'mercadolibre'
-  | 'olx'
   | 'generic'
 
-// ─── Detección de portal ──────────────────────────────────────────
 function detectPortal(url: string): Portal {
   const u = url.toLowerCase()
   if (u.includes('zillow.com')) return 'zillow'
   if (u.includes('realtor.com')) return 'realtor'
-  if (u.includes('vivareal.com.br')) return 'vivareal'
-  if (u.includes('zapimoveis.com.br')) return 'zapimoveis'
+  if (u.includes('vivareal.com.br') || u.includes('zapimoveis.com.br')) return 'vivareal'
   if (u.includes('zonaprop.com.ar')) return 'zonaprop'
   if (u.includes('argenprop.com')) return 'argenprop'
   if (u.includes('mercadolibre.com') || u.includes('inmuebles.mercadolibre')) return 'mercadolibre'
-  if (u.includes('olx.com')) return 'olx'
   return 'generic'
 }
 
-// ─── Actor mapping por portal ──────────────────────────────────────
-function getActorForPortal(portal: Portal): string {
-  const actors: Record<Portal, string> = {
-    zillow: 'aknahin/zillow-property-info-scraper',
-    realtor: 'epctex/realtor-scraper',
-    vivareal: 'gio21/vivareal-zap-scraper',
-    zapimoveis: 'gio21/vivareal-zap-scraper',
-    zonaprop: 'solidcode/zonaprop-scraper',
-    argenprop: 'whitewalk/real-estate-scraper',
-    mercadolibre: 'whitewalk/real-estate-scraper',
-    olx: 'whitewalk/real-estate-scraper',
-    generic: 'whitewalk/real-estate-scraper',
+function getPortalSearchUrl(portal: string): string {
+  const urls: Record<string, string> = {
+    zonaprop: 'https://www.zonaprop.com.ar/propiedades/venta-departamentos-capital-federal.html',
+    argenprop: 'https://www.argenprop.com/venta/departamento-capital-federal',
+    mercadolibre: 'https://inmuebles.mercadolibre.com.ar/departamentos/venta/capital-federal/',
+    zillow: 'https://www.zillow.com/homes/for_sale/',
+    realtor: 'https://www.realtor.com/realestateandhomes-for-sale',
+    vivareal: 'https://www.vivareal.com.br/venda/sp/sao-paulo/apartamento_residencial/',
   }
-  return actors[portal]
+  return urls[portal] || urls.zonaprop
 }
 
-// ─── Input builder por portal ──────────────────────────────────────
-function buildActorInput(portal: Portal, urls: string[], maxItems: number) {
-  switch (portal) {
-    case 'zillow':
-      return {
-        addresses: urls,
-        maxItems,
-      }
-    case 'realtor':
-      return {
-        startUrls: urls.map((url) => ({ url })),
-        maxItems,
-        mode: 'BUY',
-      }
-    case 'vivareal':
-    case 'zapimoveis':
-      return {
-        location: urls[0],
-        maxItems,
-      }
-    case 'zonaprop':
-      return {
-        startUrls: urls.map((url) => ({ url })),
-        maxItems,
-      }
-    default:
-      return {
-        startUrls: urls.map((url) => ({ url })),
-        maxItems,
-      }
+function normalizeGeneric(item: any, portal: string): NormalizedProperty {
+  const extractPrice = (obj: any): number | null => {
+    const val = obj.price || obj.listPrice || obj.list_price || obj.priceValue ||
+      (typeof obj.price === 'object' ? obj.price.value : null)
+    if (typeof val === 'number') return val
+    if (typeof val === 'string') {
+      const cleaned = val.replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')
+      const num = parseFloat(cleaned)
+      return isNaN(num) ? null : num
+    }
+    return null
   }
-}
 
-// ─── Normalizadores por portal ─────────────────────────────────────
-function normalizeZillow(item: any): NormalizedProperty {
+  const extractCurrency = (obj: any): string => {
+    const c = obj.currency || obj.priceCurrency || obj.price_currency || ''
+    if (typeof c === 'string' && c.length === 3) return c.toUpperCase()
+    const title = (obj.title || '').toLowerCase()
+    if (title.includes('usd') || title.includes('u$s') || title.includes('dolar')) return 'USD'
+    if (title.includes('ars') || title.includes('$')) return 'ARS'
+    if (title.includes('brl') || title.includes('r$')) return 'BRL'
+    return 'USD'
+  }
+
   return {
-    id: item.zpid || item.id || '',
-    portal: 'zillow',
-    title: item.address || '',
-    price: item.price || null,
-    currency: 'USD',
-    priceUsd: item.price || null,
-    monthlyExpenses: null,
-    address: item.address || '',
-    street: '',
-    neighborhood: '',
-    city: item.city || '',
-    state: item.state || '',
-    country: 'US',
-    zipCode: item.zipcode || '',
-    lat: item.latLong?.latitude || null,
-    lng: item.latLong?.longitude || null,
-    beds: item.beds || null,
-    baths: item.baths || null,
-    sqm: item.area || null,
-    lotSqm: item.lotSize || null,
-    propertyType: item.propertyType || '',
-    status: item.statusText || '',
-    url: item.detailUrl ? `https://www.zillow.com${item.detailUrl}` : '',
-    photos: item.imgSrc ? [item.imgSrc] : [],
-    description: '',
-    features: [],
-    yearBuilt: item.yearBuilt || null,
-    garage: item.garageSpaces || null,
-    publisher: '',
-    publisherPhone: '',
-    scrapedAt: new Date().toISOString(),
-  }
-}
-
-function normalizeRealtor(item: any): NormalizedProperty {
-  return {
-    id: item.property_id || item.id || '',
-    portal: 'realtor',
-    title: item.location?.address?.line || '',
-    price: item.list_price || null,
-    currency: 'USD',
-    priceUsd: item.list_price || null,
-    monthlyExpenses: null,
-    address: item.location?.address?.line || '',
-    street: item.location?.address?.line || '',
-    neighborhood: item.location?.neighborhoods?.[0]?.name || '',
-    city: item.location?.address?.city || '',
-    state: item.location?.address?.state_code || '',
-    country: 'US',
-    zipCode: item.location?.address?.postal_code || '',
-    lat: item.location?.address?.coordinate?.lat || null,
-    lng: item.location?.address?.coordinate?.lon || null,
-    beds: item.description?.beds || null,
-    baths: item.description?.baths || null,
-    sqm: item.description?.sqft || null,
-    lotSqm: item.description?.lot_sqft || null,
-    propertyType: item.description?.type || '',
-    status: item.status || '',
-    url: item.permalink || '',
-    photos: (item.primary_photo?.href ? [item.primary_photo.href] : []),
-    description: item.description?.text || '',
-    features: (item.features || []).map((f: any) => f.text || f.category || ''),
-    yearBuilt: item.description?.year_built || null,
-    garage: item.description?.garage || null,
-    publisher: item.list_agent?.full_name || '',
-    publisherPhone: item.list_agent?.phones?.[0]?.number || '',
-    scrapedAt: new Date().toISOString(),
-  }
-}
-
-function normalizeVivaReal(item: any): NormalizedProperty {
-  return {
-    id: item.externalId || item.id || '',
-    portal: 'vivareal',
-    title: item.title || '',
-    price: item.price || null,
-    currency: 'BRL',
-    priceUsd: null,
-    monthlyExpenses: item.condoFee || null,
-    address: `${item.street || ''}, ${item.neighborhood || ''}, ${item.city || ''}`.trim(),
-    street: item.street || '',
-    neighborhood: item.neighborhood || '',
-    city: item.city || '',
-    state: item.state || '',
-    country: 'BR',
-    zipCode: item.zipCode || '',
-    lat: item.lat || null,
-    lng: item.lng || null,
-    beds: item.bedrooms || null,
-    baths: item.bathrooms || null,
-    sqm: item.usableArea || null,
-    lotSqm: item.totalArea || null,
-    propertyType: item.propertyType || '',
-    status: item.listingType || '',
-    url: item.url || '',
-    photos: item.images || [],
-    description: item.description || '',
-    features: item.amenities || [],
-    yearBuilt: null,
-    garage: item.parkingSpaces || null,
-    publisher: item.advertiserName || '',
-    publisherPhone: item.advertiserPhones?.[0] || '',
-    scrapedAt: new Date().toISOString(),
-  }
-}
-
-function normalizeGeneric(item: any): NormalizedProperty {
-  return {
-    id: item.id || item.zpid || item.propertyId || item.listing_id || '',
-    portal: 'generic',
-    title: item.title || item.address?.full || item.address || '',
-    price: item.price || item.list_price || null,
-    currency: item.currency || 'USD',
-    priceUsd: item.price || item.list_price || null,
-    monthlyExpenses: item.condoFee || item.hoa || null,
-    address: item.address?.full || item.address || item.location?.address?.line || '',
-    street: item.address?.street || item.street || '',
-    neighborhood: item.address?.neighborhood || item.neighborhood || '',
-    city: item.address?.city || item.city || item.location?.address?.city || '',
-    state: item.address?.state || item.state || item.location?.address?.state_code || '',
-    country: item.address?.country || item.country || '',
-    zipCode: item.address?.zipCode || item.zipCode || item.location?.address?.postal_code || '',
-    lat: item.address?.latitude || item.coordinates?.latitude || item.lat || null,
-    lng: item.address?.longitude || item.coordinates?.longitude || item.lng || null,
-    beds: item.beds || item.bedrooms || item.description?.beds || null,
-    baths: item.baths || item.bathrooms || item.description?.baths || null,
-    sqm: item.sqft || item.area || item.usableArea || item.description?.sqft || null,
-    lotSqm: item.lotSize || item.lotSqm || item.totalArea || null,
+    id: item.id || item.propertyId || item.zpid || item.listing_id || Math.random().toString(36).slice(2, 10),
+    portal,
+    title: item.title || item.address || item.propertyTitle || '',
+    price: extractPrice(item),
+    currency: extractCurrency(item),
+    priceUsd: extractPrice(item),
+    monthlyExpenses: item.condoFee || item.hoa || item.expenses || null,
+    address: item.address || item.fullAddress || item.location || item.propertyAddress || '',
+    street: item.street || item.streetName || '',
+    neighborhood: item.neighborhood || item.barrio || item.district || '',
+    city: item.city || item.locality || '',
+    state: item.state || item.province || '',
+    country: item.country || '',
+    zipCode: item.zipCode || item.postalCode || item.zip || '',
+    lat: parseFloat(item.lat || item.latitude || item.latLong?.latitude) || null,
+    lng: parseFloat(item.lng || item.longitude || item.latLong?.longitude) || null,
+    beds: parseInt(item.beds || item.bedrooms || item.rooms || '0') || null,
+    baths: parseInt(item.baths || item.bathrooms || item.banos || '0') || null,
+    sqm: parseInt(item.sqm || item.area || item.usableArea || item.sqft || '0') || null,
+    lotSqm: parseInt(item.lotSize || item.totalArea || '0') || null,
     propertyType: item.propertyType || item.type || '',
     status: item.status || item.listingType || '',
-    url: item.url || item.permalink || item.detailUrl || '',
+    url: item.url || item.permalink || item.detailUrl || item.link || '',
     photos: item.photos || item.images || (item.imgSrc ? [item.imgSrc] : []),
     description: item.description || item.descriptionText || '',
     features: item.features || item.amenities || [],
-    yearBuilt: item.yearBuilt || null,
-    garage: item.garage || item.garageSpaces || null,
-    publisher: item.publisher || item.listingAgent?.name || item.advertiserName || '',
-    publisherPhone: item.publisherPhone || item.listingAgent?.phone || item.advertiserPhones?.[0] || '',
+    yearBuilt: parseInt(item.yearBuilt || '0') || null,
+    garage: parseInt(item.garage || item.garageSpaces || '0') || null,
+    publisher: item.publisher || item.advertiserName || '',
+    publisherPhone: item.publisherPhone || item.phone || '',
     scrapedAt: new Date().toISOString(),
   }
 }
 
-function normalizeByPortal(portal: Portal, item: any): NormalizedProperty {
-  switch (portal) {
-    case 'zillow':
-      return normalizeZillow(item)
-    case 'realtor':
-      return normalizeRealtor(item)
-    case 'vivareal':
-    case 'zapimoveis':
-      return normalizeVivaReal(item)
-    default:
-      return normalizeGeneric(item)
+const WEB_SCRAPER_PAGE_FUNCTION = `async function pageFunction(context) {
+  const $ = context.jQuery;
+  const url = context.request.url;
+  
+  // Generic extraction for any real estate page
+  const results = [];
+  
+  // Try common listing selectors
+  const selectors = [
+    '[data-testid="property-card"]',
+    '.property-card',
+    '.card-container',
+    '.listing-card',
+    '.search-result',
+    'article[data-id]',
+    '.geo-card',
+    '.aviso-card',
+    '.postingsContainer a',
+    '.results-list article',
+    '.ui-search-layout__item',
+    '.ant-card',
+    '[class*="CardContainer"]',
+    '[class*="property"]',
+    'li.result',
+    '.results article',
+  ];
+  
+  let items = $();
+  for (const sel of selectors) {
+    items = $(sel);
+    if (items.length > 0) break;
+  }
+  
+  // If no structured listings, extract all links with property-like patterns
+  if (items.length === 0) {
+    const links = $('a[href]');
+    links.each((i, el) => {
+      const href = $(el).attr('href') || '';
+      const text = $(el).text().trim().substring(0, 200);
+      if (text.length > 10 && (
+        href.includes('/propiedad') || href.includes('/property') || 
+        href.includes('/imovel') || href.includes('/listing') ||
+        href.includes('/homedetails') || href.includes('/realestateandhomes')
+      )) {
+        results.push({
+          title: text.replace(/\\s+/g, ' ').substring(0, 150),
+          url: href.startsWith('http') ? href : new URL(href, url).href,
+        });
+      }
+    });
+    return results.slice(0, context.customData?.maxItems || 50);
+  }
+  
+  items.each((i, el) => {
+    if (i >= (context.customData?.maxItems || 50)) return false;
+    const card = $(el);
+    
+    const title = card.find('h2, h3, [class*="title"], [class*="Title"]').first().text().trim() || 
+                  card.find('a').first().text().trim().substring(0, 150);
+    
+    const priceText = card.find('[class*="price"], [class*="Price"], [class*="valor"]').first().text().trim();
+    
+    const link = card.find('a[href]').first().attr('href') || '';
+    
+    const img = card.find('img[src]').first().attr('src') || '';
+    
+    const address = card.find('[class*="address"], [class*="location"], [class*="ubicacion"], [class*="Address"]').first().text().trim();
+    
+    if (title || link) {
+      results.push({
+        title: title.substring(0, 150),
+        price: priceText,
+        url: link.startsWith('http') ? link : new URL(link, url).href,
+        address: address.substring(0, 200),
+        image: img,
+      });
+    }
+  });
+  
+  return results;
+}`
+
+export async function scrapeUrls(
+  urls: string[],
+  maxItems: number = 50,
+  portalOverride?: string
+): Promise<{ portal: string; properties: NormalizedProperty[] }> {
+  const client = getClient()
+  const portal = portalOverride || detectPortal(urls[0])
+
+  console.log(`[Scrape] Portal: ${portal}, URLs: ${urls.length}, Max: ${maxItems}`)
+
+  try {
+    const startUrls = urls.map(url => {
+      if (portalOverride && !url.startsWith('http')) {
+        return { url: getPortalSearchUrl(portal) }
+      }
+      return { url }
+    })
+
+    const run = await client.actor('apify/web-scraper').call(
+      {
+        startUrls,
+        maxItems,
+        pageFunction: WEB_SCRAPER_PAGE_FUNCTION,
+        proxyConfiguration: { useApifyProxy: true },
+      },
+      {
+        timeout: 120,
+        memory: 2048,
+        build: 'latest',
+      }
+    )
+
+    const { items } = await client.dataset(run.defaultDatasetId).listItems()
+
+    console.log(`[Scrape] Got ${items.length} raw items`)
+
+    const properties = items
+      .flat()
+      .filter((item: any) => item && (item.title || item.url))
+      .map((item: any) => normalizeGeneric(item, portal))
+      .filter((p: NormalizedProperty) => p.title || p.url)
+      .slice(0, maxItems)
+
+    console.log(`[Scrape] Normalized ${properties.length} properties`)
+
+    return { portal, properties }
+  } catch (error: any) {
+    const msg = error.message || ''
+    if (msg.includes('approve') || msg.includes('permissions')) {
+      throw new Error(
+        'Necesitás aprobar el scraper de Apify. Andá a https://console.apify.com/actors/moJRLRc85AitArpNN?approvePermissions=true y dale "Approve". Es gratis.'
+      )
+    }
+    if (msg.includes('rent') || msg.includes('paid')) {
+      throw new Error('Este scraper requiere un plan de pago en Apify. Probá con otra URL.')
+    }
+    throw error
   }
 }
 
-// ─── Función principal ─────────────────────────────────────────────
-export async function scrapePortal(
-  urls: string[],
-  maxItems: number = 50
-): Promise<{ portal: Portal; properties: NormalizedProperty[] }> {
-  if (!urls.length) throw new Error('Se requiere al menos una URL')
-
-  const portal = detectPortal(urls[0])
-  const actorId = getActorForPortal(portal)
-  const input = buildActorInput(portal, urls, maxItems)
-
-  console.log(`[Inmoxil] Portal detectado: ${portal}`)
-  console.log(`[Inmoxil] Actor: ${actorId}`)
-
-  const run = await client.actor(actorId).call(input, {
-    timeout: 120,
-    memory: 1024,
-  })
-
-  const { items } = await client.dataset(run.defaultDatasetId).listItems()
-
-  const properties = items.map((item) => normalizeByPortal(portal, item))
-
-  return { portal, properties }
-}
-
 export async function scrapeSingleUrl(url: string): Promise<NormalizedProperty[]> {
-  const { properties } = await scrapePortal([url], 1)
+  const { properties } = await scrapeUrls([url], 1)
   return properties
 }

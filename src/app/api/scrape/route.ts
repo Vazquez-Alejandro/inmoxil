@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { scrapePortal, scrapeSingleUrl } from '@/lib/apify'
+import { scrapeUrls } from '@/lib/apify'
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,9 +12,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { portal, properties } = await scrapePortal(
+    const { portal, properties } = await scrapeUrls(
       body.urls,
-      body.maxItems || 50
+      body.maxItems || 50,
+      body.portalOverride
     )
 
     return NextResponse.json({
@@ -23,12 +24,12 @@ export async function POST(request: NextRequest) {
       count: properties.length,
       data: properties,
     })
-  } catch (error) {
-    console.error('[Inmoxil] Error:', error)
+  } catch (error: any) {
+    console.error('[Scrape] Error:', error)
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Error al scrapear',
+        error: error.message || 'Error al scrapear',
       },
       { status: 500 }
     )
@@ -37,21 +38,20 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   return NextResponse.json({
-    message: 'POST /api/scrape con { urls: string[], maxItems?: number }',
+    message: 'POST /api/scrape con { urls: string[], maxItems?: number, portalOverride?: string }',
     portalsSoportados: [
       'zillow.com',
       'realtor.com',
       'vivareal.com.br',
-      'zapimoveis.com.br',
       'zonaprop.com.ar',
       'argenprop.com',
       'mercadolibre.com',
-      'olx.com',
       'cualquier otro portal (fallback genérico)',
     ],
     ejemplo: {
-      urls: ['https://www.zillow.com/homedetails/123-main-st/12345678_zpid/'],
-      maxItems: 50,
+      urls: ['https://www.zonaprop.com.ar/propiedades/venta-departamentos-capital-federal.html'],
+      maxItems: 20,
+      portalOverride: 'zonaprop',
     },
   })
 }
