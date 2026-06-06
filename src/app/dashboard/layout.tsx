@@ -16,33 +16,19 @@ export default function DashboardLayout({
   const { user, loading } = useAuth()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [onboardingChecked, setOnboardingChecked] = useState(false)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login')
+    if (!loading) {
+      if (!user) {
+        router.replace('/login')
+      } else {
+        setReady(true)
+      }
     }
   }, [user, loading, router])
 
-  useEffect(() => {
-    if (!user || loading) return
-
-    const checkOnboarding = async () => {
-      try {
-        const res = await fetch(`/api/user?userId=${user.id}`)
-        const data = await res.json()
-        if (data.needsOnboarding) {
-          router.push('/onboarding')
-          return
-        }
-      } catch {}
-      setOnboardingChecked(true)
-    }
-
-    checkOnboarding()
-  }, [user, loading, router])
-
-  if (loading || (!onboardingChecked && user)) {
+  if (loading || !ready) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -58,8 +44,6 @@ export default function DashboardLayout({
       </div>
     )
   }
-
-  if (!user) return null
 
   return (
     <ToastProvider>
