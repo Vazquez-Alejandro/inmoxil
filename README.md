@@ -1,6 +1,8 @@
 # Inmoxil
 
-Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con IA, billing por créditos.
+Plataforma SaaS para inmobiliarias. Scraping multi-portal, importación de propiedades, generación de flyers/anuncios, facturación por créditos con Stripe.
+
+**Deploy:** https://inmoxil.vercel.app
 
 ## Stack
 
@@ -17,12 +19,11 @@ Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads co
 | [Neon PostgreSQL](https://neon.tech) | Base de datos serverless | Free |
 | [NextAuth.js](https://next-auth.js.org) v4 | Autenticación JWT + Credentials | Open source |
 | [Stripe](https://stripe.com) | Checkout, billing, webhooks, suscripciones | Test mode |
-| [ScrapingBee](https://scrapingbee.com) | Scraping de portales inmobiliarios con proxy | Free (4000 créditos/mes) |
-| [Resend](https://resend.com) | Emails transaccionales | Free (100 emails/día) |
+| [ScrapingBee](https://scrapingbee.com) | Scraping de portales inmobiliarios con proxy premium | Free (1000 créditos/mes) |
+| [Resend](https://resend.com) | Emails transaccionales (bienvenida, pagos, reseteo de contraseña) | Free (100 emails/día) |
 | [Puppeteer](https://pptr.dev) | Generación de flyers y anuncios gráficos | Local |
-| [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) | Hashing de contraseñas | Open source |
-| [Apify](https://apify.com) | Backup de scraping (requiere plan pago) | Free tier |
 | [Cheerio](https://cheerio.js.org) | Parsing de HTML para extracción de datos | Open source |
+| [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) | Hashing de contraseñas | Open source |
 
 ## Variables de entorno
 
@@ -37,7 +38,6 @@ STRIPE_PRICE_STARTER=price_...        # Stripe price ID - Plan Starter
 STRIPE_PRICE_PRO=price_...            # Stripe price ID - Plan Pro
 STRIPE_PRICE_ENTERPRISE=price_...     # Stripe price ID - Plan Enterprise
 SCRAPINGBEE_API_KEY=...               # ScrapingBee API key (scraping principal)
-APIFY_TOKEN=apify_api_...             # Apify token (backup de scraping)
 RESEND_API_KEY=re_...                 # Resend API key (emails)
 ```
 
@@ -45,32 +45,71 @@ RESEND_API_KEY=re_...                 # Resend API key (emails)
 
 ```bash
 npm install
-cp .env.local.example .env.local  # Configurar variables de entorno
+cp .env.local.example .env.local
 npm run dev
 ```
 
 ## Base de datos
 
 Tablas (Neon PostgreSQL):
-- `workspaces` — cuentas de inmobiliarias
-- `users` — usuarios con auth
+- `workspaces` — cuentas de inmobiliarias (plan, créditos, marca, Stripe)
+- `users` — usuarios con auth, rol (owner/admin/member)
 - `properties` — propiedades scrapeadas o importadas
-- `generated_ads` — anuncios generados
-- `credit_transactions` — historial de créditos
+- `generated_ads` — anuncios gráficos generados
+- `credit_transactions` — historial de créditos y pagos
 - `password_resets` — tokens de recuperación de contraseña
 
 ## Portales soportados
 
 | Portal | País | Método | Estado |
 |---|---|---|---|
-| ZonaProp | AR | ScrapingBee | Activo |
-| Argenprop | AR | ScrapingBee | Activo |
-| MercadoLibre | AR | ScrapingBee | Activo |
-| Zillow | US | ScrapingBee | Activo |
-| Realtor | US | ScrapingBee | Activo |
-| VivaReal | BR | ScrapingBee | Activo |
+| ZonaProp | AR | ScrapingBee + Cheerio | Activo |
+| Argenprop | AR | ScrapingBee + Cheerio | Activo |
+| MercadoLibre | AR | ScrapingBee | Parcial (timeout en algunos casos) |
+| Zillow | US | — | No disponible desde AR |
+| Realtor | US | — | No disponible desde AR |
+| VivaReal | BR | — | Pendiente |
 
-También se soporta importación manual de propiedades via CSV/JSON.
+Importación manual via CSV/JSON siempre disponible como alternativa.
+
+## Funcionalidades
+
+### Scraping Multi-Portal
+- Scraping rápido con un click por portal (ZonaProp, Argenprop)
+- Scraping por URLs específicas
+- Importación masiva de CSV/JSON con detección automática de columnas
+- Extracción de: precio, dirección, ambientes, baños, m², URL, fotos
+
+### Generación de Anuncios (Ads)
+- 6 templates de diseño: moderno, minimalista, lujoso, bold, elegante, tropical
+- 4 formatos: feed, story, reel, meta ad
+- Generados con Puppeteer en el servidor
+- Galería de anuncios generados
+
+### Facturación
+- 3 planes: Starter ($19), Pro ($49), Enterprise ($99)
+- Checkout con Stripe
+- Portal de auto-servicio para facturación
+- Webhooks para confirmación automática de pagos
+
+### Marca (Brand Kit)
+- Colores personalizados (primario, secundario, acento)
+- Logo upload
+- Preview en tiempo real
+
+### Dashboard
+- Estadísticas de propiedades
+- Gráficos de actividad
+- Panel de admin para gestión de usuarios
+- Documentación de API interna
+
+### Email
+- Emails transaccionales con diseño profesional
+- Bienvenida, confirmación de pago, créditos bajos, recuperación de contraseña
+
+### Legal
+- Términos y condiciones
+- Política de privacidad
 
 ## Despliegue
 
