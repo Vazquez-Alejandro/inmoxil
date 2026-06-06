@@ -13,8 +13,8 @@ export function getDb() {
 
 export async function query(text: string, params?: any[]) {
   const sql = getDb()
-  const result = await sql(text, params)
-  return result
+  const result = await sql.query(text, params || [])
+  return result.rows
 }
 
 export async function queryOne(text: string, params?: any[]) {
@@ -35,6 +35,6 @@ export async function updateOne(table: string, data: Record<string, any>, where:
   const values = Object.values(data)
   const setClauses = keys.map((k, i) => `${k}=$${i + 1}`)
   const params = [...values, ...whereParams]
-  const text = `UPDATE ${table} SET ${setClauses.join(',')} WHERE ${where.replace(/\$/g, (m) => `$${keys.length + parseInt(m.slice(1))}`)} RETURNING *`
+  const text = `UPDATE ${table} SET ${setClauses.join(',')} WHERE ${where} RETURNING *`
   return queryOne(text, params)
 }
