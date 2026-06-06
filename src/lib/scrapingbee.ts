@@ -68,92 +68,120 @@ async function fetchPage(url: string): Promise<string> {
     render_js: 'true',
     premium_proxy: 'true',
     country_code: 'ar',
+    wait: '8000',
   })
 
-  const res = await fetch(`${API_URL}?${params}`)
+  const res = await fetch(`${API_URL}?${params}`, { signal: AbortSignal.timeout(60000) })
   if (!res.ok) {
     const text = await res.text()
     if (text.includes('credit') || text.includes('balance')) {
-      throw new Error('Sin créditos ScrapingBee. Registrate gratis en scrapingbee.com (1000 créditos/mes).')
+      throw new Error('Sin créditos ScrapingBee. Registrate gratis en scrapingbee.com (4000 créditos/mes).')
     }
     throw new Error(`ScrapingBee error ${res.status}: ${text.slice(0, 200)}`)
   }
-
   return res.text()
 }
 
-function extractFromZonaprop($: cheerio.CheerioAPI): any[] {
+function parsePrice(str: string): { price: number | null; currency: string } {
+  if (!str) return { price: null, currency: 'USD' }
+  const lower = str.toLowerCase()
+  let currency = 'USD'
+  if (lower.includes('brl') || lower.includes('r$')) currency = 'BRL'
+  else if (lower.includes('ars') || (lower.includes('$') && !lower.includes('usd') && !lower.includes('u$s'))) currency = 'ARS'
+  const cleaned = str.replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')
+  const num = parseFloat(cleaned)
+  return { price: isNaN(num) || num <= 0 ? null : num, currency }
+}
+
+function extractSpecs(text: string): { beds: number | null; baths: number | null; sqm: number | null } {
+  const sqm = parseInt(text.match(/(\d+)\s*m/i)?.[1] || '0') || null
+  const beds = parseInt(text.match(/(\d+)\s*amb/i)?.[1] || text.match(/(\d+)\s*dorm/i)?.[1] || text.match(/(\d+)\s*bed/i)?.[1] || '0') || null
+  const baths = parseInt(text.match(/(\d+)\s*baño/i)?.[1] || text.match(/(\d+)\s*bath/i)?.[1] || '0') || null
+  return { beds, baths, sqm }
+}
+
+// ── ZonaProp extractor ────────────────────────────────────────────
+function extractZonaprop(html: string): any[] {
+  const $ = cheerio.load(html)
   const results: any[] = []
-  $('[class*="Card"], .card-container, .posting').each((_, el) => {
+
+  $('div.postingCard-module__posting-container').each((_, el) => {
     const card = $(el)
-    const title = card.find('[class*="title"], h2, h3').first().text().trim()
-    const price = card.find('[class*="price"], .price-tag').first().text().trim()
+    const title = card.find('h2').first().text().trim()
+    const priceText = card.find('[data-qa="POSTING_CARD_PRICE"]').text().trim() || card.find('h2').first().text().trim()
+    const specsText = card.find('h3').first().text().trim()
     const link = card.find('a[href]').first().attr('href') || ''
-    const img = card.find('img').first().attr('src') || ''
-    const attrs: string[] = []
-    card.find('[class*="attribute"], [class*="amenit"]').each((_, a) => {
-      attrs.push($(a).text().trim())
+    const imgs: string[] = []
+    card.find('img').each((_, img) => {
+      const src = $(img).attr('src')
+      if (src && src.includes('zonapropcdn')) imgs.push(src)
     })
-    const location = card.find('[class*="location"], [class*="address"]').first().text().trim()
-    if (title || link) {
+    const address = card.find('[data-qa="POSTING_CARD_LOCATION"], [class*="location"], [class*="address"]').first().text().trim()
+    const { beds, baths, sqm } = extractSpecs(specsText)
+
+    if (title) {
       results.push({
         title: title.substring(0, 200),
-        price,
+        price: priceText,
+        specs: specsText,
         url: link.startsWith('http') ? link : `https://www.zonaprop.com.ar${link}`,
-        image: img,
-        address: location.substring(0, 300),
-        attrs,
+        image: imgs[0] || '',
+        address: address.substring(0, 300),
+        beds, baths, sqm,
       })
     }
   })
+
   return results
 }
 
-function extractGeneric($: cheerio.CheerioAPI, baseUrl: string): any[] {
+// ── Argenprop extractor ───────────────────────────────────────────
+function extractArgenprop(html: string): any[] {
+  const $ = cheerio.load(html)
   const results: any[] = []
-  const selectors = [
-    '[class*="Card"]', '[class*="card"]', 'article', '.posting', '.aviso',
-    '.search-result', '.listing', '[class*="listing"]', '[class*="property"]',
-    '.ui-search-layout__item', 'li.result',
-  ]
 
-  let items = $('')
-  for (const sel of selectors) {
-    items = $(sel)
-    if (items.length > 0) break
-  }
-
-  items.each((_, el) => {
+  // Argenprop uses slide-property cards
+  $('div[class*="slide-property"]').each((_, el) => {
     const card = $(el)
-    const title = card.find('h2, h3, [class*="title"], [class*="Title"]').first().text().trim()
-    const price = card.find('[class*="price"], [class*="Price"], .andes-money-amount__fraction').first().text().trim()
+    // Skip non-card containers
+    if (card.find('img').length === 0) return
+
+    const title = card.find('h2').first().text().trim() ||
+                  card.find('[class*="title"]').first().text().trim()
+    const priceText = card.find('[class*="price"]').first().text().trim()
     const link = card.find('a[href]').first().attr('href') || ''
     const img = card.find('img').first().attr('src') || ''
-    const address = card.find('[class*="address"], [class*="location"], [class*="ubicacion"]').first().text().trim()
+    const address = card.find('[class*="address"]').first().text().trim()
+    const specsText = card.text()
 
-    if (title || link) {
+    if (title && !results.find(r => r.title === title)) {
+      const { beds, baths, sqm } = extractSpecs(specsText)
       results.push({
         title: title.substring(0, 200),
-        price,
-        url: link.startsWith('http') ? link : new URL(link, baseUrl).href,
+        price: priceText,
+        url: link.startsWith('http') ? link : `https://www.argenprop.com${link}`,
         image: img,
         address: address.substring(0, 300),
+        beds, baths, sqm,
       })
     }
   })
 
+  // Fallback: extract from h2s that contain price info
   if (results.length === 0) {
-    $('a[href]').each((_, el) => {
-      const href = $(el).attr('href') || ''
-      const text = $(el).text().trim()
-      if (text.length > 10 && (
-        href.includes('/propiedad') || href.includes('/property') ||
-        href.includes('/listing') || href.includes('/aviso') ||
-        href.includes('/homedetails') || href.includes('/realestateandhomes')
-      )) {
+    $('h2').each((_, el) => {
+      const title = $(el).text().trim()
+      if (title.length < 10) return
+      const parent = $(el).closest('a[href]') || $(el).parent().find('a[href]').first()
+      const link = parent.attr('href') || ''
+      if (link.includes('/propiedad') || link.includes('/inmueble')) {
         results.push({
-          title: text.replace(/\s+/g, ' ').substring(0, 150),
-          url: href.startsWith('http') ? href : new URL(href, baseUrl).href,
+          title: title.substring(0, 200),
+          price: '',
+          url: link.startsWith('http') ? link : `https://www.argenprop.com${link}`,
+          image: '',
+          address: '',
+          beds: null, baths: null, sqm: null,
         })
       }
     })
@@ -162,17 +190,47 @@ function extractGeneric($: cheerio.CheerioAPI, baseUrl: string): any[] {
   return results
 }
 
-function parsePrice(priceStr: string): { price: number | null; currency: string } {
-  if (!priceStr) return { price: null, currency: 'USD' }
-  const lower = priceStr.toLowerCase()
-  let currency = 'USD'
-  if (lower.includes('usd') || lower.includes('u$s') || lower.includes('dólar')) currency = 'USD'
-  else if (lower.includes('brl') || lower.includes('r$')) currency = 'BRL'
-  else if (lower.includes('ars') || lower.includes('$')) currency = 'ARS'
+// ── Generic extractor ─────────────────────────────────────────────
+function extractGeneric(html: string, baseUrl: string): any[] {
+  const $ = cheerio.load(html)
+  const results: any[] = []
 
-  const cleaned = priceStr.replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')
-  const num = parseFloat(cleaned)
-  return { price: isNaN(num) || num <= 0 ? null : num, currency }
+  // Try multiple patterns
+  const cardSelectors = [
+    '[class*="Card"]', '[class*="card"]', 'article', '.posting',
+    '.search-result', '.listing', '[class*="listing"]', '[class*="property"]',
+    '.ui-search-layout__item',
+  ]
+
+  let items = $('')
+  for (const sel of cardSelectors) {
+    items = $(sel)
+    if (items.length >= 3) break
+  }
+
+  items.each((_, el) => {
+    const card = $(el)
+    const title = card.find('h2, h3, [class*="title"]').first().text().trim()
+    const price = card.find('[class*="price"], [class*="Price"]').first().text().trim()
+    const link = card.find('a[href]').first().attr('href') || ''
+    const img = card.find('img').first().attr('src') || ''
+    const address = card.find('[class*="address"], [class*="location"]').first().text().trim()
+
+    if (title || link) {
+      const specsText = card.text()
+      const { beds, baths, sqm } = extractSpecs(specsText)
+      results.push({
+        title: title.substring(0, 200),
+        price,
+        url: link.startsWith('http') ? link : new URL(link, baseUrl).href,
+        image: img,
+        address: address.substring(0, 300),
+        beds, baths, sqm,
+      })
+    }
+  })
+
+  return results
 }
 
 function normalize(raw: any, portal: string): NormalizedProperty {
@@ -194,16 +252,16 @@ function normalize(raw: any, portal: string): NormalizedProperty {
     zipCode: '',
     lat: null,
     lng: null,
-    beds: parseInt(String(raw.attrs?.[0] || '0')) || null,
-    baths: parseInt(String(raw.attrs?.[1] || '0')) || null,
-    sqm: null,
+    beds: raw.beds || null,
+    baths: raw.baths || null,
+    sqm: raw.sqm || null,
     lotSqm: null,
     propertyType: '',
     status: '',
     url: raw.url || '',
     photos: raw.image ? [raw.image] : [],
     description: '',
-    features: raw.attrs || [],
+    features: raw.specs ? [raw.specs] : [],
     yearBuilt: null,
     garage: null,
     publisher: '',
@@ -218,9 +276,7 @@ export async function scrapeUrls(
   portalOverride?: string
 ): Promise<{ portal: string; properties: NormalizedProperty[]; warning?: string }> {
   if (!API_KEY) {
-    throw new Error(
-      'SCRAPINGBEE_API_KEY no configurada. Registrate gratis en https://www.scrapingbee.com (1000 créditos/mes).'
-    )
+    throw new Error('SCRAPINGBEE_API_KEY no configurada. Registrate gratis en https://www.scrapingbee.com')
   }
 
   const portal = portalOverride || detectPortal(urls[0])
@@ -231,18 +287,24 @@ export async function scrapeUrls(
       ? (PORTAL_INFO[portal]?.searchUrl || url)
       : url
 
-    console.log(`[Scrape] Fetching: ${targetUrl}`)
-    const html = await fetchPage(targetUrl)
-    const $ = cheerio.load(html)
+    console.log(`[Scrape] Fetching: ${targetUrl} (portal: ${portal})`)
 
+    const html = await fetchPage(targetUrl)
     let raw: any[]
-    if (portal === 'zonaprop') {
-      raw = extractFromZonaprop($)
-    } else {
-      raw = extractGeneric($, targetUrl)
+
+    switch (portal) {
+      case 'zonaprop':
+        raw = extractZonaprop(html)
+        break
+      case 'argenprop':
+        raw = extractArgenprop(html)
+        break
+      default:
+        raw = extractGeneric(html, targetUrl)
     }
 
     console.log(`[Scrape] Extracted ${raw.length} items from ${portal}`)
+
     raw.slice(0, maxItems - properties.length).forEach(item => {
       properties.push(normalize(item, portal))
     })
