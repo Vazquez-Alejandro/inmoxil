@@ -59,7 +59,7 @@ export const PORTAL_INFO: Record<string, { name: string; country: string; search
   vivareal: { name: 'VivaReal', country: 'BR', searchUrl: 'https://www.vivareal.com.br/venda/sp/sao-paulo/' },
 }
 
-async function fetchPage(url: string): Promise<string> {
+async function fetchPage(url: string, opts?: { waitFor?: number }): Promise<string> {
   if (!API_KEY) throw new Error('SCRAPINGBEE_API_KEY not set')
 
   const params = new URLSearchParams({
@@ -68,13 +68,13 @@ async function fetchPage(url: string): Promise<string> {
     render_js: 'true',
     premium_proxy: 'true',
     country_code: 'ar',
-    wait: '8000',
+    wait: String(opts?.waitFor || 8000),
   })
 
-  const res = await fetch(`${API_URL}?${params}`, { signal: AbortSignal.timeout(60000) })
+  const res = await fetch(`${API_URL}?${params}`, { signal: AbortSignal.timeout(90000) })
   if (!res.ok) {
     const text = await res.text()
-    if (text.includes('credit') || text.includes('balance')) {
+    if (text.includes('credit') || text.includes('balance') || text.includes('credits')) {
       throw new Error('Sin créditos ScrapingBee. Registrate gratis en scrapingbee.com (4000 créditos/mes).')
     }
     throw new Error(`ScrapingBee error ${res.status}: ${text.slice(0, 200)}`)
@@ -140,26 +140,24 @@ function extractArgenprop(html: string): any[] {
   const $ = cheerio.load(html)
   const results: any[] = []
 
-  // Argenprop uses slide-property cards
-  $('div[class*="slide-property"]').each((_, el) => {
+  // Real property cards: div.listing__item > a.card > div.card__details-box
+  $('div.listing__item a.card, a.card').each((_, el) => {
     const card = $(el)
-    // Skip non-card containers
-    if (card.find('img').length === 0) return
+    const href = card.attr('href') || ''
+    const fullUrl = href.startsWith('http') ? href : `https://www.argenprop.com${href}`
 
-    const title = card.find('h2').first().text().trim() ||
-                  card.find('[class*="title"]').first().text().trim()
     const priceText = card.find('[class*="price"]').first().text().trim()
-    const link = card.find('a[href]').first().attr('href') || ''
+    const specsText = card.find('.card__details-box').text().trim() || card.text()
     const img = card.find('img').first().attr('src') || ''
-    const address = card.find('[class*="address"]').first().text().trim()
-    const specsText = card.text()
+    const address = card.find('[class*="address"], [class*="location"]').first().text().trim()
+    const title = card.find('h2, h3').first().text().trim() || priceText
 
-    if (title && !results.find(r => r.title === title)) {
+    if (priceText || title) {
       const { beds, baths, sqm } = extractSpecs(specsText)
       results.push({
-        title: title.substring(0, 200),
+        title: title.substring(0, 200) || 'Departamento',
         price: priceText,
-        url: link.startsWith('http') ? link : `https://www.argenprop.com${link}`,
+        url: fullUrl,
         image: img,
         address: address.substring(0, 300),
         beds, baths, sqm,
@@ -167,21 +165,23 @@ function extractArgenprop(html: string): any[] {
     }
   })
 
-  // Fallback: extract from h2s that contain price info
+  // Fallback: try div.card as container
   if (results.length === 0) {
-    $('h2').each((_, el) => {
-      const title = $(el).text().trim()
-      if (title.length < 10) return
-      const parent = $(el).closest('a[href]') || $(el).parent().find('a[href]').first()
-      const link = parent.attr('href') || ''
-      if (link.includes('/propiedad') || link.includes('/inmueble')) {
+    $('div.card').each((_, el) => {
+      const card = $(el)
+      const href = card.find('a[href*="/propiedad"]').first().attr('href') || ''
+      const priceText = card.find('[class*="price"]').first().text().trim()
+      const specsText = card.text()
+
+      if (priceText && href) {
+        const { beds, baths, sqm } = extractSpecs(specsText)
         results.push({
-          title: title.substring(0, 200),
-          price: '',
-          url: link.startsWith('http') ? link : `https://www.argenprop.com${link}`,
-          image: '',
-          address: '',
-          beds: null, baths: null, sqm: null,
+          title: priceText.substring(0, 200),
+          price: priceText,
+          url: href.startsWith('http') ? href : `https://www.argenprop.com${href}`,
+          image: card.find('img').first().attr('src') || '',
+          address: card.find('[class*="address"]').first().text().trim(),
+          beds, baths, sqm,
         })
       }
     })
@@ -199,7 +199,8 @@ function extractGeneric(html: string, baseUrl: string): any[] {
   const cardSelectors = [
     '[class*="Card"]', '[class*="card"]', 'article', '.posting',
     '.search-result', '.listing', '[class*="listing"]', '[class*="property"]',
-    '.ui-search-layout__item',
+    '.ui-search-layout__item', 'li.ui-search-layout__item',
+    '[class*="results"] > div', '[class*="results"] > li',
   ]
 
   let items = $('')
@@ -222,13 +223,65 @@ function extractGeneric(html: string, baseUrl: string): any[] {
       results.push({
         title: title.substring(0, 200),
         price,
-        url: link.startsWith('http') ? link : new URL(link, baseUrl).href,
+        url: link.startsWith('http') ? link : (() => { try { return new URL(link, baseUrl).href } catch { return link } })(),
         image: img,
         address: address.substring(0, 300),
         beds, baths, sqm,
       })
     }
   })
+
+  return results
+}
+
+// ── MercadoLibre extractor ────────────────────────────────────────
+function extractMercadoLibre(html: string): any[] {
+  const $ = cheerio.load(html)
+  const results: any[] = []
+
+  // ML uses .ui-search-result or ol.ui-search-layout li
+  $('li.ui-search-layout__item, .ui-search-result, .ui-search-layout .ui-search-layout__item').each((_, el) => {
+    const card = $(el)
+    const link = card.find('a[href*="/MLA-"]').first().attr('href') || card.find('a[href*="inmueble"]').first().attr('href') || ''
+    const priceText = card.find('[class*="price"], .andes-money-amount').first().text().trim()
+    const title = card.find('h2, [class*="title"]').first().text().trim()
+    const img = card.find('img').first().attr('src') || ''
+    const address = card.find('[class*="location"], [class*="address"]').first().text().trim()
+    const specsText = card.text()
+
+    if (title || priceText) {
+      const { beds, baths, sqm } = extractSpecs(specsText)
+      results.push({
+        title: title.substring(0, 200),
+        price: priceText,
+        url: link.startsWith('http') ? link : `https://inmuebles.mercadolibre.com.ar${link}`,
+        image: img,
+        address: address.substring(0, 300),
+        beds, baths, sqm,
+      })
+    }
+  })
+
+  // Fallback: any link with MLA- pattern
+  if (results.length === 0) {
+    $('a[href*="/MLA-"]').each((_, el) => {
+      const href = $(el).attr('href') || ''
+      const card = $(el).closest('li, div')
+      const priceText = card.find('[class*="price"]').first().text().trim() || $(el).find('[class*="price"]').first().text().trim()
+      const title = card.find('h2, h3, [class*="title"]').first().text().trim()
+
+      if (href && !results.find(r => r.url === href)) {
+        results.push({
+          title: title.substring(0, 200) || 'Inmueble',
+          price: priceText,
+          url: href,
+          image: card.find('img').first().attr('src') || '',
+          address: '',
+          beds: null, baths: null, sqm: null,
+        })
+      }
+    })
+  }
 
   return results
 }
@@ -299,6 +352,9 @@ export async function scrapeUrls(
       case 'argenprop':
         raw = extractArgenprop(html)
         break
+      case 'mercadolibre':
+        raw = extractMercadoLibre(html)
+        break
       default:
         raw = extractGeneric(html, targetUrl)
     }
@@ -313,7 +369,13 @@ export async function scrapeUrls(
   }
 
   const warning = properties.length === 0
-    ? `No se encontraron propiedades en la página. El sitio puede haber cambiado su estructura.`
+    ? (() => {
+      if (portal === 'mercadolibre') return 'MercadoLibre bloquea scraping automatizado. Intentá exportar propiedades desde MercadoLibre y subir el CSV/JSON.'
+      if (portal === 'zillow') return 'Zillow bloquea accesos desde Argentina. Probá con ZonaProp o Argenprop.'
+      if (portal === 'realtor') return 'Realtor.com no está disponible desde esta región. Probá con ZonaProp o Argenprop.'
+      if (portal === 'vivareal') return 'VivaReal puede estar temporalmente bloqueado. Intentá de nuevo en unos minutos.'
+      return 'No se encontraron propiedades. El sitio puede haber cambiado su estructura. Intentá con otro portal.'
+    })()
     : undefined
 
   return { portal, properties: properties.slice(0, maxItems), warning }
