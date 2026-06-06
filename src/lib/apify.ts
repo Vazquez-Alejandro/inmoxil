@@ -245,7 +245,6 @@ export async function scrapeUrls(
       {
         timeout: 120,
         memory: 2048,
-        build: 'latest',
       }
     )
 
