@@ -95,8 +95,8 @@ function parsePrice(str: string): { price: number | null; currency: string } {
 
 function extractSpecs(text: string): { beds: number | null; baths: number | null; sqm: number | null } {
   const sqm = parseInt(text.match(/(\d+)\s*m/i)?.[1] || '0') || null
-  const beds = parseInt(text.match(/(\d+)\s*amb/i)?.[1] || text.match(/(\d+)\s*dorm/i)?.[1] || text.match(/(\d+)\s*bed/i)?.[1] || '0') || null
-  const baths = parseInt(text.match(/(\d+)\s*baño/i)?.[1] || text.match(/(\d+)\s*bath/i)?.[1] || '0') || null
+  const beds = parseInt(text.match(/(\d+)\s*amb/i)?.[1] || text.match(/(\d+)\s*dorm/i)?.[1] || text.match(/(\d+)\s*bed/i)?.[1] || text.match(/(\d+)\s*cuarto/i)?.[1] || '0') || null
+  const baths = parseInt(text.match(/(\d+)\s*baño/i)?.[1] || text.match(/(\d+)\s*bath/i)?.[1] || text.match(/(\d+)\s*toilette/i)?.[1] || '0') || null
   return { beds, baths, sqm }
 }
 
@@ -113,7 +113,7 @@ function extractZonaprop(html: string): any[] {
     const link = card.find('a[href]').first().attr('href') || ''
     const imgs: string[] = []
     card.find('img').each((_, img) => {
-      const src = $(img).attr('src')
+      const src = $(img).attr('data-src') || $(img).attr('src') || ''
       if (src && src.includes('zonapropcdn')) imgs.push(src)
     })
     const address = card.find('[data-qa="POSTING_CARD_LOCATION"], [class*="location"], [class*="address"]').first().text().trim()
@@ -140,52 +140,37 @@ function extractArgenprop(html: string): any[] {
   const $ = cheerio.load(html)
   const results: any[] = []
 
-  // Real property cards: div.listing__item > a.card > div.card__details-box
-  $('div.listing__item a.card, a.card').each((_, el) => {
+  // Real property cards: div.listing__item > a.card
+  $('div.listing__item a.card').each((_, el) => {
     const card = $(el)
     const href = card.attr('href') || ''
     const fullUrl = href.startsWith('http') ? href : `https://www.argenprop.com${href}`
 
-    const priceText = card.find('[class*="price"]').first().text().trim()
-    const specsText = card.find('.card__details-box').text().trim() || card.text()
-    const img = card.find('img').first().attr('src') || ''
-    const address = card.find('[class*="address"], [class*="location"]').first().text().trim()
-    const title = card.find('h2, h3').first().text().trim() || priceText
+    // Price: "USD 2.400.000\n+\n$2.200.000\nexpensas" → take first line only
+    const rawPrice = card.find('.card__price, [class*="price"]').first().text().trim()
+    const priceLine = rawPrice.split('\n')[0].trim()
+    // Extract expenses: "+ $X.XXX expensas"
+    const expensesMatch = rawPrice.match(/\+\s*\$[\d.]+/)
+    const expensesText = expensesMatch ? expensesMatch[0] : ''
 
-    if (priceText || title) {
+    const title = card.find('h2.card__title, h2').first().text().trim()
+    const specsText = card.find('.card__main-features').text().trim() || card.text()
+    const address = card.find('.card__info, p[class*="info"]').first().text().trim()
+    const img = card.find('img').first().attr('data-src') || card.find('img').first().attr('src') || ''
+
+    if (priceLine || title) {
       const { beds, baths, sqm } = extractSpecs(specsText)
       results.push({
-        title: title.substring(0, 200) || 'Departamento',
-        price: priceText,
+        title: title.substring(0, 200) || 'Inmueble',
+        price: priceLine,
+        expenses: expensesText,
         url: fullUrl,
-        image: img,
+        image: img.includes('listing-camera') ? '' : img,
         address: address.substring(0, 300),
         beds, baths, sqm,
       })
     }
   })
-
-  // Fallback: try div.card as container
-  if (results.length === 0) {
-    $('div.card').each((_, el) => {
-      const card = $(el)
-      const href = card.find('a[href*="/propiedad"]').first().attr('href') || ''
-      const priceText = card.find('[class*="price"]').first().text().trim()
-      const specsText = card.text()
-
-      if (priceText && href) {
-        const { beds, baths, sqm } = extractSpecs(specsText)
-        results.push({
-          title: priceText.substring(0, 200),
-          price: priceText,
-          url: href.startsWith('http') ? href : `https://www.argenprop.com${href}`,
-          image: card.find('img').first().attr('src') || '',
-          address: card.find('[class*="address"]').first().text().trim(),
-          beds, baths, sqm,
-        })
-      }
-    })
-  }
 
   return results
 }
