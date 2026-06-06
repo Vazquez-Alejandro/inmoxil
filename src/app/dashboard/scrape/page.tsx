@@ -5,12 +5,12 @@ import Header from '@/components/Header'
 import { useWorkspace } from '@/lib/workspace-context'
 
 const PORTALS = [
-  { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700' },
-  { slug: 'argenprop', name: 'Argenprop', color: 'bg-green-100 text-green-700' },
-  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700' },
-  { slug: 'zillow', name: 'Zillow', color: 'bg-purple-100 text-purple-700' },
-  { slug: 'realtor', name: 'Realtor', color: 'bg-red-100 text-red-700' },
-  { slug: 'vivareal', name: 'VivaReal', color: 'bg-emerald-100 text-emerald-700' },
+  { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700', placeholder: 'https://www.zonaprop.com.ar/propiedades/venta-departamento-palermo-12345.html' },
+  { slug: 'argenprop', name: 'Argenprop', color: 'bg-green-100 text-green-700', placeholder: 'https://www.argenprop.com/propiedad/...' },
+  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700', placeholder: 'https://inmuebles.mercadolibre.com.ar/...' },
+  { slug: 'zillow', name: 'Zillow', color: 'bg-purple-100 text-purple-700', placeholder: 'https://www.zillow.com/homedetails/...' },
+  { slug: 'realtor', name: 'Realtor', color: 'bg-red-100 text-red-700', placeholder: 'https://www.realtor.com/realestateandhomes-detail/...' },
+  { slug: 'vivareal', name: 'VivaReal', color: 'bg-emerald-100 text-emerald-700', placeholder: 'https://www.vivareal.com.br/...' },
 ]
 
 const formatPrice = (price: number, currency: string) => {
@@ -28,6 +28,7 @@ export default function ScrapePage() {
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<any>(null)
   const [error, setError] = useState('')
+  const [activeTab, setActiveTab] = useState<'urls' | 'quick'>('urls')
 
   const handleScrape = async () => {
     const urlList = urls.split('\n').map(u => u.trim()).filter(u => u)
@@ -50,7 +51,35 @@ export default function ScrapePage() {
       if (!res.ok) throw new Error(data.error || 'Error al scrapear')
       setResults(data)
 
-      // Save to DB if workspace exists
+      if (workspace?.id && data.data?.length > 0) {
+        fetch('/api/properties', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workspaceId: workspace.id, properties: data.data }),
+        }).catch(() => {})
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleQuickScrape = async (portal: string) => {
+    setLoading(true)
+    setError('')
+    setResults(null)
+
+    try {
+      const res = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ urls: [`https://www.${portal}.com`], maxItems, portalOverride: portal }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Error al scrapear')
+      setResults(data)
+
       if (workspace?.id && data.data?.length > 0) {
         fetch('/api/properties', {
           method: 'POST',
@@ -76,6 +105,8 @@ export default function ScrapePage() {
     URL.revokeObjectURL(url)
   }
 
+  const hasCredits = (workspace?.credits_remaining ?? 50) > 0
+
   return (
     <>
       <Header
@@ -83,76 +114,138 @@ export default function ScrapePage() {
         subtitle="Scrapeá propiedades de múltiples portales inmobiliarios"
       />
 
+      {workspace && !hasCredits && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+          <div className="flex items-center gap-3">
+            <svg className="w-5 h-5 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold text-amber-800">Sin créditos disponibles</p>
+              <p className="text-xs text-amber-600">Mejorá tu plan para seguir scrapeando</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Portal Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8">
         {PORTALS.map((portal) => (
-          <div key={portal.slug} className="card p-3 sm:p-4 text-center hover:shadow-corporate-md transition-all">
-            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${portal.color} flex items-center justify-center mx-auto mb-2`}>
+          <button
+            key={portal.slug}
+            onClick={() => handleQuickScrape(portal.slug)}
+            disabled={loading || !hasCredits}
+            className="card p-3 sm:p-4 text-center hover:shadow-corporate-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group"
+          >
+            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${portal.color} flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform`}>
               <span className="text-base sm:text-lg font-bold">{portal.name[0]}</span>
             </div>
             <p className="text-xs sm:text-sm font-medium text-navy-700">{portal.name}</p>
-            <p className="text-[10px] sm:text-xs text-navy-400 mt-1">Activo</p>
-          </div>
+            <p className="text-[10px] sm:text-xs text-emerald-600 mt-1 group-hover:text-emerald-700">Click para scrapear</p>
+          </button>
         ))}
       </div>
 
-      {/* Scrape Form */}
-      <div className="card p-4 sm:p-6 mb-8">
-        <h3 className="text-lg font-bold text-navy-900 mb-4">Nueva consulta</h3>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <label className="label">URLs de propiedades (una por línea)</label>
-            <textarea
-              className="input min-h-[120px] sm:min-h-[160px] font-mono text-sm"
-              placeholder={`https://www.zonaprop.com.ar/propiedades/venta-departamento-palermo-12345.html\nhttps://www.zillow.com/homedetails/123-Main-St/12345_zpid/\nhttps://www.realtor.com/realestateandhomes-detail/123-Main-St`}
-              value={urls}
-              onChange={(e) => setUrls(e.target.value)}
-            />
-            <p className="text-xs text-navy-400 mt-2">
-              Soportamos ZonaProp, Argenprop, MercadoLibre, Zillow, Realtor, VivaReal y más
-            </p>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div>
-              <label className="label">Máximo de resultados</label>
-              <input
-                type="number"
-                className="input"
-                value={maxItems}
-                onChange={(e) => setMaxItems(parseInt(e.target.value) || 50)}
-                min={1}
-                max={200}
-              />
-            </div>
-            <div className="flex-1" />
-            <button
-              onClick={handleScrape}
-              disabled={loading || !urls.trim()}
-              className="btn-gold w-full disabled:opacity-50"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Scrapeando...
-                </span>
-              ) : (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                  </svg>
-                  Scrapear
-                </span>
-              )}
-            </button>
-            <p className="text-xs text-navy-400 text-center">
-              1 crédito por consulta
-            </p>
+      {/* Tabs */}
+      <div className="flex gap-2 mb-6">
+        <button
+          onClick={() => setActiveTab('quick')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'quick' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
+        >
+          Rápido
+        </button>
+        <button
+          onClick={() => setActiveTab('urls')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'urls' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
+        >
+          Por URLs
+        </button>
+      </div>
+
+      {activeTab === 'quick' ? (
+        <div className="card p-6 mb-8">
+          <h3 className="text-lg font-bold text-navy-900 mb-2">Scraping rápido</h3>
+          <p className="text-sm text-navy-500 mb-6">
+            Hacé click en cualquier portal de arriba para scrapear propiedades de ejemplo. 
+            Para resultados más específicos, pegá URLs individuales en la pestaña &quot;Por URLs&quot;.
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {PORTALS.map((portal) => (
+              <button
+                key={portal.slug}
+                onClick={() => handleQuickScrape(portal.slug)}
+                disabled={loading || !hasCredits}
+                className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-navy-300 hover:bg-navy-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className={`w-8 h-8 rounded-lg ${portal.color} flex items-center justify-center shrink-0`}>
+                  <span className="text-sm font-bold">{portal.name[0]}</span>
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-navy-800">{portal.name}</p>
+                  <p className="text-[10px] text-navy-400">Scrapear →</p>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="card p-4 sm:p-6 mb-8">
+          <h3 className="text-lg font-bold text-navy-900 mb-4">Scraping por URLs</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <label className="label">URLs de propiedades (una por línea)</label>
+              <textarea
+                className="input min-h-[120px] sm:min-h-[160px] font-mono text-sm"
+                placeholder={`https://www.zonaprop.com.ar/propiedades/venta-departamento-palermo-12345.html\nhttps://www.zillow.com/homedetails/123-Main-St/12345_zpid/\nhttps://www.realtor.com/realestateandhomes-detail/123-Main-St`}
+                value={urls}
+                onChange={(e) => setUrls(e.target.value)}
+              />
+              <p className="text-xs text-navy-400 mt-2">
+                Soportamos ZonaProp, Argenprop, MercadoLibre, Zillow, Realtor, VivaReal y más
+              </p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="label">Máximo de resultados</label>
+                <input
+                  type="number"
+                  className="input"
+                  value={maxItems}
+                  onChange={(e) => setMaxItems(parseInt(e.target.value) || 50)}
+                  min={1}
+                  max={200}
+                />
+              </div>
+              <div className="flex-1" />
+              <button
+                onClick={handleScrape}
+                disabled={loading || !urls.trim() || !hasCredits}
+                className="btn-gold w-full disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Scrapeando...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                    Scrapear
+                  </span>
+                )}
+              </button>
+              <p className="text-xs text-navy-400 text-center">
+                1 crédito por consulta
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Error */}
       {error && (
@@ -196,12 +289,23 @@ export default function ScrapePage() {
                   Portal: {results.portal} • Crédito utilizado
                 </p>
               </div>
-              <button onClick={downloadJSON} className="btn-outline text-sm self-start">
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                </svg>
-                Exportar JSON
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setResults(null)
+                    setUrls('')
+                  }}
+                  className="btn-outline text-sm"
+                >
+                  Limpiar
+                </button>
+                <button onClick={downloadJSON} className="btn-outline text-sm">
+                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  </svg>
+                  Exportar JSON
+                </button>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6">
@@ -280,7 +384,7 @@ export default function ScrapePage() {
           </div>
           <h3 className="text-lg font-bold text-navy-900 mb-2">Empezá a scrapear</h3>
           <p className="text-sm text-navy-500 max-w-md mx-auto">
-            Ingresá URLs de propiedades de cualquier portal y nosotros las normalizamos y deduplicamos automáticamente.
+            Hacé click en cualquier portal de arriba para scrapeo rápido, o pegá URLs individuales en la pestaña &quot;Por URLs&quot;.
           </p>
         </div>
       )}
