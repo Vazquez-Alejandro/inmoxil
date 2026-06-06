@@ -325,7 +325,8 @@ export async function scrapeUrls(
   const properties: NormalizedProperty[] = []
 
   for (const url of urls.slice(0, 5)) {
-    const targetUrl = (portalOverride && !url.startsWith('http'))
+    const isHomepage = url === `https://www.${portal}.com` || url === `https://www.${portal}.com/`
+    const targetUrl = (portalOverride && (!url.startsWith('http') || isHomepage))
       ? (PORTAL_INFO[portal]?.searchUrl || url)
       : url
 
