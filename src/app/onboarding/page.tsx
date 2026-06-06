@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
-import { queryOne } from '@/lib/db'
 
 const STEPS = [
   'Bienvenido',
@@ -57,9 +56,10 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (!user) return
-    queryOne('SELECT workspace_id FROM users WHERE id = $1', [user.id])
+    fetch(`/api/user/workspace?userId=${user.id}`)
+      .then(r => r.json())
       .then((data: any) => {
-        if (data?.workspace_id) setWorkspaceId(data.workspace_id)
+        if (data.workspace?.id) setWorkspaceId(data.workspace.id)
       })
   }, [user])
 
@@ -96,10 +96,11 @@ export default function OnboardingPage() {
           accent_color: colors.accent,
         }),
       })
-      await queryOne(
-        'UPDATE workspaces SET name = $1 WHERE id = $2 RETURNING *',
-        [companyName, workspaceId]
-      )
+      await fetch('/api/workspace', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workspaceId, name: companyName }),
+      })
       goTo(4)
     } catch (e) {
       console.error(e)

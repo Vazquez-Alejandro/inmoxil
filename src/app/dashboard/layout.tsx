@@ -7,7 +7,6 @@ import { WorkspaceProvider } from '@/lib/workspace-context'
 import { ToastProvider } from '@/lib/toast-context'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import Sidebar from '@/components/Sidebar'
-import { queryOne } from '@/lib/db'
 
 export default function DashboardLayout({
   children,
@@ -30,15 +29,11 @@ export default function DashboardLayout({
 
     const checkOnboarding = async () => {
       try {
-        const userData = await queryOne('SELECT workspace_id FROM users WHERE id = $1', [user.id])
-
-        if (userData?.workspace_id) {
-          const ws = await queryOne('SELECT name FROM workspaces WHERE id = $1', [userData.workspace_id])
-
-          if (ws && ws.name === 'Mi Inmobiliaria') {
-            router.push('/onboarding')
-            return
-          }
+        const res = await fetch(`/api/user?userId=${user.id}`)
+        const data = await res.json()
+        if (data.needsOnboarding) {
+          router.push('/onboarding')
+          return
         }
       } catch {}
       setOnboardingChecked(true)

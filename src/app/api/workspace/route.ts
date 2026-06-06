@@ -47,3 +47,18 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Workspace no encontrado' }, { status: 404 })
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { workspaceId, name } = await request.json()
+
+    if (!workspaceId || !name) {
+      return NextResponse.json({ error: 'workspaceId y name requeridos' }, { status: 400 })
+    }
+
+    await query('UPDATE workspaces SET name = $1 WHERE id = $2', [name, workspaceId])
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json({ error: 'Error actualizando workspace' }, { status: 500 })
+  }
+}

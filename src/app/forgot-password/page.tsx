@@ -2,8 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { queryOne } from '@/lib/db'
-import bcrypt from 'bcryptjs'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')

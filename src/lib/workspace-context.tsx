@@ -2,7 +2,6 @@
 
 import { useState, useEffect, createContext, useContext, type ReactNode } from 'react'
 import { useAuth } from './auth'
-import { queryOne } from '@/lib/db'
 
 interface Workspace {
   id: string
@@ -44,11 +43,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const userData = await queryOne('SELECT workspace_id FROM users WHERE id = $1', [user.id])
-
-      if (userData?.workspace_id) {
-        const ws = await queryOne('SELECT * FROM workspaces WHERE id = $1', [userData.workspace_id])
-        setWorkspace(ws)
+      const res = await fetch(`/api/user/workspace?userId=${user.id}`)
+      const data = await res.json()
+      if (data.workspace) {
+        setWorkspace(data.workspace)
       }
     } catch (err) {
       console.error('Error fetching workspace:', err)
