@@ -1,34 +1,45 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Header from '@/components/Header'
 import { useWorkspace } from '@/lib/workspace-context'
 
 const PORTALS = [
-  { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700', placeholder: 'https://www.zonaprop.com.ar/propiedades/venta-departamento-palermo-12345.html' },
-  { slug: 'argenprop', name: 'Argenprop', color: 'bg-green-100 text-green-700', placeholder: 'https://www.argenprop.com/propiedad/...' },
-  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700', placeholder: 'https://inmuebles.mercadolibre.com.ar/...' },
-  { slug: 'zillow', name: 'Zillow', color: 'bg-purple-100 text-purple-700', placeholder: 'https://www.zillow.com/homedetails/...' },
-  { slug: 'realtor', name: 'Realtor', color: 'bg-red-100 text-red-700', placeholder: 'https://www.realtor.com/realestateandhomes-detail/...' },
-  { slug: 'vivareal', name: 'VivaReal', color: 'bg-emerald-100 text-emerald-700', placeholder: 'https://www.vivareal.com.br/...' },
+  { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700', country: 'AR' },
+  { slug: 'argenprop', name: 'Argenprop', color: 'bg-green-100 text-green-700', country: 'AR' },
+  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700', country: 'AR' },
+  { slug: 'zillow', name: 'Zillow', color: 'bg-purple-100 text-purple-700', country: 'US' },
+  { slug: 'realtor', name: 'Realtor', color: 'bg-red-100 text-red-700', country: 'US' },
+  { slug: 'vivareal', name: 'VivaReal', color: 'bg-emerald-100 text-emerald-700', country: 'BR' },
 ]
 
 const formatPrice = (price: number, currency: string) => {
   return new Intl.NumberFormat('es-AR', {
     style: 'currency',
-    currency: currency === 'USD' ? 'USD' : 'ARS',
+    currency: currency === 'USD' ? 'USD' : currency === 'BRL' ? 'BRL' : 'ARS',
     maximumFractionDigits: 0,
   }).format(price)
 }
 
+type Tab = 'urls' | 'import'
+
 export default function ScrapePage() {
   const { workspace } = useWorkspace()
+  const [activeTab, setActiveTab] = useState<Tab>('urls')
   const [urls, setUrls] = useState('')
   const [maxItems, setMaxItems] = useState(50)
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<any>(null)
   const [error, setError] = useState('')
-  const [activeTab, setActiveTab] = useState<'urls' | 'quick'>('urls')
+
+  // Import state
+  const [importFile, setImportFile] = useState<File | null>(null)
+  const [importPreview, setImportPreview] = useState<any[]>([])
+  const [importLoading, setImportLoading] = useState(false)
+  const [importResult, setImportResult] = useState<{ count: number; success: boolean; message: string } | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const hasCredits = (workspace?.credits_remaining ?? 50) > 0
 
   const handleScrape = async () => {
     const urlList = urls.split('\n').map(u => u.trim()).filter(u => u)
@@ -94,39 +105,170 @@ export default function ScrapePage() {
     }
   }
 
+  const parseCSV = useCallback((text: string): any[] => {
+    const lines = text.split('\n').filter(l => l.trim())
+    if (lines.length < 2) return []
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase())
+    return lines.slice(1).map(line => {
+      const values: string[] = []
+      let current = ''
+      let inQuotes = false
+      for (const char of line) {
+        if (char === '"') { inQuotes = !inQuotes }
+        else if (char === ',' && !inQuotes) { values.push(current.trim()); current = '' }
+        else { current += char }
+      }
+      values.push(current.trim())
+
+      const obj: any = {}
+      headers.forEach((h, i) => { obj[h] = (values[i] || '').replace(/^"|"$/g, '') })
+      return obj
+    })
+  }, [])
+
+  const normalizeImportRow = (row: any): any => {
+    const find = (...keys: string[]): string => {
+      for (const k of keys) {
+        const v = row[k] || row[k.toLowerCase()] || row[k.toUpperCase()]
+        if (v && String(v).trim()) return String(v).trim()
+      }
+      return ''
+    }
+
+    const findNum = (...keys: string[]): number | null => {
+      const v = find(...keys)
+      if (!v) return null
+      const n = parseInt(v.replace(/[^0-9]/g, ''))
+      return isNaN(n) ? null : n
+    }
+
+    return {
+      title: find('title', 'titulo', 'título', 'nombre', 'name'),
+      price: findNum('price', 'precio', 'valor'),
+      currency: find('currency', 'moneda') || 'USD',
+      address: find('address', 'direccion', 'dirección', 'ubicacion', 'ubicación', 'location'),
+      neighborhood: find('neighborhood', 'barrio', 'neighborhood', 'bairro', 'district'),
+      city: find('city', 'ciudad', 'locality', 'cidade'),
+      state: find('state', 'provincia', 'estado', 'region'),
+      country: find('country', 'pais', 'país'),
+      beds: findNum('beds', 'bedrooms', 'habitaciones', 'dormitorios', 'quartos'),
+      baths: findNum('baths', 'bathrooms', 'banos', 'baños', 'banheiros'),
+      sqm: findNum('sqm', 'area', 'superficie', 'm2', 'm²', 'metros'),
+      propertyType: find('propertytype', 'type', 'tipo', 'tipopropiedad'),
+      url: find('url', 'link', 'permalink'),
+      description: find('description', 'descripcion', 'descripción'),
+      photos: find('photos', 'images', 'fotos', 'imagen', 'image').split('|').filter(Boolean),
+    }
+  }
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setImportFile(file)
+    setImportResult(null)
+    setError('')
+
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string
+      try {
+        if (file.name.endsWith('.json')) {
+          const data = JSON.parse(text)
+          const arr = Array.isArray(data) ? data : [data]
+          setImportPreview(arr.slice(0, 5))
+        } else {
+          const rows = parseCSV(text)
+          setImportPreview(rows.slice(0, 5))
+        }
+      } catch {
+        setError('No se pudo leer el archivo. Verificá el formato.')
+      }
+    }
+    reader.readAsText(file)
+  }
+
+  const handleImport = async () => {
+    if (!importFile || !workspace?.id) return
+
+    setImportLoading(true)
+    setError('')
+
+    try {
+      const text = await importFile.text()
+      let rawRows: any[]
+
+      if (importFile.name.endsWith('.json')) {
+        const data = JSON.parse(text)
+        rawRows = Array.isArray(data) ? data : [data]
+      } else {
+        rawRows = parseCSV(text)
+      }
+
+      const properties = rawRows.map(normalizeImportRow).filter(p => p.title || p.address)
+
+      if (properties.length === 0) {
+        setError('No se encontraron propiedades válidas. Verificá que el archivo tenga columnas como título, precio, dirección, etc.')
+        setImportLoading(false)
+        return
+      }
+
+      const res = await fetch('/api/properties', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workspaceId: workspace.id, properties }),
+      })
+      const data = await res.json()
+
+      if (data.success) {
+        setImportResult({
+          count: data.count,
+          success: true,
+          message: `${data.count} propiedades importadas exitosamente`,
+        })
+        setImportFile(null)
+        setImportPreview([])
+        if (fileRef.current) fileRef.current.value = ''
+      } else {
+        throw new Error(data.error || 'Error al importar')
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setImportLoading(false)
+    }
+  }
+
   const downloadJSON = () => {
     if (!results?.data) return
     const blob = new Blob([JSON.stringify(results.data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `propiedades-${results.portal || 'mixed'}-${Date.now()}.json`
+    a.download = `propiedades-${results.portal || 'import'}-${Date.now()}.json`
     a.click()
     URL.revokeObjectURL(url)
   }
 
-  const hasCredits = (workspace?.credits_remaining ?? 50) > 0
+  const downloadSampleCSV = () => {
+    const sample = `titulo,precio,moneda,direccion,barrio,ciudad,provincia,pais,habitaciones,banos,m2,tipo,url
+"Depto 3 ambientes Palermo",120000,USD,"Av. Santa Fe 1234",Palermo,Capital Federal,CABA,Argentina,3,2,85,departamento,https://ejemplo.com/1
+"Loft Puerto Madero",250000,USD,"Av. Alicia Moreau de Justo 500",Puerto Madero,Capital Federal,CABA,Argentina,2,2,120,loft,https://ejemplo.com/2`
+    const blob = new Blob([sample], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'ejemplo-propiedades.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <>
       <Header
         title="Scraping Multi-Portal"
-        subtitle="Scrapeá propiedades de múltiples portales inmobiliarios"
+        subtitle="Scrapeá propiedades o importalas desde un archivo"
       />
-
-      {workspace && !hasCredits && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
-          <div className="flex items-center gap-3">
-            <svg className="w-5 h-5 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-            </svg>
-            <div>
-              <p className="text-sm font-semibold text-amber-800">Sin créditos disponibles</p>
-              <p className="text-xs text-amber-600">Mejorá tu plan para seguir scrapeando</p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Portal Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8">
@@ -141,7 +283,7 @@ export default function ScrapePage() {
               <span className="text-base sm:text-lg font-bold">{portal.name[0]}</span>
             </div>
             <p className="text-xs sm:text-sm font-medium text-navy-700">{portal.name}</p>
-            <p className="text-[10px] sm:text-xs text-emerald-600 mt-1 group-hover:text-emerald-700">Click para scrapear</p>
+            <p className="text-[10px] sm:text-xs text-navy-400 mt-1">{portal.country}</p>
           </button>
         ))}
       </div>
@@ -149,46 +291,20 @@ export default function ScrapePage() {
       {/* Tabs */}
       <div className="flex gap-2 mb-6">
         <button
-          onClick={() => setActiveTab('quick')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'quick' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
-        >
-          Rápido
-        </button>
-        <button
           onClick={() => setActiveTab('urls')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'urls' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
         >
-          Por URLs
+          Scraping por URLs
+        </button>
+        <button
+          onClick={() => setActiveTab('import')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'import' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
+        >
+          Importar CSV/JSON
         </button>
       </div>
 
-      {activeTab === 'quick' ? (
-        <div className="card p-6 mb-8">
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Scraping rápido</h3>
-          <p className="text-sm text-navy-500 mb-6">
-            Hacé click en cualquier portal de arriba para scrapear propiedades de ejemplo. 
-            Para resultados más específicos, pegá URLs individuales en la pestaña &quot;Por URLs&quot;.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {PORTALS.map((portal) => (
-              <button
-                key={portal.slug}
-                onClick={() => handleQuickScrape(portal.slug)}
-                disabled={loading || !hasCredits}
-                className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-navy-300 hover:bg-navy-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className={`w-8 h-8 rounded-lg ${portal.color} flex items-center justify-center shrink-0`}>
-                  <span className="text-sm font-bold">{portal.name[0]}</span>
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-navy-800">{portal.name}</p>
-                  <p className="text-[10px] text-navy-400">Scrapear →</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : (
+      {activeTab === 'urls' ? (
         <div className="card p-4 sm:p-6 mb-8">
           <h3 className="text-lg font-bold text-navy-900 mb-4">Scraping por URLs</h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -201,7 +317,7 @@ export default function ScrapePage() {
                 onChange={(e) => setUrls(e.target.value)}
               />
               <p className="text-xs text-navy-400 mt-2">
-                Soportamos ZonaProp, Argenprop, MercadoLibre, Zillow, Realtor, VivaReal y más
+                Nota: El scraping puede estar bloqueado por los portales. Si falla, usá la pestaña &quot;Importar CSV/JSON&quot;.
               </p>
             </div>
             <div className="flex flex-col gap-4">
@@ -239,18 +355,107 @@ export default function ScrapePage() {
                   </span>
                 )}
               </button>
-              <p className="text-xs text-navy-400 text-center">
-                1 crédito por consulta
-              </p>
+              <p className="text-xs text-navy-400 text-center">1 crédito por consulta</p>
             </div>
           </div>
+        </div>
+      ) : (
+        <div className="card p-4 sm:p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold text-navy-900">Importar propiedades</h3>
+            <button onClick={downloadSampleCSV} className="text-xs text-gold-600 hover:text-gold-700 font-medium">
+              Descargar ejemplo CSV →
+            </button>
+          </div>
+          <p className="text-sm text-navy-500 mb-6">
+            Subí un archivo CSV o JSON con tus propiedades. El sistema detecta automáticamente las columnas.
+          </p>
+
+          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-gold-400 transition-colors mb-6">
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".csv,.json"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            <svg className="w-12 h-12 text-navy-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+            </svg>
+            {importFile ? (
+              <div>
+                <p className="text-sm font-medium text-navy-700">{importFile.name}</p>
+                <p className="text-xs text-navy-400">{(importFile.size / 1024).toFixed(1)} KB</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-sm text-navy-600 mb-1">Arrastrá tu archivo o hacé click</p>
+                <p className="text-xs text-navy-400">CSV o JSON — hasta 1000 propiedades</p>
+              </div>
+            )}
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="btn-outline text-sm mt-4"
+            >
+              Seleccionar archivo
+            </button>
+          </div>
+
+          {importPreview.length > 0 && (
+            <div className="mb-6">
+              <h4 className="text-sm font-semibold text-navy-700 mb-2">Vista previa ({importPreview.length} filas)</h4>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="border-b border-gray-200">
+                      {Object.keys(importPreview[0]).slice(0, 8).map(k => (
+                        <th key={k} className="text-left py-2 px-3 font-medium text-navy-600">{k}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {importPreview.map((row, i) => (
+                      <tr key={i} className="border-b border-gray-100">
+                        {Object.values(row).slice(0, 8).map((v, j) => (
+                          <td key={j} className="py-2 px-3 text-navy-700 truncate max-w-[150px]">{String(v || '').substring(0, 50)}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <button
+                onClick={handleImport}
+                disabled={importLoading}
+                className="btn-gold mt-4 disabled:opacity-50"
+              >
+                {importLoading ? 'Importando...' : `Importar propiedades`}
+              </button>
+            </div>
+          )}
+
+          {importResult && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <p className="text-sm font-medium text-emerald-800">{importResult.message}</p>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
       {/* Error */}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-8">
-          <p className="text-sm text-red-700">{error}</p>
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
         </div>
       )}
 
@@ -268,7 +473,6 @@ export default function ScrapePage() {
                 <div className="p-4 space-y-3">
                   <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
                   <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse" />
-                  <div className="h-3 bg-gray-200 rounded w-1/3 animate-pulse" />
                 </div>
               </div>
             ))}
@@ -290,87 +494,56 @@ export default function ScrapePage() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setResults(null)
-                    setUrls('')
-                  }}
-                  className="btn-outline text-sm"
-                >
-                  Limpiar
-                </button>
-                <button onClick={downloadJSON} className="btn-outline text-sm">
-                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                  </svg>
-                  Exportar JSON
-                </button>
+                <button onClick={() => { setResults(null); setUrls('') }} className="btn-outline text-sm">Limpiar</button>
+                {results.data?.length > 0 && (
+                  <button onClick={downloadJSON} className="btn-outline text-sm">
+                    <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    Exportar JSON
+                  </button>
+                )}
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6">
-            {results.data?.map((property: any, idx: number) => (
-              <div key={idx} className="card-hover overflow-hidden">
-                <div className="relative h-48">
-                  <img
-                    src={property.photos?.[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop'}
-                    alt={property.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <span className="portal-badge bg-navy-900/80 text-white">
-                    {property.portal}
-                  </span>
-                  {property.currency && (
-                    <span className="absolute top-3 right-3 badge bg-gold-400 text-navy-900">
-                      {property.currency}
-                    </span>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-navy-900 truncate mb-1">{property.title}</h4>
-                  <p className="text-sm text-navy-500 truncate mb-3">
-                    {property.address || property.location?.address}
-                  </p>
-                  <div className="flex items-center gap-4 text-xs text-navy-400 mb-3">
-                    {property.features?.beds > 0 && (
-                      <span className="flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                        </svg>
-                        {property.features?.beds}
-                      </span>
-                    )}
-                    {property.features?.baths > 0 && (
-                      <span className="flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {property.features?.baths}
-                      </span>
-                    )}
-                    {property.features?.area > 0 && (
-                      <span>{property.features?.area} m²</span>
-                    )}
+          {results.data?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-6">
+              {results.data?.map((property: any, idx: number) => (
+                <div key={idx} className="card-hover overflow-hidden">
+                  <div className="relative h-48">
+                    <img
+                      src={property.photos?.[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop'}
+                      alt={property.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop' }}
+                    />
+                    <span className="portal-badge bg-navy-900/80 text-white">{property.portal}</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <p className="price-tag text-lg">
-                      {formatPrice(property.price || 0, property.currency || 'USD')}
-                    </p>
-                    {property.url && (
-                      <a
-                        href={property.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-ghost text-xs px-2 py-1"
-                      >
-                        Ver →
-                      </a>
-                    )}
+                  <div className="p-4">
+                    <h4 className="font-semibold text-navy-900 truncate mb-1">{property.title}</h4>
+                    <p className="text-sm text-navy-500 truncate mb-3">{property.address}</p>
+                    <div className="flex items-center gap-4 text-xs text-navy-400 mb-3">
+                      {property.beds > 0 && <span>{property.beds} hab</span>}
+                      {property.baths > 0 && <span>{property.baths} baños</span>}
+                      {property.sqm > 0 && <span>{property.sqm} m²</span>}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="price-tag text-lg">
+                        {formatPrice(property.price || 0, property.currency || 'USD')}
+                      </p>
+                      {property.url && (
+                        <a href={property.url} target="_blank" rel="noopener noreferrer" className="btn-ghost text-xs px-2 py-1">Ver →</a>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-center">
+              <p className="text-navy-500 text-sm">{results.warning || 'No se encontraron propiedades'}</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -382,9 +555,9 @@ export default function ScrapePage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9 9 0 013 12c0-1.605.42-3.113 1.157-4.418" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Empezá a scrapear</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-2">Empezá a cargar propiedades</h3>
           <p className="text-sm text-navy-500 max-w-md mx-auto">
-            Hacé click en cualquier portal de arriba para scrapeo rápido, o pegá URLs individuales en la pestaña &quot;Por URLs&quot;.
+            Usá scraping por URLs, importá un archivo CSV/JSON, o hacé click en un portal arriba para scraping rápido.
           </p>
         </div>
       )}
