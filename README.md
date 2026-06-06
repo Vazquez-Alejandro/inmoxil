@@ -8,16 +8,21 @@ Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads co
 - **Lenguaje:** TypeScript
 - **Estilos:** Tailwind CSS
 - **Runtime:** Node.js 20
+- **Deploy:** Vercel
 
 ## APIs y Servicios
 
-- **Base de datos:** [Neon PostgreSQL](https://neon.tech) — base de datos serverless
-- **Auth:** [NextAuth.js](https://next-auth.js.org) v4 — autenticación con JWT + Credentials
-- **Pagos:** [Stripe](https://stripe.com) — checkout, portal de facturación, webhooks, suscripciones
-- **Scraping:** [Apify](https://apify.com) — scraping de propiedades inmobiliarias (Zillow, Realtor, ZonaProp, Argenprop, MercadoLibre, VivaReal, OLX)
-- **Email:** [Resend](https://resend.com) — envío de emails transaccionales
-- **PDFs:** [Puppeteer](https://pptr.dev) — generación de flyers y anuncios gráficos
-- **Hashing:** [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) — hashing de contraseñas
+| Servicio | Uso | Plan |
+|---|---|---|
+| [Neon PostgreSQL](https://neon.tech) | Base de datos serverless | Free |
+| [NextAuth.js](https://next-auth.js.org) v4 | Autenticación JWT + Credentials | Open source |
+| [Stripe](https://stripe.com) | Checkout, billing, webhooks, suscripciones | Test mode |
+| [ScrapingBee](https://scrapingbee.com) | Scraping de portales inmobiliarios con proxy | Free (4000 créditos/mes) |
+| [Resend](https://resend.com) | Emails transaccionales | Free (100 emails/día) |
+| [Puppeteer](https://pptr.dev) | Generación de flyers y anuncios gráficos | Local |
+| [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) | Hashing de contraseñas | Open source |
+| [Apify](https://apify.com) | Backup de scraping (requiere plan pago) | Free tier |
+| [Cheerio](https://cheerio.js.org) | Parsing de HTML para extracción de datos | Open source |
 
 ## Variables de entorno
 
@@ -31,8 +36,9 @@ STRIPE_WEBHOOK_SECRET=whsec_...       # Stripe webhook signing secret
 STRIPE_PRICE_STARTER=price_...        # Stripe price ID - Plan Starter
 STRIPE_PRICE_PRO=price_...            # Stripe price ID - Plan Pro
 STRIPE_PRICE_ENTERPRISE=price_...     # Stripe price ID - Plan Enterprise
-APIFY_TOKEN=apify_api_...             # Apify API token
-RESEND_API_KEY=re_...                 # Resend API key
+SCRAPINGBEE_API_KEY=...               # ScrapingBee API key (scraping principal)
+APIFY_TOKEN=apify_api_...             # Apify token (backup de scraping)
+RESEND_API_KEY=re_...                 # Resend API key (emails)
 ```
 
 ## Inicio rápido
@@ -48,23 +54,23 @@ npm run dev
 Tablas (Neon PostgreSQL):
 - `workspaces` — cuentas de inmobiliarias
 - `users` — usuarios con auth
-- `properties` — propiedades scrapeadas
+- `properties` — propiedades scrapeadas o importadas
 - `generated_ads` — anuncios generados
 - `credit_transactions` — historial de créditos
 - `password_resets` — tokens de recuperación de contraseña
 
-## Portales soportados (Scraping)
+## Portales soportados
 
-| Portal | País | Actor Apify |
-|---|---|---|
-| Zillow | US | aknahin/zillow-property-info-scraper |
-| Realtor | US | epctex/realtor-scraper |
-| VivaReal | BR | gio21/vivareal-zap-scraper |
-| ZAP Imóveis | BR | gio21/vivareal-zap-scraper |
-| ZonaProp | AR | solidcode/zonaprop-scraper |
-| Argenprop | AR | whitewalk/real-estate-scraper |
-| MercadoLibre | AR | whitewalk/real-estate-scraper |
-| OLX | Global | whitewalk/real-estate-scraper |
+| Portal | País | Método | Estado |
+|---|---|---|---|
+| ZonaProp | AR | ScrapingBee | Activo |
+| Argenprop | AR | ScrapingBee | Activo |
+| MercadoLibre | AR | ScrapingBee | Activo |
+| Zillow | US | ScrapingBee | Activo |
+| Realtor | US | ScrapingBee | Activo |
+| VivaReal | BR | ScrapingBee | Activo |
+
+También se soporta importación manual de propiedades via CSV/JSON.
 
 ## Despliegue
 
