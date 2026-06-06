@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { scrapeUrls } from '@/lib/apify'
+import { scrapeUrls } from '@/lib/scrapingbee'
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { portal, properties } = await scrapeUrls(
+    const { portal, properties, warning } = await scrapeUrls(
       body.urls,
       body.maxItems || 50,
       body.portalOverride
@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       portal,
       count: properties.length,
       data: properties,
+      warning,
     })
   } catch (error: any) {
     console.error('[Scrape] Error:', error)
@@ -39,19 +40,13 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     message: 'POST /api/scrape con { urls: string[], maxItems?: number, portalOverride?: string }',
-    portalsSoportados: [
-      'zillow.com',
-      'realtor.com',
-      'vivareal.com.br',
-      'zonaprop.com.ar',
-      'argenprop.com',
-      'mercadolibre.com',
-      'cualquier otro portal (fallback genérico)',
-    ],
-    ejemplo: {
-      urls: ['https://www.zonaprop.com.ar/propiedades/venta-departamentos-capital-federal.html'],
-      maxItems: 20,
-      portalOverride: 'zonaprop',
+    portalInfo: {
+      zonaprop: { name: 'ZonaProp', country: 'AR' },
+      argenprop: { name: 'Argenprop', country: 'AR' },
+      mercadolibre: { name: 'MercadoLibre', country: 'AR' },
+      zillow: { name: 'Zillow', country: 'US' },
+      realtor: { name: 'Realtor', country: 'US' },
+      vivareal: { name: 'VivaReal', country: 'BR' },
     },
   })
 }
