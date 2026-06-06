@@ -30,6 +30,9 @@ export async function POST(request: NextRequest) {
 
     let count = 0
     for (const p of properties) {
+      const beds = p.beds || p.features?.beds || null
+      const baths = p.baths || p.features?.baths || null
+      const sqm = p.sqm || p.features?.area || p.features?.sqm || null
       await query(
         `INSERT INTO properties (workspace_id, portal, title, price, currency, address, neighborhood, city, state, country, beds, baths, sqm, property_type, status, url, photos, description, features, source_url)
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)`,
@@ -44,15 +47,15 @@ export async function POST(request: NextRequest) {
           p.city || '',
           p.state || '',
           p.country || '',
-          p.features?.beds || null,
-          p.features?.baths || null,
-          p.features?.area || null,
+          beds,
+          baths,
+          sqm,
           p.propertyType || 'apartment',
           'active',
           p.url || '',
-          JSON.stringify(p.photos || []),
+          p.photos || [],
           p.description || '',
-          JSON.stringify(p.features ? Object.values(p.features).filter(Boolean).map(String) : []),
+          p.features ? (Array.isArray(p.features) ? p.features : Object.values(p.features).filter(Boolean).map(String)) : [],
           p.url || '',
         ]
       )
