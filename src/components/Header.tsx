@@ -12,7 +12,7 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
 
   const handleSignOut = async () => {
     await signOut()
-    router.push('/login')
+    window.location.href = '/login'
   }
 
   return (

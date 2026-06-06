@@ -39,7 +39,7 @@ export default function RegisterPage() {
       setError(result.error)
       setLoading(false)
     } else {
-      router.push('/onboarding')
+      window.location.href = '/onboarding'
     }
   }
 
