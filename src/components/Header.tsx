@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 
-export default function Header({ title, subtitle }: { title: string; subtitle?: string }) {
+export default function Header({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   const { user, signOut } = useAuth()
   const router = useRouter()
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -23,6 +23,7 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
       </div>
 
       <div className="flex items-center gap-4">
+        {action}
         <div className="relative">
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}

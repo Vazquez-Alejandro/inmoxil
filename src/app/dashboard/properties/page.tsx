@@ -12,62 +12,124 @@ const formatPrice = (price: number, currency: string) => {
   }).format(price)
 }
 
+const PROPERTY_TYPES = [
+  { value: '', label: 'Todos' },
+  { value: 'departamento', label: 'Departamento' },
+  { value: 'casa', label: 'Casa' },
+  { value: 'ph', label: 'PH' },
+  { value: 'loft', label: 'Loft' },
+  { value: 'terreno', label: 'Terreno' },
+  { value: 'local', label: 'Local' },
+  { value: 'oficina', label: 'Oficina' },
+]
+
 export default function PropertiesPage() {
   const { workspace } = useWorkspace()
   const [properties, setProperties] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [filter, setFilter] = useState('all')
 
-  useEffect(() => {
+  // Filters
+  const [search, setSearch] = useState('')
+  const [filterPortal, setFilterPortal] = useState('all')
+  const [filterType, setFilterType] = useState('')
+  const [priceMin, setPriceMin] = useState('')
+  const [priceMax, setPriceMax] = useState('')
+  const [filterBeds, setFilterBeds] = useState('')
+
+  // Add form
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [addForm, setAddForm] = useState({
+    title: '', price: '', currency: 'USD', address: '', neighborhood: '',
+    city: '', state: '', country: 'Argentina', beds: '', baths: '', sqm: '',
+    propertyType: 'departamento', url: '', description: '',
+  })
+  const [addLoading, setAddLoading] = useState(false)
+  const [addSuccess, setAddSuccess] = useState(false)
+
+  const fetchProperties = () => {
     if (workspace) {
       setLoading(true)
       fetch(`/api/properties?workspaceId=${workspace.id}`)
         .then(r => r.json())
-        .then(data => {
-          setProperties(data.properties || [])
-          setLoading(false)
-        })
+        .then(data => { setProperties(data.properties || []); setLoading(false) })
         .catch(() => setLoading(false))
     }
-  }, [workspace])
+  }
+
+  useEffect(() => { fetchProperties() }, [workspace])
 
   const filtered = properties.filter(p => {
-    const matchesSearch = !search ||
-      p.title?.toLowerCase().includes(search.toLowerCase()) ||
-      p.address?.toLowerCase().includes(search.toLowerCase()) ||
-      p.neighborhood?.toLowerCase().includes(search.toLowerCase())
-    const matchesFilter = filter === 'all' || p.portal?.toLowerCase() === filter
-    return matchesSearch && matchesFilter
+    if (search) {
+      const q = search.toLowerCase()
+      const match = p.title?.toLowerCase().includes(q) ||
+        p.address?.toLowerCase().includes(q) ||
+        p.neighborhood?.toLowerCase().includes(q)
+      if (!match) return false
+    }
+    if (filterPortal !== 'all' && p.portal?.toLowerCase() !== filterPortal) return false
+    if (filterType && p.property_type?.toLowerCase() !== filterType) return false
+    if (filterBeds && p.beds !== parseInt(filterBeds)) return false
+    if (priceMin && (p.price || 0) < parseInt(priceMin)) return false
+    if (priceMax && (p.price || 0) > parseInt(priceMax)) return false
+    return true
   })
 
   const portals = [...new Set(properties.map(p => p.portal))]
 
-  const downloadPDF = async (propertyId: string, title: string) => {
-    if (!workspace) return
+  const handleAddProperty = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!workspace?.id || !addForm.title) return
+    setAddLoading(true)
     try {
-      const res = await fetch('/api/properties/pdf', {
+      const res = await fetch('/api/properties', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ propertyId, workspaceId: workspace.id }),
+        body: JSON.stringify({
+          workspaceId: workspace.id,
+          properties: [{
+            portal: 'manual',
+            title: addForm.title,
+            price: addForm.price ? parseInt(addForm.price) : null,
+            currency: addForm.currency,
+            address: addForm.address,
+            neighborhood: addForm.neighborhood,
+            city: addForm.city,
+            state: addForm.state,
+            country: addForm.country,
+            beds: addForm.beds ? parseInt(addForm.beds) : null,
+            baths: addForm.baths ? parseInt(addForm.baths) : null,
+            sqm: addForm.sqm ? parseInt(addForm.sqm) : null,
+            propertyType: addForm.propertyType,
+            url: addForm.url,
+            description: addForm.description,
+          }]
+        }),
       })
-      if (!res.ok) throw new Error('Error generando PDF')
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${title || 'propiedad'}.pdf`
-      a.click()
-      URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Error descargando PDF:', error)
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error)
+      setAddSuccess(true)
+      setAddForm({ title: '', price: '', currency: 'USD', address: '', neighborhood: '', city: '', state: '', country: 'Argentina', beds: '', baths: '', sqm: '', propertyType: 'departamento', url: '', description: '' })
+      fetchProperties()
+      setTimeout(() => { setAddSuccess(false); setShowAddForm(false) }, 1500)
+    } catch (err: any) {
+      alert('Error: ' + err.message)
+    } finally {
+      setAddLoading(false)
     }
   }
 
+  const deleteProperty = async (id: string) => {
+    if (!confirm('¿Eliminar esta propiedad?')) return
+    try {
+      await fetch(`/api/properties/${id}`, { method: 'DELETE' })
+      setProperties(prev => prev.filter(p => p.id !== id))
+    } catch {}
+  }
+
   const exportCSV = () => {
-    const headers = ['Título', 'Portal', 'Precio', 'Moneda', 'Dirección', 'Barrio', 'Ciudad', 'Amb', 'Baños', 'm²', 'URL']
+    const headers = ['Título', 'Portal', 'Precio', 'Moneda', 'Dirección', 'Barrio', 'Ciudad', 'Amb', 'Baños', 'm²', 'Tipo', 'URL']
     const rows = filtered.map(p => [
-      p.title, p.portal, p.price || '', p.currency, p.address, p.neighborhood, p.city, p.beds || '', p.baths || '', p.sqm || '', p.url || ''
+      p.title, p.portal, p.price || '', p.currency, p.address, p.neighborhood, p.city, p.beds || '', p.baths || '', p.sqm || '', p.property_type || '', p.url || ''
     ])
     const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
@@ -84,44 +146,125 @@ export default function PropertiesPage() {
       <Header
         title="Propiedades"
         subtitle={`${properties.length} propiedades en tu portafolio`}
+        action={<button onClick={() => setShowAddForm(!showAddForm)} className="btn-gold text-sm">+ Agregar propiedad</button>}
       />
+
+      {/* Add Form */}
+      {showAddForm && (
+        <div className="card p-6 mb-6">
+          <h3 className="text-lg font-bold text-navy-900 mb-4">Agregar propiedad manualmente</h3>
+          {addSuccess ? (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+              <p className="text-emerald-700 font-medium">Propiedad agregada correctamente</p>
+            </div>
+          ) : (
+            <form onSubmit={handleAddProperty} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-2">
+                <label className="label">Título *</label>
+                <input className="input" value={addForm.title} onChange={e => setAddForm({ ...addForm, title: e.target.value })} placeholder="Ej: Departamento 3 ambientes Palermo" required />
+              </div>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="label">Precio</label>
+                  <input className="input" type="number" value={addForm.price} onChange={e => setAddForm({ ...addForm, price: e.target.value })} placeholder="120000" />
+                </div>
+                <div className="w-24">
+                  <label className="label">Moneda</label>
+                  <select className="input" value={addForm.currency} onChange={e => setAddForm({ ...addForm, currency: e.target.value })}>
+                    <option value="USD">USD</option>
+                    <option value="ARS">ARS</option>
+                    <option value="BRL">BRL</option>
+                  </select>
+                </div>
+              </div>
+              <div className="lg:col-span-2">
+                <label className="label">Dirección</label>
+                <input className="input" value={addForm.address} onChange={e => setAddForm({ ...addForm, address: e.target.value })} placeholder="Av. Santa Fe 1234" />
+              </div>
+              <div>
+                <label className="label">Barrio</label>
+                <input className="input" value={addForm.neighborhood} onChange={e => setAddForm({ ...addForm, neighborhood: e.target.value })} placeholder="Palermo" />
+              </div>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="label">Ambientes</label>
+                  <input className="input" type="number" min="0" value={addForm.beds} onChange={e => setAddForm({ ...addForm, beds: e.target.value })} placeholder="3" />
+                </div>
+                <div className="flex-1">
+                  <label className="label">Baños</label>
+                  <input className="input" type="number" min="0" value={addForm.baths} onChange={e => setAddForm({ ...addForm, baths: e.target.value })} placeholder="2" />
+                </div>
+                <div className="flex-1">
+                  <label className="label">m²</label>
+                  <input className="input" type="number" min="0" value={addForm.sqm} onChange={e => setAddForm({ ...addForm, sqm: e.target.value })} placeholder="85" />
+                </div>
+              </div>
+              <div>
+                <label className="label">Tipo</label>
+                <select className="input" value={addForm.propertyType} onChange={e => setAddForm({ ...addForm, propertyType: e.target.value })}>
+                  {PROPERTY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                </select>
+              </div>
+              <div className="lg:col-span-2">
+                <label className="label">URL (opcional)</label>
+                <input className="input" value={addForm.url} onChange={e => setAddForm({ ...addForm, url: e.target.value })} placeholder="https://..." />
+              </div>
+              <div>
+                <label className="label">Ciudad</label>
+                <input className="input" value={addForm.city} onChange={e => setAddForm({ ...addForm, city: e.target.value })} placeholder="Capital Federal" />
+              </div>
+              <div className="lg:col-span-3">
+                <label className="label">Descripción</label>
+                <textarea className="input min-h-[80px]" value={addForm.description} onChange={e => setAddForm({ ...addForm, description: e.target.value })} placeholder="Descripción de la propiedad..." />
+              </div>
+              <div className="lg:col-span-3 flex gap-2">
+                <button type="submit" disabled={addLoading} className="btn-gold disabled:opacity-50">
+                  {addLoading ? 'Guardando...' : 'Guardar propiedad'}
+                </button>
+                <button type="button" onClick={() => setShowAddForm(false)} className="btn-outline">Cancelar</button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
 
       {/* Filters */}
       <div className="card p-4 mb-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+          <div className="sm:col-span-2 lg:col-span-2">
             <div className="relative">
               <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
-              <input
-                type="text"
-                className="input pl-10"
-                placeholder="Buscar por título, dirección o barrio..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+              <input type="text" className="input pl-10" placeholder="Buscar título, dirección, barrio..." value={search} onChange={(e) => setSearch(e.target.value)} />
             </div>
           </div>
-          <select
-            className="input w-auto min-w-[160px]"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
+          <select className="input" value={filterPortal} onChange={(e) => setFilterPortal(e.target.value)}>
             <option value="all">Todos los portales</option>
-            {portals.map(p => (
-              <option key={p} value={p?.toLowerCase()}>{p}</option>
-            ))}
+            {portals.map(p => <option key={p} value={p?.toLowerCase()}>{p}</option>)}
           </select>
-          {filtered.length > 0 && (
-            <button onClick={exportCSV} className="btn-outline whitespace-nowrap">
-              <svg className="w-4 h-4 mr-1 inline" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-              </svg>
-              Exportar CSV
-            </button>
-          )}
+          <select className="input" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+            {PROPERTY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+          </select>
+          <select className="input" value={filterBeds} onChange={(e) => setFilterBeds(e.target.value)}>
+            <option value="">Ambientes: Todos</option>
+            <option value="1">1 amb</option>
+            <option value="2">2 amb</option>
+            <option value="3">3 amb</option>
+            <option value="4">4 amb</option>
+            <option value="5">5+ amb</option>
+          </select>
+          <div className="flex gap-2">
+            <input className="input flex-1" type="number" placeholder="Precio mín" value={priceMin} onChange={(e) => setPriceMin(e.target.value)} />
+            <input className="input flex-1" type="number" placeholder="Precio máx" value={priceMax} onChange={(e) => setPriceMax(e.target.value)} />
+          </div>
         </div>
+        {(search || filterPortal !== 'all' || filterType || filterBeds || priceMin || priceMax) && (
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-xs text-navy-400">{filtered.length} resultados con estos filtros</span>
+            <button onClick={() => { setSearch(''); setFilterPortal('all'); setFilterType(''); setFilterBeds(''); setPriceMin(''); setPriceMax('') }} className="text-xs text-gold-600 hover:text-gold-700 font-medium">Limpiar filtros</button>
+          </div>
+        )}
       </div>
 
       {/* Loading */}
@@ -133,7 +276,6 @@ export default function PropertiesPage() {
               <div className="p-4 space-y-3">
                 <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
                 <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse" />
-                <div className="h-3 bg-gray-200 rounded w-1/3 animate-pulse" />
               </div>
             </div>
           ))}
@@ -150,80 +292,81 @@ export default function PropertiesPage() {
           </div>
           <h3 className="text-lg font-bold text-navy-900 mb-2">Sin propiedades aún</h3>
           <p className="text-sm text-navy-500 max-w-md mx-auto mb-6">
-            Empezá a scrapear propiedades de portales inmobiliarios para que aparezcan acá.
+            Agregá propiedades manualmente, importá un CSV o scrapeá portales inmobiliarios.
           </p>
-          <a href="/dashboard/scrape" className="btn-gold">
-            Ir a Scraping →
-          </a>
+          <div className="flex gap-3 justify-center">
+            <button onClick={() => setShowAddForm(true)} className="btn-gold">+ Agregar propiedad</button>
+            <a href="/dashboard/scrape" className="btn-outline">Ir a Scraping</a>
+          </div>
         </div>
       )}
 
       {/* Properties Grid */}
       {!loading && filtered.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((property) => (
-            <div key={property.id} className="card-hover overflow-hidden">
-              <div className="relative h-48">
-                <img
-                  src={property.photos?.[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop'}
-                  alt={property.title}
-                  className="w-full h-full object-cover"
-                />
-                <span className="portal-badge bg-navy-900/80 text-white">
-                  {property.portal}
-                </span>
-                {property.currency && (
-                  <span className="absolute top-3 right-3 badge bg-gold-400 text-navy-900">
-                    {property.currency}
-                  </span>
-                )}
-              </div>
-              <div className="p-4">
-                <h4 className="font-semibold text-navy-900 truncate mb-1">{property.title}</h4>
-                <p className="text-sm text-navy-500 truncate mb-3">
-                  {property.address || property.neighborhood}
-                </p>
-                <div className="flex items-center gap-4 text-xs text-navy-400 mb-3">
-                  {property.beds > 0 && <span>{property.beds} amb</span>}
-                  {property.baths > 0 && <span>{property.baths} baños</span>}
-                  {property.sqm > 0 && <span>{property.sqm} m²</span>}
+        <>
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-navy-500">{filtered.length} propiedades</p>
+            {filtered.length > 0 && (
+              <button onClick={exportCSV} className="btn-outline text-sm">
+                <svg className="w-4 h-4 mr-1 inline" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Exportar CSV
+              </button>
+            )}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filtered.map((property) => (
+              <div key={property.id} className="card-hover overflow-hidden">
+                <div className="relative h-48">
+                  <img
+                    src={property.photos?.[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop'}
+                    alt={property.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <span className="portal-badge bg-navy-900/80 text-white">{property.portal}</span>
+                  {property.currency && (
+                    <span className="absolute top-3 right-3 badge bg-gold-400 text-navy-900">{property.currency}</span>
+                  )}
+                  <button
+                    onClick={() => deleteProperty(property.id)}
+                    className="absolute top-3 left-3 w-7 h-7 rounded-full bg-red-500/80 text-white flex items-center justify-center hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                    title="Eliminar"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
-                <div className="flex items-center justify-between">
-                  <p className="price-tag text-lg">
-                    {formatPrice(property.price || 0, property.currency || 'USD')}
-                  </p>
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => downloadPDF(property.id, property.title)}
-                      className="btn-ghost text-xs px-2 py-1"
-                      title="Descargar PDF"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                      </svg>
-                    </button>
+                <div className="p-4">
+                  <h4 className="font-semibold text-navy-900 truncate mb-1">{property.title}</h4>
+                  <p className="text-sm text-navy-500 truncate mb-3">{property.address || property.neighborhood || 'Sin dirección'}</p>
+                  <div className="flex items-center gap-4 text-xs text-navy-400 mb-3">
+                    {property.beds > 0 && <span>{property.beds} amb</span>}
+                    {property.baths > 0 && <span>{property.baths} baños</span>}
+                    {property.sqm > 0 && <span>{property.sqm} m²</span>}
+                    {property.property_type && <span className="badge bg-navy-50 text-navy-600">{property.property_type}</span>}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="price-tag text-lg">
+                      {formatPrice(property.price || 0, property.currency || 'USD')}
+                    </p>
                     {property.url && (
-                      <a
-                        href={property.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-ghost text-xs px-2 py-1"
-                      >
-                        Ver →
-                      </a>
+                      <a href={property.url} target="_blank" rel="noopener noreferrer" className="btn-ghost text-xs px-2 py-1">Ver →</a>
                     )}
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* No results */}
       {!loading && properties.length > 0 && filtered.length === 0 && (
         <div className="card p-8 text-center">
           <p className="text-navy-500">No se encontraron propiedades con esos filtros.</p>
+          <button onClick={() => { setSearch(''); setFilterPortal('all'); setFilterType(''); setFilterBeds(''); setPriceMin(''); setPriceMax('') }} className="btn-outline text-sm mt-3">Limpiar filtros</button>
         </div>
       )}
     </>
