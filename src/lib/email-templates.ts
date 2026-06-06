@@ -181,6 +181,37 @@ export function paymentConfirmationTemplate(name: string, plan: string, amount: 
   return baseTemplate(content)
 }
 
+export function passwordResetTemplate(name: string, resetUrl: string): string {
+  const content = `
+    <h1 style="margin:0 0 8px;font-size:24px;font-weight:800;color:${BRAND.navy};">
+      Restablecer contraseña
+    </h1>
+    <p style="margin:0 0 24px;font-size:15px;color:${BRAND.textMuted};line-height:1.6;">
+      Hola <strong style="color:${BRAND.textDark};">${name}</strong>, recibimos un pedido para restablecer tu contraseña.
+    </p>
+
+    <div style="text-align:center;margin:32px 0;">
+      ${btn(resetUrl, 'Restablecer contraseña →')}
+    </div>
+
+    <p style="margin:0 0 16px;font-size:13px;color:${BRAND.textMuted};line-height:1.6;">
+      Este enlace expira en <strong>1 hora</strong>. Si no pediste este cambio, ignorá este email.
+    </p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:${BRAND.lightGray};border-radius:8px;margin-top:24px;">
+      <tr>
+        <td style="padding:16px;">
+          <p style="margin:0;font-size:12px;color:${BRAND.textMuted};word-break:break-all;">
+            Si el botón no funciona, copiá y pegá este enlace en tu navegador:<br/>
+            <a href="${resetUrl}" style="color:${BRAND.coral};text-decoration:none;">${resetUrl}</a>
+          </p>
+        </td>
+      </tr>
+    </table>
+  `
+  return baseTemplate(content)
+}
+
 export function lowCreditsTemplate(name: string, creditsRemaining: number): string {
   const content = `
     <h1 style="margin:0 0 8px;font-size:24px;font-weight:800;color:${BRAND.navy};">

@@ -2,6 +2,7 @@ import {
   welcomeEmailTemplate,
   paymentConfirmationTemplate,
   lowCreditsTemplate,
+  passwordResetTemplate,
 } from './email-templates'
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
@@ -60,5 +61,13 @@ export async function sendLowCredits(to: string, name: string, creditsRemaining:
     to,
     'Créditos bajos en tu cuenta Inmoxil',
     lowCreditsTemplate(name, creditsRemaining)
+  )
+}
+
+export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string) {
+  await sendEmail(
+    to,
+    'Restablecer tu contraseña - Inmoxil',
+    passwordResetTemplate(name, resetUrl)
   )
 }

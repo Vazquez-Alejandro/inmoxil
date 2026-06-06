@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { query } from '@/lib/db'
+import { queryOne, query } from '@/lib/db'
 
 export async function POST(request: Request) {
   try {
@@ -14,15 +14,31 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'La contraseña debe tener al menos 8 caracteres' }, { status: 400 })
     }
 
-    // In production, validate token against a password_resets table
-    // For now, accept any valid UUID-like token
+    const resetRecord = await queryOne(
+      'SELECT user_id, expires_at, used FROM password_resets WHERE token = $1',
+      [token]
+    )
+
+    if (!resetRecord) {
+      return NextResponse.json({ error: 'Token inválido' }, { status: 400 })
+    }
+
+    if (resetRecord.used) {
+      return NextResponse.json({ error: 'Este enlace ya fue utilizado' }, { status: 400 })
+    }
+
+    if (new Date(resetRecord.expires_at) < new Date()) {
+      return NextResponse.json({ error: 'Este enlace expiró. Solicitá uno nuevo' }, { status: 400 })
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    // This would update the user's password in a real implementation
-    // await query('UPDATE users SET password_hash = $1 WHERE id = (SELECT user_id FROM password_resets WHERE token = $2)', [hashedPassword, token])
+    await query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashedPassword, resetRecord.user_id])
+    await query('UPDATE password_resets SET used = TRUE WHERE token = $1', [token])
 
     return NextResponse.json({ success: true })
   } catch (err: any) {
+    console.error('[Reset Password] Error:', err)
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })
   }
 }

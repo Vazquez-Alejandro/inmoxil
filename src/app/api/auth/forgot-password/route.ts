@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
-import { queryOne } from '@/lib/db'
+import { queryOne, insertOne } from '@/lib/db'
 import crypto from 'crypto'
+import { sendPasswordResetEmail } from '@/lib/email'
 
 export async function POST(request: Request) {
   try {
@@ -10,22 +11,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email requerido' }, { status: 400 })
     }
 
-    // Always return success to prevent email enumeration
-    const user = await queryOne('SELECT id FROM users WHERE email = $1', [email])
+    const user = await queryOne('SELECT id, full_name FROM users WHERE email = $1', [email])
 
     if (user) {
-      // Generate reset token (valid for 1 hour)
       const token = crypto.randomBytes(32).toString('hex')
       const expires = new Date(Date.now() + 3600000).toISOString()
 
-      // Store token in a simple way (in production, use a separate table)
-      // For now, we'll just log it since email isn't configured yet
-      console.log(`[Password Reset] Token for ${email}: ${token}`)
-      console.log(`[Password Reset] Expires: ${expires}`)
+      await insertOne('password_resets', {
+        user_id: user.id,
+        token,
+        expires_at: expires,
+      })
+
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://inmoxil.vercel.app'
+      const resetUrl = `${baseUrl}/reset-password?token=${token}`
+
+      await sendPasswordResetEmail(email, user.full_name || 'Usuario', resetUrl)
     }
 
     return NextResponse.json({ success: true })
   } catch (err: any) {
+    console.error('[Forgot Password] Error:', err)
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })
   }
 }
