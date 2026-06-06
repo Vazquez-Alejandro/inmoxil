@@ -63,8 +63,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, count })
-  } catch (error) {
-    console.error('[Properties] Error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  } catch (error: any) {
+    console.error('[Properties] POST Error:', error?.message || error)
+    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 })
   }
 }
