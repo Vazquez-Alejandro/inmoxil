@@ -14,7 +14,7 @@ export function getDb() {
 export async function query(text: string, params?: any[]) {
   const sql = getDb()
   const result = await sql.query(text, params || [])
-  return result.rows
+  return Array.isArray(result) ? result : result.rows || []
 }
 
 export async function queryOne(text: string, params?: any[]) {
