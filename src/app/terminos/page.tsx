@@ -85,7 +85,24 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3">6. Limitación de Responsabilidad</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3">6. Uso del Scraping y Datos de Terceros</h2>
+            <p className="text-navy-700 leading-relaxed mb-3">
+              La plataforma permite recopilar información de propiedades inmobiliarias publicadas en portales web públicos
+              (ZonaProp, Argenprop, MercadoLibre, entre otros). El usuario reconoce y acepta que:
+            </p>
+            <ul className="list-disc list-inside text-navy-700 space-y-2 ml-4">
+              <li>El scraping debe realizarse de buena fe y con fines lícitos, exclusivamente para monitoreo de mercado o gestión de las propias propiedades.</li>
+              <li>Queda estrictamente prohibido copiar, reproducir o publicar como propias las publicaciones de otras inmobiliarias o agentes.</li>
+              <li>El usuario es el único responsable del uso que le dé a la información obtenida a través del scraping.</li>
+              <li>Los portales inmobiliarios pueden modificar sus términos de servicio, estructura HTML o políticas de acceso en cualquier momento, lo que puede afectar el funcionamiento del scraping.</li>
+              <li>Inmoxil no garantiza la exactitud, completitud ni vigencia de los datos recopilados mediante scraping.</li>
+              <li>El usuario debe respetar los términos de servicio de cada portal inmobiliario al que acceda a través de la plataforma.</li>
+              <li>Inmoxil no se responsabiliza por cualquier reclamo, sanción o consecuencia legal derivada del uso indebido del scraping por parte del usuario.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-navy-900 mb-3">7. Limitación de Responsabilidad</h2>
             <p className="text-navy-700 leading-relaxed">
               Inmoxil no será responsable por daños indirectos, incidentales, especiales o consecuentes que resulten
               del uso o imposibilidad de uso de la plataforma. No garantizamos la disponibilidad ininterrumpida del
@@ -95,7 +112,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3">7. Terminación</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3">8. Terminación</h2>
             <p className="text-navy-700 leading-relaxed">
               Inmoxil se reserva el derecho de suspender o terminar la cuenta del usuario en caso de incumplimiento
               de estos términos, con o sin previo aviso. En caso de terminación por parte del usuario, este podrá
@@ -105,7 +122,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3">8. Ley Aplicable y Jurisdicción</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3">9. Ley Aplicable y Jurisdicción</h2>
             <p className="text-navy-700 leading-relaxed">
               Estos Términos de Servicio se rigen por las leyes de la República Argentina. Cualquier controversia
               derivada de la interpretación o ejecución de estos términos será sometida a la jurisdicción de los
@@ -114,7 +131,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3">9. Contacto</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3">10. Contacto</h2>
             <p className="text-navy-700 leading-relaxed">
               Para consultas sobre estos Términos de Servicio, podés contactarnos a través de{' '}
               <a href="mailto:hola@inmoxil.com" className="text-gold-600 hover:text-gold-700 underline">

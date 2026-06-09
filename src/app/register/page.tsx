@@ -14,6 +14,7 @@ export default function RegisterPage() {
     email: '',
     password: '',
     confirmPassword: '',
+    acceptTerms: false,
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -29,6 +30,11 @@ export default function RegisterPage() {
 
     if (formData.password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres')
+      return
+    }
+
+    if (!formData.acceptTerms) {
+      setError('Debés aceptar los Términos y Condiciones para registrarte')
       return
     }
 
@@ -190,12 +196,22 @@ export default function RegisterPage() {
               )}
             </button>
 
-            <p className="text-center text-xs text-navy-400">
-              Al registrarte aceptás nuestros{' '}
-              <span className="text-gold-600">Términos</span>{' '}
-              y{' '}
-              <span className="text-gold-600">Política de Privacidad</span>
-            </p>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                className="mt-1 w-4 h-4 rounded border-gray-300 text-gold-600 focus:ring-gold-500"
+                checked={formData.acceptTerms}
+                onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
+                required
+              />
+              <span className="text-xs text-navy-500 leading-relaxed">
+                Acepto los{' '}
+                <Link href="/terminos" target="_blank" className="text-gold-600 hover:text-gold-700 underline">Términos de Servicio</Link>
+                {' '}y la{' '}
+                <Link href="/privacidad" target="_blank" className="text-gold-600 hover:text-gold-700 underline">Política de Privacidad</Link>.
+                Entiendo que el scraping debe usarse de forma lícita y responsable.
+              </span>
+            </label>
           </form>
 
           <div className="divider my-8" />
