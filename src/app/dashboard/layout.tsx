@@ -163,7 +163,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Sidebar onClose={() => setSidebarOpen(false)} />
             </div>
 
-            <div className="lg:ml-64">
+            <div className="lg:ml-64 flex flex-col min-h-screen">
               <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-30">
                 <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
                   <svg className="w-5 h-5 text-navy-700" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -176,9 +176,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
               </div>
 
-              <main className="p-4 sm:p-6 lg:p-8">
+              <main className="p-4 sm:p-6 lg:p-8 flex-1">
                 {children}
               </main>
+
+              <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-gray-200 mt-auto">
+                <div className="flex items-center justify-center gap-4 text-xs text-navy-400">
+                  <Link href="/terminos" target="_blank" className="hover:text-navy-600 transition-colors">Términos y Condiciones</Link>
+                  <span>·</span>
+                  <Link href="/privacidad" target="_blank" className="hover:text-navy-600 transition-colors">Política de Privacidad</Link>
+                </div>
+              </footer>
             </div>
           </div>
         </ErrorBoundary>
