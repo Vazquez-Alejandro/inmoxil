@@ -34,7 +34,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const creditsPercent = creditsTotal > 0 ? Math.min((creditsUsed / (plan.credits)) * 100, 100) : 0
 
   return (
-    <aside className="w-64 h-full bg-gradient-dark flex flex-col overflow-hidden">
+    <aside className="w-64 h-full bg-gradient-dark flex flex-col">
       <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
         <div className="flex items-center gap-3">
           <div className="logo-mark">Ix</div>
