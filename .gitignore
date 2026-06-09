@@ -16,6 +16,7 @@ build/
 # misc
 .DS_Store
 *.pem
+TEST_PLAN.txt
 
 # debug
 npm-debug.log*
