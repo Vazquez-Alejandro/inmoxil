@@ -34,7 +34,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const creditsPercent = creditsTotal > 0 ? Math.min((creditsUsed / (plan.credits)) * 100, 100) : 0
 
   return (
-    <aside className="w-64 h-full bg-gradient-dark flex flex-col">
+    <aside className="w-64 h-full bg-gradient-dark flex flex-col overflow-hidden">
       <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
         <div className="flex items-center gap-3">
           <div className="logo-mark">Ix</div>
@@ -53,7 +53,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         </button>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         {navigation.map((item) => {
           if ('ownerOnly' in item && item.ownerOnly && !isOwner) return null
           const isActive = pathname === item.href || 
@@ -82,7 +82,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         )}
       </nav>
 
-      <div className="px-3 py-4 border-t border-white/10">
+      <div className="px-3 py-4 border-t border-white/10 shrink-0">
         <div className="card bg-white/5 border-white/10 p-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-8 h-8 rounded-full bg-gold-400 flex items-center justify-center text-navy-900 font-bold text-xs">
