@@ -99,9 +99,9 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
           <p className="text-navy-400 text-[10px] mt-2">{workspace?.credits_remaining ?? plan.credits} de {plan.credits} disponibles</p>
         </div>
         <div className="flex items-center gap-3 mt-3 px-1">
-          <Link href="/terminos" target="_blank" className="text-navy-300 hover:text-white text-[11px] transition-colors">Términos</Link>
-          <span className="text-navy-500 text-[11px]">·</span>
-          <Link href="/privacidad" target="_blank" className="text-navy-300 hover:text-white text-[11px] transition-colors">Privacidad</Link>
+          <Link href="/terminos" target="_blank" className="text-gold-400 hover:text-gold-300 text-xs underline transition-colors">Términos</Link>
+          <span className="text-gold-600">·</span>
+          <Link href="/privacidad" target="_blank" className="text-gold-400 hover:text-gold-300 text-xs underline transition-colors">Privacidad</Link>
         </div>
       </div>
     </aside>
