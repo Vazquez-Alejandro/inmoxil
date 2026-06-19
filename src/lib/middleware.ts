@@ -8,7 +8,9 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/register') ||
     request.nextUrl.pathname.startsWith('/api/auth')
 
-  const isPublicPage = request.nextUrl.pathname === '/'
+  const isPublicPage = request.nextUrl.pathname === '/' ||
+    request.nextUrl.pathname === '/terminos' ||
+    request.nextUrl.pathname === '/privacidad'
 
   if (!token && !isAuthPage && !isPublicPage) {
     const url = request.nextUrl.clone()
