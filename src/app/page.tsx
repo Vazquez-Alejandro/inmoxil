@@ -209,7 +209,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
             <div key={feature.title} className="card bg-white/5 border-white/10 p-8 hover:bg-white/[0.08] transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-gold-400/20 flex items-center justify-center mb-5 text-gold-400">
+              <div className="w-12 h-12 rounded-xl bg-gold-500/20 flex items-center justify-center mb-5 text-gold-400">
                 {feature.icon}
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
@@ -233,12 +233,12 @@ export default function HomePage() {
               key={plan.name}
               className={`relative rounded-2xl p-8 ${
                 plan.popular
-                  ? 'bg-white border-2 border-gold-400 shadow-gold-glow'
+                  ? 'bg-white border-2 border-gold-500 shadow-gold-glow'
                   : 'bg-white/5 border border-white/10'
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold-400 text-navy-900 text-xs font-bold px-4 py-1.5 rounded-full">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold-500 text-white text-xs font-bold px-4 py-1.5 rounded-full">
                   Más popular
                 </div>
               )}

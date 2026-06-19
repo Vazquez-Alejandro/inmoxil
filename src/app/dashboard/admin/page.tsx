@@ -104,7 +104,7 @@ export default function AdminPage() {
 
   const planColors: Record<string, string> = {
     starter: 'bg-navy-400',
-    pro: 'bg-gold-400',
+    pro: 'bg-gold-500',
     enterprise: 'bg-coral-400',
   }
 

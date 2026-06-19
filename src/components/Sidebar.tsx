@@ -85,7 +85,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
       <div className="px-3 py-4 border-t border-white/10 shrink-0">
         <div className="card bg-white/5 border-white/10 p-4">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-full bg-gold-400 flex items-center justify-center text-navy-900 font-bold text-xs">
+            <div className="w-8 h-8 rounded-full bg-gold-500 flex items-center justify-center text-white font-bold text-xs">
               {workspace?.name?.[0] || 'Ix'}
             </div>
             <div className="flex-1 min-w-0">
@@ -94,7 +94,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             </div>
           </div>
           <div className="w-full bg-white/10 rounded-full h-1.5">
-            <div className="bg-gold-400 h-1.5 rounded-full transition-all" style={{ width: `${100 - creditsPercent}%` }} />
+            <div className="bg-gold-500 h-1.5 rounded-full transition-all" style={{ width: `${100 - creditsPercent}%` }} />
           </div>
           <p className="text-navy-400 text-[10px] mt-2">{workspace?.credits_remaining ?? plan.credits} de {plan.credits} disponibles</p>
         </div>

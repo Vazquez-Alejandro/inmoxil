@@ -158,7 +158,7 @@ export default function AnalyticsPage() {
                     <circle
                       cx="50" cy="50" r="40"
                       fill="none"
-                      stroke="#E85D3A"
+                      stroke="#10b981"
                       strokeWidth="12"
                       strokeDasharray={`${(data.stats.creditsUsed / totalPlanCredits) * 251.2} 251.2`}
                       strokeLinecap="round"

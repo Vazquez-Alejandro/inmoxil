@@ -10,7 +10,7 @@
   }
 
   ::selection {
-    @apply bg-gold-400/30 text-navy-900;
+    @apply bg-gold-500/20 text-white;
   }
 }
 
@@ -25,7 +25,7 @@
 
   .btn-gold {
     @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm
-           bg-gold-400 text-navy-900 hover:bg-gold-500
+           bg-gold-500 text-white hover:bg-gold-600
            transition-all duration-200 ease-out
            shadow-corporate hover:shadow-corporate-md hover:shadow-gold-glow
            active:scale-[0.98];
@@ -63,12 +63,12 @@
   .input {
     @apply w-full px-4 py-3 rounded-lg border border-gray-300 bg-white
            text-navy-900 placeholder:text-navy-400
-           focus:outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900
+           focus:outline-none focus:ring-2 focus:ring-gold-500/20 focus:border-gold-500
            transition-all duration-200;
   }
 
   .input-gold {
-    @apply input focus:ring-gold-400/30 focus:border-gold-400;
+    @apply input focus:ring-gold-500/20 focus:border-gold-500;
   }
 
   .label {
@@ -134,8 +134,8 @@
   }
 
   .logo-mark {
-    @apply w-10 h-10 rounded-xl bg-gold-400 flex items-center justify-center
-           text-navy-900 font-black text-lg tracking-tighter;
+    @apply w-10 h-10 rounded-xl bg-gold-500 flex items-center justify-center
+           text-white font-black text-lg tracking-tighter;
   }
 
   .price-tag {

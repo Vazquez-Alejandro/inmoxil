@@ -9,9 +9,9 @@ export default function BrandPage() {
   const { workspace, refresh } = useWorkspace()
   const { toast } = useToast()
   const [brand, setBrand] = useState({
-    primaryColor: '#0F2B46',
-    secondaryColor: '#D4A843',
-    accentColor: '#E85D3A',
+    primaryColor: '#0f172a',
+    secondaryColor: '#6366f1',
+    accentColor: '#10b981',
     companyName: 'Mi Inmobiliaria',
   })
   const [saved, setSaved] = useState(false)
@@ -21,9 +21,9 @@ export default function BrandPage() {
   useEffect(() => {
     if (workspace) {
       setBrand({
-        primaryColor: workspace.primary_color || '#0F2B46',
-        secondaryColor: workspace.secondary_color || '#D4A843',
-        accentColor: workspace.accent_color || '#E85D3A',
+        primaryColor: workspace.primary_color || '#0f172a',
+        secondaryColor: workspace.secondary_color || '#6366f1',
+        accentColor: workspace.accent_color || '#10b981',
         companyName: workspace.name || 'Mi Inmobiliaria',
       })
     }
@@ -61,9 +61,9 @@ export default function BrandPage() {
 
   const handleRestore = () => {
     setBrand({
-      primaryColor: '#0F2B46',
-      secondaryColor: '#D4A843',
-      accentColor: '#E85D3A',
+      primaryColor: '#0f172a',
+      secondaryColor: '#6366f1',
+      accentColor: '#10b981',
       companyName: workspace?.name || 'Mi Inmobiliaria',
     })
     setLogoFile(null)

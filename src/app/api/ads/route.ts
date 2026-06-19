@@ -24,9 +24,9 @@ export async function POST(request: NextRequest) {
     if (!property) return NextResponse.json({ error: 'Propiedad no encontrada' }, { status: 404 })
 
     const brandConfig = {
-      primary_color: workspace.primary_color || '#0F2B46',
-      secondary_color: workspace.secondary_color || '#D4A843',
-      accent_color: workspace.accent_color || '#E85D3A',
+      primary_color: workspace.primary_color || '#0f172a',
+      secondary_color: workspace.secondary_color || '#6366f1',
+      accent_color: workspace.accent_color || '#10b981',
       name: workspace.name || 'Inmoxil',
       logo_url: workspace.logo_url || null,
     }

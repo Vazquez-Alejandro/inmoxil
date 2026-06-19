@@ -141,7 +141,7 @@ export default function BillingPage() {
           </div>
           <div className="w-full bg-navy-100 rounded-full h-2">
             <div
-              className="bg-gold-400 h-2 rounded-full transition-all"
+              className="bg-gold-500 h-2 rounded-full transition-all"
               style={{ width: `${Math.min((creditsUsed / creditsTotal) * 100, 100)}%` }}
             />
           </div>

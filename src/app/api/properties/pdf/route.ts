@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     if (!property) return NextResponse.json({ error: 'Propiedad no encontrada' }, { status: 404 })
 
     const brand = await queryOne('SELECT name, primary_color, secondary_color FROM workspaces WHERE id=$1', [workspaceId])
-    const brandConfig = { name: brand?.name || 'Ix', primaryColor: brand?.primary_color || '#0F2B46', secondaryColor: brand?.secondary_color || '#D4A843' }
+    const brandConfig = { name: brand?.name || 'Ix', primaryColor: brand?.primary_color || '#0f172a', secondaryColor: brand?.secondary_color || '#6366f1' }
 
     const pdfBuffer = await generatePropertyPDF(property, brandConfig)
     return new NextResponse(new Uint8Array(pdfBuffer), {

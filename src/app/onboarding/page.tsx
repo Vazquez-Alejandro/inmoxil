@@ -13,9 +13,9 @@ const STEPS = [
 ]
 
 const PRESET_COLORS = {
-  primary: ['#0F2B46', '#1e3a5f', '#2d1b69', '#1a4731', '#7c2d12'],
-  secondary: ['#D4A843', '#fbbf24', '#60a5fa', '#34d399', '#f97316'],
-  accent: ['#E85D3A', '#ef4444', '#a855f7', '#14b8a6', '#3b82f6'],
+  primary: ['#0f172a', '#1e3a5f', '#2d1b69', '#1a4731', '#7c2d12'],
+  secondary: ['#6366f1', '#fbbf24', '#60a5fa', '#34d399', '#f97316'],
+  accent: ['#10b981', '#ef4444', '#a855f7', '#14b8a6', '#3b82f6'],
 }
 
 const PLANS = [
@@ -45,7 +45,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const [companyName, setCompanyName] = useState('Mi Inmobiliaria')
-  const [colors, setColors] = useState({ primary: '#0F2B46', secondary: '#D4A843', accent: '#E85D3A' })
+  const [colors, setColors] = useState({ primary: '#0f172a', secondary: '#6366f1', accent: '#10b981' })
   const [selectedPlan, setSelectedPlan] = useState('starter')
   const [saving, setSaving] = useState(false)
   const [workspaceId, setWorkspaceId] = useState<string | null>(null)
@@ -133,7 +133,7 @@ export default function OnboardingPage() {
                     i < step
                       ? 'bg-green-500 text-white'
                       : i === step
-                        ? 'bg-gold-400 text-navy-900'
+                        ? 'bg-gold-500 text-white'
                         : 'bg-gray-200 text-gray-500'
                   }`}
                 >
@@ -204,7 +204,7 @@ export default function OnboardingPage() {
 function StepWelcome({ onNext }: { onNext: () => void }) {
   return (
     <div className="text-center">
-      <div className="w-20 h-20 rounded-2xl bg-gold-400 flex items-center justify-center text-navy-900 font-black text-3xl tracking-tighter mx-auto mb-8 shadow-gold-glow">
+      <div className="w-20 h-20 rounded-2xl bg-gold-500 flex items-center justify-center text-white font-black text-3xl tracking-tighter mx-auto mb-8 shadow-gold-glow">
         Ix
       </div>
       <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4 tracking-tight">
@@ -257,7 +257,7 @@ function StepCompany({
               Vista previa
             </p>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gold-400 flex items-center justify-center text-navy-900 font-black text-sm tracking-tighter">
+              <div className="w-10 h-10 rounded-xl bg-gold-500 flex items-center justify-center text-white font-black text-sm tracking-tighter">
                 Ix
               </div>
               <div>
@@ -429,7 +429,7 @@ function StepPlan({
             } ${plan.id === 'pro' ? 'relative' : ''}`}
           >
             {plan.id === 'pro' && (
-              <span className="absolute -top-3 right-4 badge bg-gold-400 text-navy-900 text-[10px] font-bold">
+              <span className="absolute -top-3 right-4 badge bg-gold-500 text-white text-[10px] font-bold">
                 Popular
               </span>
             )}
@@ -480,7 +480,7 @@ function StepDone() {
   const [particles, setParticles] = useState<{ x: number; y: number; color: string; delay: number; size: number }[]>([])
 
   useEffect(() => {
-    const colors = ['#D4A843', '#E85D3A', '#0F2B46', '#34d399', '#a855f7', '#fbbf24']
+    const colors = ['#6366f1', '#10b981', '#0f172a', '#34d399', '#a855f7', '#fbbf24']
     const items = Array.from({ length: 40 }, () => ({
       x: Math.random() * 100,
       y: Math.random() * -20 - 5,

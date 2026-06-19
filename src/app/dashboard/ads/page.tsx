@@ -230,8 +230,8 @@ export default function AdsPage() {
                   <p className="font-semibold text-navy-900 text-sm">{template.name}</p>
                   <p className="text-xs text-navy-400 mt-0.5">{template.description}</p>
                   {selectedTemplate === template.id && (
-                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-gold-400 flex items-center justify-center">
-                      <svg className="w-3 h-3 text-navy-900" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-gold-500 flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
                     </div>

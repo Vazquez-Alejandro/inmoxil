@@ -36,12 +36,12 @@ function formatPrice(price: number | null | undefined, currency: string | undefi
 }
 
 function renderFeature(feature: string): string {
-  return `<div style="display:inline-block;background:#F4F6F8;border-radius:8px;padding:8px 14px;margin:4px;font-size:13px;color:#0F2B46;">${feature}</div>`
+  return `<div style="display:inline-block;background:#F4F6F8;border-radius:8px;padding:8px 14px;margin:4px;font-size:13px;color:#0f172a;">${feature}</div>`
 }
 
 function buildPropertyHTML(property: PropertyData, brand: BrandConfig): string {
-  const primary = brand.primaryColor || '#0F2B46'
-  const secondary = brand.secondaryColor || '#D4A843'
+  const primary = brand.primaryColor || '#0f172a'
+  const secondary = brand.secondaryColor || '#6366f1'
   const brandName = brand.name || 'Ix'
   const photoUrl =
     property.photos?.[0] ||

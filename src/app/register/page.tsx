@@ -54,8 +54,8 @@ export default function RegisterPage() {
       {/* Left panel - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-corporate relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-gold-400 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gold-400 rounded-full blur-3xl" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-gold-500 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gold-500 rounded-full blur-3xl" />
         </div>
         <div className="relative z-10 flex flex-col justify-center px-16">
           <div className="logo-mark w-16 h-16 mb-8">Ix</div>
@@ -69,7 +69,7 @@ export default function RegisterPage() {
           </p>
           <div className="mt-12 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gold-500/20 flex items-center justify-center">
                 <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
@@ -77,7 +77,7 @@ export default function RegisterPage() {
               <span className="text-navy-200 text-sm">50 créditos gratis al registrarte</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gold-500/20 flex items-center justify-center">
                 <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
@@ -85,7 +85,7 @@ export default function RegisterPage() {
               <span className="text-navy-200 text-sm">Scraping multi-portal incluido</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gold-500/20 flex items-center justify-center">
                 <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>

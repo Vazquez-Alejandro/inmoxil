@@ -326,7 +326,7 @@ export default function PropertiesPage() {
                   />
                   <span className="portal-badge bg-navy-900/80 text-white">{property.portal}</span>
                   {property.currency && (
-                    <span className="absolute top-3 right-3 badge bg-gold-400 text-navy-900">{property.currency}</span>
+                    <span className="absolute top-3 right-3 badge bg-gold-500 text-white">{property.currency}</span>
                   )}
                   <button
                     onClick={() => deleteProperty(property.id)}

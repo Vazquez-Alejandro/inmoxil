@@ -1,7 +1,7 @@
 const BRAND = {
-  navy: '#0F2B46',
-  gold: '#D4A843',
-  coral: '#E85D3A',
+  navy: '#0f172a',
+  gold: '#6366f1',
+  coral: '#10b981',
   white: '#FFFFFF',
   lightGray: '#F4F6F8',
   textDark: '#1A1A2E',
