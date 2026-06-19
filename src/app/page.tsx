@@ -84,27 +84,6 @@ const plans = [
   },
 ]
 
-const testimonials = [
-  {
-    name: 'María González',
-    role: 'Directora de InmoTech',
-    quote: 'Inmoxil nos ahorró 20 horas semanales. El scraping automático es increíble, siempre tenemos datos frescos de todas las propiedades.',
-    stars: 5,
-  },
-  {
-    name: 'Carlos Ruiz',
-    role: 'CEO de PropiGroup',
-    quote: 'La generación de ads con nuestra marca nos hizo parecer una agencia 10 veces más grande. El ROI se disparó desde el primer mes.',
-    stars: 5,
-  },
-  {
-    name: 'Ana Martínez',
-    role: 'Gerente de SmartRealty',
-    quote: 'El billing por créditos es perfecto. Pagamos solo lo que usamos y el soporte responde en minutos. Totalmente recomendado.',
-    stars: 5,
-  },
-]
-
 const faqs = [
   {
     question: '¿Qué portales soporta el scraping?',
@@ -175,25 +154,6 @@ export default function HomePage() {
             <a href="#precios" className="btn-outline border-white/20 text-white hover:bg-white/10 text-lg px-8 py-4 w-full sm:w-auto">
               Ver precios
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="border-y border-white/10 py-12 md:py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-center text-navy-400 text-sm font-medium mb-8">
-            Ya confían en nosotros +50 inmobiliarias
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-            {['InmoTech', 'PropiGroup', 'SmartRealty', 'CasaPro', 'Urbania'].map((name) => (
-              <div key={name} className="flex items-center gap-2 text-white/20">
-                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-xs font-bold">
-                  {name[0]}
-                </div>
-                <span className="text-sm font-semibold tracking-wide">{name}</span>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -273,32 +233,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Lo que dicen nuestros clientes</h2>
-          <p className="text-navy-400 text-lg">Más de 50 inmobiliarias ya están creciendo con Inmoxil.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial) => (
-            <div key={testimonial.name} className="card bg-white/5 border-white/10 p-8">
-              <div className="flex gap-1 mb-4">
-                {Array.from({ length: testimonial.stars }).map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-navy-300 leading-relaxed mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
-              <div>
-                <p className="text-white font-semibold">{testimonial.name}</p>
-                <p className="text-navy-400 text-sm">{testimonial.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* FAQ */}
       <section className="max-w-3xl mx-auto px-6 py-24 md:py-32">
         <div className="text-center mb-16">
@@ -321,7 +255,7 @@ export default function HomePage() {
           ¿Listo para escalar tu inmobiliaria?
         </h2>
         <p className="text-navy-400 text-lg mb-10 max-w-2xl mx-auto">
-          Unite a las +50 inmobiliarias que ya automatizaron su captación de propiedades.
+          Unite a las inmobiliarias que ya automatizaron su captación de propiedades.
           14 días gratis, sin tarjeta de crédito.
         </p>
         <Link href="/register" className="btn-gold text-lg px-10 py-4">
