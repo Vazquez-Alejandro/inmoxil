@@ -110,6 +110,13 @@ export default function RegisterPage() {
           <h2 className="text-2xl font-bold text-navy-900 mb-2">Crear cuenta</h2>
           <p className="text-navy-500 mb-8">Registrate para empezar a usar Inmoxil</p>
 
+          <Link href="/" className="inline-flex items-center gap-1 text-sm text-navy-400 hover:text-navy-600 transition-colors mb-6">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Volver al inicio
+          </Link>
+
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-5">
               <p className="text-sm text-red-700">{error}</p>
