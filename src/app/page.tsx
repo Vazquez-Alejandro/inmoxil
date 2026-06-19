@@ -231,7 +231,7 @@ export default function HomePage() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative rounded-2xl p-8 transition-all duration-300 ${
+              className={`relative rounded-2xl p-8 transition-all duration-300 flex flex-col ${
                 plan.popular
                   ? 'bg-white border-2 border-gold-500 shadow-gold-glow hover:scale-105 hover:shadow-xl'
                   : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-105 hover:shadow-lg'
@@ -248,7 +248,7 @@ export default function HomePage() {
                 <span className={`text-4xl font-bold ${plan.popular ? 'text-navy-900' : 'text-white'}`}>${plan.price}</span>
                 <span className={`text-sm ml-1 ${plan.popular ? 'text-navy-500' : 'text-navy-400'}`}>/mes</span>
               </div>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-3">
                     <svg className={`w-5 h-5 flex-shrink-0 ${plan.popular ? 'text-gold-500' : 'text-gold-400'}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -260,7 +260,7 @@ export default function HomePage() {
               </ul>
               <Link
                 href="/register"
-                className={`w-full text-center ${
+                className={`w-full text-center mt-auto ${
                   plan.popular
                     ? 'btn-gold'
                     : 'btn-outline border-white/20 text-white hover:bg-white/10'
