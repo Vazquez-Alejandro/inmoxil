@@ -231,10 +231,10 @@ export default function HomePage() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative rounded-2xl p-8 ${
+              className={`relative rounded-2xl p-8 transition-all duration-300 ${
                 plan.popular
-                  ? 'bg-white border-2 border-gold-500 shadow-gold-glow'
-                  : 'bg-white/5 border border-white/10'
+                  ? 'bg-white border-2 border-gold-500 shadow-gold-glow hover:scale-105 hover:shadow-xl'
+                  : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-105 hover:shadow-lg'
               }`}
             >
               {plan.popular && (
