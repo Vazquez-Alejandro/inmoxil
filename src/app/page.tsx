@@ -159,7 +159,7 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+      <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Todo lo que necesitás, en un solo lugar</h2>
           <p className="text-navy-400 text-lg max-w-2xl mx-auto">
@@ -180,7 +180,7 @@ export default function HomePage() {
       </section>
 
       {/* Pricing */}
-      <section id="precios" className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+      <section id="precios" className="max-w-6xl mx-auto px-6 py-16 md:py-20">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Planes simples, precios transparentes</h2>
           <p className="text-navy-400 text-lg max-w-2xl mx-auto">
@@ -234,7 +234,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section className="max-w-3xl mx-auto px-6 py-24 md:py-32">
+      <section className="max-w-3xl mx-auto px-6 py-16 md:py-20">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Preguntas frecuentes</h2>
           <p className="text-navy-400 text-lg">Resolvemos tus dudas.</p>
@@ -250,7 +250,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA */}
-      <section className="max-w-4xl mx-auto px-6 py-24 md:py-32 text-center">
+      <section className="max-w-4xl mx-auto px-6 py-16 md:py-20 text-center">
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
           ¿Listo para escalar tu inmobiliaria?
         </h2>
