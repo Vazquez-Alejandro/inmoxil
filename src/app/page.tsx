@@ -123,7 +123,7 @@ export default function HomePage() {
           <a href="#precios" className="text-navy-300 hover:text-white transition-colors text-sm font-medium">Precios</a>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/login" className="btn-ghost text-navy-300 hover:text-white hidden sm:inline-flex">
+          <Link href="/login" className="btn-ghost text-navy-300 hover:text-white hover:bg-white/10 hidden sm:inline-flex">
             Iniciar sesión
           </Link>
           <Link href="/register" className="btn-gold">
