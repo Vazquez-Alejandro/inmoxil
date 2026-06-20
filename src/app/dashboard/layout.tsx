@@ -66,7 +66,7 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
             <h3 className="font-bold text-navy-900 mb-2">Privacidad</h3>
             <p className="leading-relaxed">
               Al aceptar, aceptás nuestra{' '}
-              <Link href="/terminos" target="_blank" className="text-gold-600 hover:text-gold-700 underline font-medium">Política de Privacidad</Link>
+              <Link href="/privacidad" target="_blank" className="text-gold-600 hover:text-gold-700 underline font-medium">Política de Privacidad</Link>
               {' '}y{' '}
               <Link href="/terminos" target="_blank" className="text-gold-600 hover:text-gold-700 underline font-medium">Términos de Servicio</Link>.
               Tus datos son protegidos conforme a la Ley 25.326 de Argentina.
