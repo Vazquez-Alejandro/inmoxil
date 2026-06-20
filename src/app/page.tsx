@@ -120,7 +120,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hidden md:flex items-center gap-6">
-          <a href="#precios" className="text-navy-300 hover:text-white transition-colors text-sm font-medium">Precios</a>
+          <a href="#precios" className="text-navy-300 hover:text-white hover:bg-white/10 transition-colors text-sm font-medium px-4 py-2 rounded-lg">Precios</a>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/login" className="btn-ghost text-navy-300 hover:text-white hover:bg-white/10 hidden sm:inline-flex">
