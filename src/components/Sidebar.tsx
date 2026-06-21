@@ -13,10 +13,12 @@ const PLAN_LABELS: Record<string, { name: string; credits: number }> = {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: DashboardIcon },
-  { name: 'Scraping', href: '/dashboard/scrape', icon: ScrapingIcon },
-  { name: 'Propiedades', href: '/dashboard/properties', icon: PropertiesIcon },
   { name: 'Pipeline', href: '/dashboard/pipeline', icon: PipelineIcon },
   { name: 'Contratos', href: '/dashboard/contracts', icon: ContractIcon },
+  { name: 'Scraping', href: '/dashboard/scrape', icon: ScrapingIcon },
+  { name: 'Propiedades', href: '/dashboard/properties', icon: PropertiesIcon },
+  { name: 'Notificaciones', href: '/dashboard/notifications', icon: NotifIcon },
+  { name: 'MercadoLibre', href: '/dashboard/ml', icon: MLIcon },
   { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon },
   { name: 'Analytics', href: '/dashboard/analytics', icon: AnalyticsIcon },
   { name: 'Billing', href: '/dashboard/billing', icon: BillingIcon },
@@ -201,6 +203,22 @@ function CodeIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+    </svg>
+  )
+}
+
+function NotifIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+    </svg>
+  )
+}
+
+function MLIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
     </svg>
   )
 }

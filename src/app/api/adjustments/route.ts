@@ -10,6 +10,17 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const contractId = searchParams.get('contractId')
+    const workspaceId = searchParams.get('workspaceId')
+    const pending = searchParams.get('pending') === 'true'
+
+    if (workspaceId && pending) {
+      const { workspace, error } = await requireWorkspaceAuth(workspaceId)
+      if (error) return error
+      const { getPendingAdjustments } = await import('@/lib/contracts/db')
+      const contracts = await getPendingAdjustments(workspaceId, 30)
+      return NextResponse.json({ pending: contracts.length, contracts })
+    }
+
     if (!contractId) return NextResponse.json({ error: 'contractId requerido' }, { status: 400 })
 
     const contract = await getContract(contractId)

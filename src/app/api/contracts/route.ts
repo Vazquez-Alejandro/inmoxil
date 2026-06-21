@@ -40,6 +40,21 @@ export async function POST(request: NextRequest) {
       number: contractData.number || generateContractNumber(),
       status: contractData.status || 'borrador',
     })
+
+    try {
+      const daysUntil = contract.nextAdjustmentDate
+        ? Math.ceil((new Date(contract.nextAdjustmentDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+        : null
+      if (daysUntil && daysUntil > 0 && daysUntil <= 60) {
+        await (await import('@/lib/notifications/db')).createNotification({
+          workspaceId, type: 'ajuste_proximo',
+          title: 'Próximo ajuste de contrato',
+          message: `El contrato "${contract.title}" tiene un ajuste en ${daysUntil} días (${contract.nextAdjustmentDate})`,
+          link: `/dashboard/contracts/${contract.id}`,
+        })
+      }
+    } catch {}
+
     return NextResponse.json({ success: true, contract })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 })

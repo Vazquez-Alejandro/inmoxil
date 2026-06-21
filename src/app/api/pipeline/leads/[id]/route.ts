@@ -40,6 +40,12 @@ export async function POST(request: NextRequest) {
       completedAt: new Date().toISOString(),
     })
 
+    try { await (await import('@/lib/notifications/db')).createNotification({
+      workspaceId, type: 'lead_nuevo', title: `Nuevo lead: ${lead.fullName}`,
+      message: `Cliente ${lead.source === 'whatsapp' ? 'de WhatsApp' : lead.source === 'portal' ? 'de portal' : 'manual'} registrado en ${firstStage.name}`,
+      link: '/dashboard/pipeline',
+    }) } catch {}
+
     return NextResponse.json({ success: true, lead })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 })

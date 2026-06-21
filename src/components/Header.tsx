@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
+import NotificationBell from './NotificationBell'
 
 export default function Header({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   const { user, signOut } = useAuth()
@@ -22,7 +23,8 @@ export default function Header({ title, subtitle, action }: { title: string; sub
         {subtitle && <p className="page-subtitle">{subtitle}</p>}
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
+        <NotificationBell />
         {action}
         <div className="relative">
           <button
