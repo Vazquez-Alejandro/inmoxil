@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 12pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 30mm 25mm;
+      background: white;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #0f172a;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      font-size: 20pt;
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .header .subtitle {
+      font-size: 13pt;
+      color: #6366f1;
+      font-style: italic;
+    }
+    .section {
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #0f172a;
+      text-transform: uppercase;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+    .clause {
+      margin-bottom: 14px;
+      text-align: justify;
+    }
+    .clause-number {
+      font-weight: bold;
+      color: #334155;
+      margin-right: 8px;
+    }
+    .field {
+      display: inline-block;
+      border-bottom: 1px solid #0f172a;
+      min-width: 180px;
+      padding: 2px 4px;
+      margin: 0 4px;
+      font-weight: 500;
+      color: #0f172a;
+    }
+    .field-small {
+      min-width: 100px;
+    }
+    .field-large {
+      min-width: 300px;
+    }
+    .two-column {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 16px;
+    }
+    .two-column > div {
+      flex: 1;
+    }
+    .signature-block {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .signature-line {
+      flex: 1;
+      text-align: center;
+    }
+    .signature-line .line {
+      border-top: 1px solid #0f172a;
+      height: 40px;
+      margin-bottom: 6px;
+    }
+    .signature-line .label {
+      font-size: 10pt;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .signature-line .name {
+      font-weight: bold;
+      font-size: 11pt;
+      color: #0f172a;
+      margin-top: 4px;
+    }
+    .signature-line .dni {
+      font-size: 9pt;
+      color: #94a3b8;
+    }
+    .footer-note {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 9pt;
+      color: #64748b;
+      text-align: center;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+    .highlight-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #6366f1;
+      padding: 14px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .amount-box {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-left: 4px solid #10b981;
+      padding: 14px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+      text-align: center;
+    }
+    .amount-box .label {
+      font-size: 10pt;
+      color: #065f46;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .amount-box .value {
+      font-size: 18pt;
+      font-weight: bold;
+      color: #065f46;
+      font-family: 'Georgia', serif;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      text-align: left;
+    }
+    th {
+      background: #f1f5f9;
+      font-weight: bold;
+      color: #0f172a;
+      font-size: 10pt;
+    }
+    td {
+      font-size: 11pt;
+    }
+    @media print {
+      body { padding: 0; max-width: none; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>{{ title }}</h1>
+    <div class="subtitle">{{ subtitle }}</div>
+  </div>
+
+  {% block content %}{% endblock %}
+
+  <div class="footer-note">
+    Documento generado por Inmoxil · {{ generated_at }} · ID: {{ document_id }}
+    {% if brand_name %} · {{ brand_name }}{% endif %}
+  </div>
+</body>
+</html>
