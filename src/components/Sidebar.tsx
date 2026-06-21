@@ -17,6 +17,7 @@ const navigation = [
   { name: 'Contratos', href: '/dashboard/contracts', icon: ContractIcon },
   { name: 'Scraping', href: '/dashboard/scrape', icon: ScrapingIcon },
   { name: 'Propiedades', href: '/dashboard/properties', icon: PropertiesIcon },
+  { name: 'Scraping Autom.', href: '/dashboard/schedule', icon: ClockIcon },
   { name: 'Notificaciones', href: '/dashboard/notifications', icon: NotifIcon },
   { name: 'MercadoLibre', href: '/dashboard/ml', icon: MLIcon },
   { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon },
@@ -211,6 +212,14 @@ function NotifIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+    </svg>
+  )
+}
+
+function ClockIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   )
 }

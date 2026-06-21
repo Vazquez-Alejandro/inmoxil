@@ -4,6 +4,12 @@
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "regions": ["gru1"],
+  "crons": [
+    {
+      "path": "/api/cron/scrape",
+      "schedule": "0 * * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
