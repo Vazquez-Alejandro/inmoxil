@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
 import { AuthProvider } from '@/lib/auth'
+import { ThemeProvider } from '@/lib/theme-context'
 import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Inmoxil — Scraping y Marketing para Inmobiliarias',
+  other: {
+    'theme-color': '#0f172a',
+  },
   description:
     'Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con tu marca, billing por créditos.',
   keywords: [
@@ -44,9 +48,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
-      <body className="min-h-screen bg-gray-50">
-        <AuthProvider>{children}</AuthProvider>
+    <html lang="es" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <meta name="theme-color" content="#0f172a" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Inmoxil" />
+      </head>
+      <body className="min-h-screen bg-gray-50 dark:bg-navy-950 dark:text-navy-100">
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

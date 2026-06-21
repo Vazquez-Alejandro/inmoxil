@@ -24,8 +24,8 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-white z-[100] flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full max-h-[90vh] flex flex-col bg-white rounded-2xl border border-gray-200 shadow-xl">
+    <div className="fixed inset-0 bg-white dark:bg-navy-950 z-[100] flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full max-h-[90vh] flex flex-col bg-white dark:bg-navy-900 rounded-2xl border border-gray-200 dark:border-navy-700 shadow-xl">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3 mb-2">
             <div className="logo-mark w-10 h-10 text-base">Ix</div>
@@ -113,6 +113,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [termsAccepted, setTermsAccepted] = useState<boolean | null>(null)
 
   useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    }
+  }, [])
+
+  useEffect(() => {
     if (!loading) {
       if (!user) {
         router.replace('/login')
@@ -131,7 +137,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (loading || !ready && termsAccepted === null) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-navy-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="logo-mark w-12 h-12">Ix</div>
           <div className="flex items-center gap-2 text-navy-500">
@@ -154,7 +160,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <ToastProvider>
       <WorkspaceProvider>
         <ErrorBoundary>
-          <div className="min-h-screen bg-gray-50">
+          <div className="min-h-screen bg-gray-50 dark:bg-navy-950">
             {sidebarOpen && (
               <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
             )}
@@ -164,15 +170,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
 
             <div className="lg:ml-64 flex flex-col min-h-screen">
-              <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-30">
-                <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
-                  <svg className="w-5 h-5 text-navy-700" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white dark:bg-navy-900 border-b border-gray-200 dark:border-navy-700 sticky top-0 z-30">
+                <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-navy-800">
+                  <svg className="w-5 h-5 text-navy-700 dark:text-navy-200" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                   </svg>
                 </button>
                 <div className="flex items-center gap-2">
                   <div className="logo-mark w-8 h-8 text-sm">Ix</div>
-                  <span className="font-bold text-navy-900">Inmoxil</span>
+                  <span className="font-bold text-navy-900 dark:text-white">Inmoxil</span>
                 </div>
               </div>
 
@@ -180,11 +186,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {children}
               </main>
 
-              <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-gray-200 mt-auto">
-                <div className="flex items-center justify-center gap-4 text-xs text-navy-400">
-                  <Link href="/terminos" target="_blank" className="hover:text-navy-600 transition-colors">Términos y Condiciones</Link>
+              <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-gray-200 dark:border-navy-700 mt-auto">
+                <div className="flex items-center justify-center gap-4 text-xs text-navy-400 dark:text-navy-500">
+                  <Link href="/terminos" target="_blank" className="hover:text-navy-600 dark:hover:text-navy-300 transition-colors">Términos y Condiciones</Link>
                   <span>·</span>
-                  <Link href="/privacidad" target="_blank" className="hover:text-navy-600 transition-colors">Política de Privacidad</Link>
+                  <Link href="/privacidad" target="_blank" className="hover:text-navy-600 dark:hover:text-navy-300 transition-colors">Política de Privacidad</Link>
                 </div>
               </footer>
             </div>
