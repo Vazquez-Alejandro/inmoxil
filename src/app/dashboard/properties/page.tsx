@@ -27,6 +27,9 @@ export default function PropertiesPage() {
   const { workspace } = useWorkspace()
   const [properties, setProperties] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [channels, setChannels] = useState<any[]>([])
+  const [publishing, setPublishing] = useState<string | null>(null)
+  const [publishDrop, setPublishDrop] = useState<string | null>(null)
 
   // Filters
   const [search, setSearch] = useState('')
@@ -57,6 +60,37 @@ export default function PropertiesPage() {
   }
 
   useEffect(() => { fetchProperties() }, [workspace])
+
+  useEffect(() => {
+    if (workspace?.id) {
+      fetch(`/api/publish?workspaceId=${workspace.id}`)
+        .then(r => r.json()).then(d => setChannels((d.channels || []).filter((c: any) => c.active)))
+        .catch(() => {})
+    }
+  }, [workspace?.id])
+
+  const publishProperty = async (propertyId: string, channelType: string) => {
+    if (!workspace?.id) return
+    setPublishing(propertyId)
+    setPublishDrop(null)
+    try {
+      const res = await fetch(`/api/publish/${propertyId}?workspaceId=${workspace.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channelType }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        alert('¡Publicado con éxito!')
+      } else {
+        alert('Error: ' + (data.error || 'Error al publicar'))
+      }
+    } catch (err: any) {
+      alert('Error: ' + err.message)
+    } finally {
+      setPublishing(null)
+    }
+  }
 
   const filtered = properties.filter(p => {
     if (search) {
@@ -347,13 +381,47 @@ export default function PropertiesPage() {
                     {property.sqm > 0 && <span>{property.sqm} m²</span>}
                     {property.property_type && <span className="badge bg-navy-50 text-navy-600">{property.property_type}</span>}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <p className="price-tag text-lg">
-                      {formatPrice(property.price || 0, property.currency || 'USD')}
-                    </p>
-                    {property.url && (
-                      <a href={property.url} target="_blank" rel="noopener noreferrer" className="btn-ghost text-xs px-2 py-1">Ver →</a>
-                    )}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <p className="price-tag text-lg whitespace-nowrap">
+                        {formatPrice(property.price || 0, property.currency || 'USD')}
+                      </p>
+                      {property.url && (
+                        <a href={property.url} target="_blank" rel="noopener noreferrer" className="btn-ghost text-xs px-2 py-1 whitespace-nowrap">Ver →</a>
+                      )}
+                    </div>
+                    <div className="relative">
+                      <button
+                        onClick={() => setPublishDrop(publishDrop === property.id ? null : property.id)}
+                        disabled={publishing === property.id || channels.length === 0}
+                        className="btn-outline text-xs py-1.5 whitespace-nowrap disabled:opacity-40"
+                      >
+                        {publishing === property.id ? 'Publicando...' : 'Publicar'}
+                      </button>
+                      {publishDrop === property.id && (
+                        <>
+                          <div className="fixed inset-0 z-40" onClick={() => setPublishDrop(null)} />
+                          <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-navy-200 rounded-lg shadow-lg z-50 py-1">
+                            {channels.length === 0 ? (
+                              <p className="px-3 py-2 text-xs text-navy-400">Sin canales activos</p>
+                            ) : (
+                              channels.map((ch: any) => (
+                                <button
+                                  key={ch.id}
+                                  onClick={() => publishProperty(property.id, ch.type)}
+                                  className="w-full text-left px-3 py-2 text-sm text-navy-700 hover:bg-navy-50 flex items-center gap-2"
+                                >
+                                  <span className={`w-5 h-5 rounded ${ch.type === 'mercadolibre' ? 'bg-amber-500' : 'bg-navy-400'} flex items-center justify-center text-white text-[8px] font-bold`}>
+                                    {ch.type === 'mercadolibre' ? 'ML' : ch.type.slice(0, 2).toUpperCase()}
+                                  </span>
+                                  {ch.label}
+                                </button>
+                              ))
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
