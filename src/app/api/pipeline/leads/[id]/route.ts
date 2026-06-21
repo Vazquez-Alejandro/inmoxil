@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
     if (error) return error
 
     const user = await requireAuth()
+    const userRole = (user as any)?.role_in_workspace || 'owner'
     const stages = await getStages(workspaceId)
     const firstStage = stages[0]
     if (!firstStage) return NextResponse.json({ error: 'No hay etapas configuradas' }, { status: 400 })
@@ -28,6 +29,7 @@ export async function POST(request: NextRequest) {
       source: leadData.source || 'manual',
       documentType: leadData.documentType || 'DNI',
       currency: leadData.currency || 'ARS',
+      assignedTo: userRole === 'agent' ? user!.id : (leadData.assignedTo || null),
     })
 
     await createActivity({

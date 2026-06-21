@@ -62,7 +62,7 @@ export async function createLead(data: PipelineLead): Promise<PipelineLead> {
   return mapLead(result)
 }
 
-export async function getLeads(workspaceId: string, stageId?: string, search?: string): Promise<PipelineLead[]> {
+export async function getLeads(workspaceId: string, stageId?: string, search?: string, assignedTo?: string): Promise<PipelineLead[]> {
   const conditions = ['ps.workspace_id=$1']
   const values: any[] = [workspaceId]
   let idx = 2
@@ -73,6 +73,7 @@ export async function getLeads(workspaceId: string, stageId?: string, search?: s
     values.push(`%${search}%`)
     idx++
   }
+  if (assignedTo) { conditions.push(`pl.assigned_to=$${idx++}`); values.push(assignedTo) }
 
   const rows = await query(
     `SELECT pl.*, p.title as property_title, ps.name as stage_name, ps.color as stage_color, ps."order" as stage_order_val

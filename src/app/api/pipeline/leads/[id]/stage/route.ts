@@ -33,6 +33,31 @@ export async function PATCH(request: NextRequest) {
       completedAt: new Date().toISOString(),
     })
 
+    if (newStage?.name === 'Ganado' && oldStage?.name !== 'Ganado') {
+      try {
+        const { createCommission } = await import('@/lib/commissions/db')
+        const titleParts = [lead.fullName]
+        if ((lead as any).propertyTitle) titleParts.push((lead as any).propertyTitle)
+        await createCommission({
+          workspaceId: lead.workspaceId,
+          leadId: lead.id,
+          title: `Comisión - ${titleParts.join(' - ')}`,
+          amount: 0,
+          currency: lead.currency || 'ARS',
+          status: 'pending',
+          createdBy: user?.id,
+        })
+        const { createNotification } = await import('@/lib/notifications/db')
+        await createNotification({
+          workspaceId: lead.workspaceId,
+          type: 'ajuste_completado',
+          title: '¡Operación cerrada!',
+          message: `Creá la comisión para ${lead.fullName}`,
+          link: '/dashboard/commissions',
+        })
+      } catch {}
+    }
+
     return NextResponse.json({ success: true, lead: result })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 })

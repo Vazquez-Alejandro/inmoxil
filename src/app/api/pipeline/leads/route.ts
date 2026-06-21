@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireWorkspaceAuth } from '@/lib/api-auth'
+import { requireWorkspaceAuth, requireAuth } from '@/lib/api-auth'
 import { getLeads } from '@/lib/pipeline/db'
 
 export async function GET(request: NextRequest) {
@@ -13,7 +13,12 @@ export async function GET(request: NextRequest) {
 
     const stageId = searchParams.get('stageId') || undefined
     const search = searchParams.get('search') || undefined
-    const leads = await getLeads(workspaceId, stageId, search)
+    const user = await requireAuth()
+
+    const userRole = (user as any)?.role_in_workspace || 'owner'
+    const assignedTo = userRole === 'agent' ? user!.id : undefined
+
+    const leads = await getLeads(workspaceId, stageId, search, assignedTo)
 
     return NextResponse.json({ leads })
   } catch (err: any) {
