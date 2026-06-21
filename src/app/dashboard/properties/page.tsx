@@ -44,10 +44,16 @@ export default function PropertiesPage() {
   const [addForm, setAddForm] = useState({
     title: '', price: '', currency: 'USD', address: '', neighborhood: '',
     city: '', state: '', country: 'Argentina', beds: '', baths: '', sqm: '',
-    propertyType: 'departamento', url: '', description: '',
+    propertyType: 'departamento', url: '', description: '', lat: '', lng: '',
   })
   const [addLoading, setAddLoading] = useState(false)
   const [addSuccess, setAddSuccess] = useState(false)
+
+  // Edit modal
+  const [editProperty, setEditProperty] = useState<any>(null)
+  const [editForm, setEditForm] = useState<any>({})
+  const [editLoading, setEditLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const fetchProperties = () => {
     if (workspace) {
@@ -136,13 +142,15 @@ export default function PropertiesPage() {
             propertyType: addForm.propertyType,
             url: addForm.url,
             description: addForm.description,
+            lat: addForm.lat ? parseFloat(addForm.lat) : null,
+            lng: addForm.lng ? parseFloat(addForm.lng) : null,
           }]
         }),
       })
       const data = await res.json()
       if (!data.success) throw new Error(data.error)
       setAddSuccess(true)
-      setAddForm({ title: '', price: '', currency: 'USD', address: '', neighborhood: '', city: '', state: '', country: 'Argentina', beds: '', baths: '', sqm: '', propertyType: 'departamento', url: '', description: '' })
+      setAddForm({ title: '', price: '', currency: 'USD', address: '', neighborhood: '', city: '', state: '', country: 'Argentina', beds: '', baths: '', sqm: '', propertyType: 'departamento', url: '', description: '', lat: '', lng: '' })
       fetchProperties()
       setTimeout(() => { setAddSuccess(false); setShowAddForm(false) }, 1500)
     } catch (err: any) {
@@ -159,6 +167,102 @@ export default function PropertiesPage() {
       setProperties(prev => prev.filter(p => p.id !== id))
     } catch {}
   }
+
+  const openEdit = async (property: any) => {
+    setEditProperty(property)
+    setEditForm({
+      title: property.title || '',
+      price: property.price?.toString() || '',
+      currency: property.currency || 'USD',
+      address: property.address || '',
+      neighborhood: property.neighborhood || '',
+      city: property.city || '',
+      state: property.state || '',
+      country: property.country || 'Argentina',
+      beds: property.beds?.toString() || '',
+      baths: property.baths?.toString() || '',
+      sqm: property.sqm?.toString() || '',
+      propertyType: property.property_type || 'departamento',
+      url: property.url || '',
+      description: property.description || '',
+      lat: property.lat?.toString() || '',
+      lng: property.lng?.toString() || '',
+      photos: property.photos || [],
+    })
+  }
+
+  const handleEditSave = async () => {
+    if (!editProperty) return
+    setEditLoading(true)
+    try {
+      const body: any = {}
+      if (editForm.title !== editProperty.title) body.title = editForm.title
+      if (editForm.price !== (editProperty.price?.toString() || '')) body.price = editForm.price ? parseFloat(editForm.price) : null
+      if (editForm.currency !== editProperty.currency) body.currency = editForm.currency
+      if (editForm.address !== (editProperty.address || '')) body.address = editForm.address
+      if (editForm.neighborhood !== (editProperty.neighborhood || '')) body.neighborhood = editForm.neighborhood
+      if (editForm.city !== (editProperty.city || '')) body.city = editForm.city
+      if (editForm.state !== (editProperty.state || '')) body.state = editForm.state
+      if (editForm.country !== (editProperty.country || '')) body.country = editForm.country
+      if (editForm.beds !== (editProperty.beds?.toString() || '')) body.beds = editForm.beds ? parseInt(editForm.beds) : null
+      if (editForm.baths !== (editProperty.baths?.toString() || '')) body.baths = editForm.baths ? parseInt(editForm.baths) : null
+      if (editForm.sqm !== (editProperty.sqm?.toString() || '')) body.sqm = editForm.sqm ? parseFloat(editForm.sqm) : null
+      if (editForm.propertyType !== (editProperty.property_type || '')) body.property_type = editForm.propertyType
+      if (editForm.url !== (editProperty.url || '')) body.url = editForm.url
+      if (editForm.description !== (editProperty.description || '')) body.description = editForm.description
+      if (editForm.lat !== (editProperty.lat?.toString() || '')) body.lat = editForm.lat ? parseFloat(editForm.lat) : null
+      if (editForm.lng !== (editProperty.lng?.toString() || '')) body.lng = editForm.lng ? parseFloat(editForm.lng) : null
+
+      const res = await fetch(`/api/properties/${editProperty.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error)
+      setEditProperty(null)
+      fetchProperties()
+    } catch (err: any) {
+      alert('Error: ' + err.message)
+    } finally {
+      setEditLoading(false)
+    }
+  }
+
+  const uploadPhoto = async (file: File) => {
+    setUploading(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/upload', { method: 'POST', body: fd })
+      const data = await res.json()
+      if (data.success) {
+        const newPhotos = [...(editForm.photos || []), data.url]
+        setEditForm({ ...editForm, photos: newPhotos })
+        await fetch(`/api/properties/${editProperty.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ photos: newPhotos }),
+        })
+        fetchProperties()
+      }
+    } catch {}
+    setUploading(false)
+  }
+
+  const removePhoto = async (idx: number) => {
+    const newPhotos = (editForm.photos || []).filter((_: any, i: number) => i !== idx)
+    setEditForm({ ...editForm, photos: newPhotos })
+    await fetch(`/api/properties/${editProperty.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photos: newPhotos }),
+    })
+    fetchProperties()
+  }
+
+  const mapUrl = (lat: number | string, lng: number | string) =>
+    `https://www.google.com/maps?q=${lat},${lng}`
 
   const exportCSV = () => {
     const headers = ['Título', 'Portal', 'Precio', 'Moneda', 'Dirección', 'Barrio', 'Ciudad', 'Amb', 'Baños', 'm²', 'Tipo', 'URL']
@@ -250,6 +354,16 @@ export default function PropertiesPage() {
               <div className="lg:col-span-3">
                 <label className="label">Descripción</label>
                 <textarea className="input min-h-[80px]" value={addForm.description} onChange={e => setAddForm({ ...addForm, description: e.target.value })} placeholder="Descripción de la propiedad..." />
+              </div>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="label">Latitud</label>
+                  <input className="input" value={addForm.lat} onChange={e => setAddForm({ ...addForm, lat: e.target.value })} placeholder="-34.6037" />
+                </div>
+                <div className="flex-1">
+                  <label className="label">Longitud</label>
+                  <input className="input" value={addForm.lng} onChange={e => setAddForm({ ...addForm, lng: e.target.value })} placeholder="-58.3816" />
+                </div>
               </div>
               <div className="lg:col-span-3 flex gap-2">
                 <button type="submit" disabled={addLoading} className="btn-gold disabled:opacity-50">
@@ -363,8 +477,17 @@ export default function PropertiesPage() {
                     <span className="absolute top-3 right-3 badge bg-gold-500 text-white">{property.currency}</span>
                   )}
                   <button
+                    onClick={(e) => { e.stopPropagation(); openEdit(property) }}
+                    className="absolute top-3 left-3 w-7 h-7 rounded-full bg-white/80 text-navy-700 flex items-center justify-center hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    title="Editar"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
+                  </button>
+                  <button
                     onClick={() => deleteProperty(property.id)}
-                    className="absolute top-3 left-3 w-7 h-7 rounded-full bg-red-500/80 text-white flex items-center justify-center hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-3 right-12 w-7 h-7 rounded-full bg-red-500/80 text-white flex items-center justify-center hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
                     title="Eliminar"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -380,6 +503,14 @@ export default function PropertiesPage() {
                     {property.baths > 0 && <span>{property.baths} baños</span>}
                     {property.sqm > 0 && <span>{property.sqm} m²</span>}
                     {property.property_type && <span className="badge bg-navy-50 text-navy-600">{property.property_type}</span>}
+                    {property.lat && property.lng && (
+                      <a href={mapUrl(property.lat, property.lng)} target="_blank" rel="noopener" className="text-indigo-500 hover:text-indigo-700 font-medium" title="Ver en mapa">
+                        <svg className="w-4 h-4 inline" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                        </svg>
+                      </a>
+                    )}
                   </div>
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
@@ -437,6 +568,118 @@ export default function PropertiesPage() {
             ))}
           </div>
         </>
+      )}
+
+      {/* Edit Modal */}
+      {editProperty && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setEditProperty(null)}>
+          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 sticky top-0 bg-white z-10">
+              <h2 className="text-lg font-bold text-navy-900">Editar propiedad</h2>
+              <button onClick={() => setEditProperty(null)} className="text-navy-400 hover:text-navy-600 p-1">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="label">Título</label>
+                  <input className="input" value={editForm.title} onChange={e => setEditForm({ ...editForm, title: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">Precio</label>
+                  <input className="input" type="number" value={editForm.price} onChange={e => setEditForm({ ...editForm, price: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">Moneda</label>
+                  <select className="input" value={editForm.currency} onChange={e => setEditForm({ ...editForm, currency: e.target.value })}>
+                    <option value="USD">USD</option>
+                    <option value="ARS">ARS</option>
+                    <option value="BRL">BRL</option>
+                  </select>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="label">Dirección</label>
+                  <input className="input" value={editForm.address} onChange={e => setEditForm({ ...editForm, address: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">Barrio</label>
+                  <input className="input" value={editForm.neighborhood} onChange={e => setEditForm({ ...editForm, neighborhood: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">Ciudad</label>
+                  <input className="input" value={editForm.city} onChange={e => setEditForm({ ...editForm, city: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">Ambientes</label>
+                  <input className="input" type="number" min="0" value={editForm.beds} onChange={e => setEditForm({ ...editForm, beds: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">Baños</label>
+                  <input className="input" type="number" min="0" value={editForm.baths} onChange={e => setEditForm({ ...editForm, baths: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">m²</label>
+                  <input className="input" type="number" min="0" value={editForm.sqm} onChange={e => setEditForm({ ...editForm, sqm: e.target.value })} />
+                </div>
+                <div>
+                  <label className="label">Tipo</label>
+                  <select className="input" value={editForm.propertyType} onChange={e => setEditForm({ ...editForm, propertyType: e.target.value })}>
+                    {PROPERTY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="label">Latitud</label>
+                  <input className="input" value={editForm.lat} onChange={e => setEditForm({ ...editForm, lat: e.target.value })} placeholder="-34.6037" />
+                </div>
+                <div>
+                  <label className="label">Longitud</label>
+                  <input className="input" value={editForm.lng} onChange={e => setEditForm({ ...editForm, lng: e.target.value })} placeholder="-58.3816" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="label">URL</label>
+                  <input className="input" value={editForm.url} onChange={e => setEditForm({ ...editForm, url: e.target.value })} />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="label">Descripción</label>
+                  <textarea className="input min-h-[80px]" value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
+                </div>
+              </div>
+
+              {/* Photos */}
+              <div>
+                <label className="label">Fotos</label>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {(editForm.photos || []).map((url: string, i: number) => (
+                    <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-navy-200">
+                      <img src={url} alt="" className="w-full h-full object-cover" />
+                      <button onClick={() => removePhoto(i)} className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-[10px] hover:bg-red-600">
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  <label className="w-20 h-20 rounded-lg border-2 border-dashed border-navy-300 flex items-center justify-center cursor-pointer hover:border-indigo-400 transition-colors">
+                    {uploading ? (
+                      <span className="text-xs text-navy-400">...</span>
+                    ) : (
+                      <svg className="w-6 h-6 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                    )}
+                    <input type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) uploadPhoto(f) }} />
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button onClick={handleEditSave} disabled={editLoading} className="btn-gold disabled:opacity-50">
+                  {editLoading ? 'Guardando...' : 'Guardar cambios'}
+                </button>
+                <button onClick={() => setEditProperty(null)} className="btn-outline">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* No results */}
