@@ -5,7 +5,7 @@ import path from 'path'
 
 export async function GET() {
   try {
-    const filePath = path.join(process.cwd(), 'src/migrations/010_features.sql')
+    const filePath = path.join(process.cwd(), 'src/migrations/011_features.sql')
     const sql = fs.readFileSync(filePath, 'utf8')
     const statements = sql
       .split('\n')

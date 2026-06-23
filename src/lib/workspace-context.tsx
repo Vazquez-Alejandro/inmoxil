@@ -16,6 +16,17 @@ interface Workspace {
   credits_used: number
   stripe_customer_id: string | null
   stripe_subscription_id: string | null
+  public_catalog_enabled?: boolean
+  pub_catalog_slug?: string | null
+  contact_email?: string | null
+  contact_phone?: string | null
+  contact_address?: string | null
+  social_instagram?: string | null
+  social_facebook?: string | null
+  social_twitter?: string | null
+  social_linkedin?: string | null
+  whatsapp_number?: string | null
+  timezone?: string | null
 }
 
 interface WorkspaceContextType {

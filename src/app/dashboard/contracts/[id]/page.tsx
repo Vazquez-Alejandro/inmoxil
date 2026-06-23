@@ -43,6 +43,13 @@ export default function ContractDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [adjusting, setAdjusting] = useState(false)
+  const [signatures, setSignatures] = useState<any[]>([])
+  const [showSignForm, setShowSignForm] = useState(false)
+  const [signName, setSignName] = useState('')
+  const [signEmail, setSignEmail] = useState('')
+  const [signType, setSignType] = useState('lessee')
+  const [signSaving, setSignSaving] = useState(false)
+  const [signUrl, setSignUrl] = useState('')
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [statusLoading, setStatusLoading] = useState(false)
 
@@ -61,6 +68,10 @@ export default function ContractDetailPage() {
       })
       .then(adjData => {
         if (adjData?.adjustments) setAdjustments(adjData.adjustments)
+        return fetch(`/api/signature?contractId=${params.id}&workspaceId=${workspace.id}`).then(r => r.json())
+      })
+      .then(sigData => {
+        if (sigData?.requests) setSignatures(sigData.requests)
       })
       .catch(() => setError('Error de conexión'))
       .finally(() => setLoading(false))
@@ -111,6 +122,27 @@ export default function ContractDetailPage() {
       if (res.ok) setContract(prev => prev ? { ...prev, status: status as any } : prev)
     } finally {
       setStatusLoading(false)
+    }
+  }
+
+  const requestSignature = async () => {
+    if (!signName || !signEmail) return
+    setSignSaving(true)
+    try {
+      const res = await fetch('/api/signature', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workspaceId: workspace?.id, contractId: params.id, signerName: signName, signerEmail: signEmail, signerType: signType }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error)
+      setSignUrl(data.signUrl || '')
+      setSignatures(prev => [...prev, data.request])
+      setShowSignForm(false)
+    } catch (err: any) {
+      alert('Error: ' + err.message)
+    } finally {
+      setSignSaving(false)
     }
   }
 
@@ -173,11 +205,78 @@ export default function ContractDetailPage() {
           <option value="vencido">→ Vencido</option>
           <option value="rescindido">→ Rescindido</option>
         </select>
+        <button onClick={() => setShowSignForm(!showSignForm)} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-purple-600 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
+          Firmar digital
+        </button>
         <button onClick={handleDelete} disabled={deleteLoading} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
           {deleteLoading ? 'Eliminando...' : 'Eliminar'}
         </button>
       </div>
+
+      {/* Signature section */}
+      {showSignForm && (
+        <div className="card p-6 mb-6 border border-purple-200">
+          <h3 className="font-bold text-navy-900 mb-4">Solicitar firma digital</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="label">Nombre del firmante *</label>
+              <input className="input" value={signName} onChange={e => setSignName(e.target.value)} placeholder={contract.lessee.fullName} />
+            </div>
+            <div>
+              <label className="label">Email *</label>
+              <input className="input" type="email" value={signEmail} onChange={e => setSignEmail(e.target.value)} placeholder={contract.lessee.email} />
+            </div>
+            <div>
+              <label className="label">Tipo</label>
+              <select className="input" value={signType} onChange={e => setSignType(e.target.value)}>
+                <option value="lessee">Locatario (inquilino)</option>
+                <option value="lessor">Locador (propietario)</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-4">
+            <button onClick={requestSignature} disabled={signSaving || !signName || !signEmail} className="btn-gold disabled:opacity-50">
+              {signSaving ? 'Generando...' : 'Enviar solicitud'}
+            </button>
+            <button onClick={() => setShowSignForm(false)} className="btn-outline">Cancelar</button>
+          </div>
+          {signUrl && (
+            <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+              <p className="text-sm font-medium text-purple-800">Link de firma generado:</p>
+              <a href={signUrl} target="_blank" rel="noopener" className="text-sm text-indigo-600 underline break-all">{signUrl}</a>
+            </div>
+          )}
+        </div>
+      )}
+
+      {signatures.length > 0 && (
+        <div className="card p-6 mb-6">
+          <h3 className="font-bold text-navy-900 mb-3">Firmas digitales</h3>
+          <div className="space-y-2">
+            {signatures.map((s: any) => (
+              <div key={s.id} className="flex items-center justify-between p-3 bg-navy-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-navy-900">{s.signer_name}</p>
+                  <p className="text-xs text-navy-400">{s.signer_email} · {s.signer_type === 'lessor' ? 'Locador' : 'Locatario'}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={`badge ${
+                    s.status === 'signed' ? 'bg-emerald-100 text-emerald-700' :
+                    s.status === 'sent' ? 'bg-blue-100 text-blue-700' :
+                    s.status === 'declined' ? 'bg-red-100 text-red-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {s.status === 'pending' ? 'Pendiente' : s.status === 'sent' ? 'Enviado' : s.status === 'signed' ? 'Firmado' : s.status === 'declined' ? 'Rechazado' : s.status}
+                  </span>
+                  {s.signed_at && <span className="text-xs text-navy-400">{new Date(s.signed_at).toLocaleDateString('es-AR')}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2 space-y-6">
