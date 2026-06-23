@@ -59,32 +59,41 @@ export const PORTAL_INFO: Record<string, { name: string; country: string; search
   vivareal: { name: 'VivaReal', country: 'BR', searchUrl: 'https://www.vivareal.com.br/venda/sp/sao-paulo/' },
 }
 
-function needsPremiumProxy(portal: Portal): boolean {
-  if (portal === 'zonaprop' || portal === 'argenprop' || portal === 'mercadolibre') return false
-  return true
-}
-
 async function fetchPage(url: string, portal: Portal = 'generic', opts?: { waitFor?: number }): Promise<string> {
   if (!API_KEY) throw new Error('SCRAPINGBEE_API_KEY not set')
 
-  const params = new URLSearchParams({
-    api_key: API_KEY,
-    url,
-    render_js: 'true',
-    premium_proxy: needsPremiumProxy(portal) ? 'true' : 'false',
-    country_code: portal === 'zillow' || portal === 'realtor' ? 'us' : portal === 'vivareal' ? 'br' : 'ar',
-    wait: String(opts?.waitFor || 8000),
-  })
+  const country = portal === 'zillow' || portal === 'realtor' ? 'us' : portal === 'vivareal' ? 'br' : 'ar'
 
-  const res = await fetch(`${API_URL}?${params}`, { signal: AbortSignal.timeout(90000) })
-  if (!res.ok) {
+  async function tryFetch(premiumProxy: boolean): Promise<string> {
+    const params = new URLSearchParams()
+    params.set('api_key', API_KEY!)
+    params.set('url', url)
+    params.set('render_js', 'true')
+    params.set('premium_proxy', premiumProxy ? 'true' : 'false')
+    params.set('country_code', country)
+    params.set('wait', String(opts?.waitFor || 8000))
+
+    const res = await fetch(`${API_URL}?${params}`, { signal: AbortSignal.timeout(90000) })
     const text = await res.text()
-    if (text.includes('credit') || text.includes('balance') || text.includes('credits')) {
-      throw new Error('Sin créditos ScrapingBee. Registrate gratis en scrapingbee.com (4000 créditos/mes).')
+
+    const isCloudflareBlock = text.includes('Cloudflare') || text.includes('Just a moment') || text.includes('challenges.cloudflare')
+    const isWafBlock = text.includes('premium_proxy=True') || text.includes('stealth_proxy')
+    const isCredits = text.includes('credit') || text.includes('balance') || text.includes('credits')
+
+    if (!res.ok || isCloudflareBlock || isWafBlock) {
+      if (isCredits) {
+        throw new Error('Sin créditos ScrapingBee. Registrate gratis en scrapingbee.com (4000 créditos/mes).')
+      }
+      if (!premiumProxy && (isCloudflareBlock || isWafBlock)) {
+        console.log(`[Scrape] Blocked without premium proxy, retrying with premium...`)
+        return tryFetch(true)
+      }
+      throw new Error(`ScrapingBee error ${res.status}: ${(isCloudflareBlock || isWafBlock) ? 'Sitio bloqueado incluso con proxy premium' : text.slice(0, 200)}`)
     }
-    throw new Error(`ScrapingBee error ${res.status}: ${text.slice(0, 200)}`)
+    return text
   }
-  return res.text()
+
+  return tryFetch(false)
 }
 
 function parsePrice(str: string): { price: number | null; currency: string } {
@@ -352,7 +361,7 @@ export async function scrapeUrls(
     throw new Error('SCRAPINGBEE_API_KEY no configurada. Registrate gratis en https://www.scrapingbee.com')
   }
 
-  const portal = portalOverride || detectPortal(urls[0])
+  const portal: Portal = (portalOverride as Portal) || detectPortal(urls[0])
   const properties: NormalizedProperty[] = []
 
   for (const url of urls.slice(0, 5)) {
