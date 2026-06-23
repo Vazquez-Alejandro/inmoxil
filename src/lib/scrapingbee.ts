@@ -119,45 +119,48 @@ function extractZonaprop(html: string): any[] {
   const $ = cheerio.load(html)
   const results: any[] = []
 
-  // Try multiple card selectors (ZonaProp changes CSS module hashes on each deploy)
-  const cardSelectors = [
-    'div[class*="postingCard-module__posting"]',
-    'div[data-qa="posting-card"]',
-    'div[class*="PostingCard"]',
-    'div[class*="posting-card"]',
-    'div[class*="card"]',
-    'div[class*="Card"]',
-    'div[class*="listing"]',
-    'div[class*="posting"]',
-    'div[class*="result"]',
-    'div[class*="property"]',
-  ]
-
-  let cards = $('')
-  for (const sel of cardSelectors) {
-    cards = $(sel)
-    if (cards.length > 0) break
-  }
-
-  if (cards.length === 0) {
-    // Last resort: find links with typical ZonaProp property URL pattern
-    cards = $('a[href*="/propiedades/"]').parent('div')
-    if (cards.length === 0) cards = $('a[href*="zonaprop"]').closest('div[class]')
-  }
-
-  cards.each((_, el) => {
+  // Main card container (CSS module class, verified Jun 2026)
+  $('div.postingCard-module__posting-container').each((_, el) => {
     const card = $(el)
-    const title = card.find('h2').first().text().trim() || card.find('[data-qa*="title"], [class*="title"]').first().text().trim()
-    const priceText = card.find('[data-qa="POSTING_CARD_PRICE"], [data-qa*="price"], [class*="price"]').first().text().trim()
-    const specsText = card.find('h3, [data-qa*="specs"], [class*="specs"]').first().text().trim()
-    const link = card.find('a[href]').first().attr('href') || ''
+
+    // Title: h2 with posting-description class
+    const title = card.find('h2.postingCard-module__posting-description').first().text().trim()
+      || card.find('h2').first().text().trim()
+
+    // Price: h2 with price class
+    const priceText = card.find('h2.postingPrices-module__price').first().text().trim()
+      || card.find('[class*="price"]').first().text().trim()
+
+    // Specs: h3 with main-features class
+    const specsText = card.find('h3.postingMainFeatures-module__posting-main-features-block').first().text().trim()
+      || card.find('h3').first().text().trim()
+
+    // Link: find anchor with propiedad path
+    const link = card.find('a[href*="/propiedades/"]').first().attr('href')
+      || card.find('a[href]').first().attr('href')
+      || ''
+
+    // Images: in gallery container
     const imgs: string[] = []
-    card.find('img').each((_, img) => {
+    card.find('.postingGallery-module__gallery-container img, [class*="gallery"] img').each((_, img) => {
       const src = $(img).attr('data-src') || $(img).attr('src') || ''
-      if (src && (src.includes('zonapropcdn') || src.startsWith('http'))) imgs.push(src)
+      if (src && !src.includes('placeholder') && !src.includes('blank')) imgs.push(src)
     })
-    const address = card.find('[data-qa="POSTING_CARD_LOCATION"], [data-qa*="location"], [class*="location"], [class*="address"]').first().text().trim()
-    const { beds, baths, sqm } = extractSpecs(specsText || card.text())
+    // Also try any img with zonapropcdn
+    if (imgs.length === 0) {
+      card.find('img').each((_, img) => {
+        const src = $(img).attr('data-src') || $(img).attr('src') || ''
+        if (src && src.includes('zonapropcdn')) imgs.push(src)
+      })
+    }
+
+    // Address: location block
+    const addressBlock = card.find('.postingLocations-module__location-block').first()
+    const addressStreet = addressBlock.find('h4').first().text().trim()
+    const addressCity = addressBlock.find('h4').last().text().trim()
+    const address = addressStreet && addressCity ? `${addressStreet}, ${addressCity}` : (addressBlock.text().trim() || '')
+
+    const { beds, baths, sqm } = extractSpecs(specsText)
 
     if (title) {
       results.push({
