@@ -59,7 +59,10 @@ function AuthInner({ children }: { children: ReactNode }) {
         redirect: false,
       })
       if (res?.error) {
-        return { error: res.error }
+        const msg = res.error === 'CredentialsSignin'
+          ? 'Email o contraseña incorrectos'
+          : res.error
+        return { error: msg }
       }
       return {}
     } catch (err: any) {
