@@ -86,7 +86,7 @@ export default function CalendarPage() {
                           {v.description && <p className="text-sm text-navy-600 mb-1">{v.description}</p>}
                           <div className="flex items-center gap-3 text-xs text-navy-400">
                             <span>{v.type}</span>
-                            {v.scheduled_at && <span>🕐 {formatTime(v.scheduled_at)}</span>}
+                            {v.scheduled_at && <span><svg className="w-3.5 h-3.5 inline mr-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {formatTime(v.scheduled_at)}</span>}
                             {v.outcome && <span className="text-navy-500">→ {v.outcome}</span>}
                           </div>
                         </div>

@@ -23,7 +23,7 @@ const navigation = [
   { name: 'Publicaciones', href: '/dashboard/publish', icon: SendIcon },
   { name: 'Scraping Autom.', href: '/dashboard/schedule', icon: ClockIcon },
   { name: 'Notificaciones', href: '/dashboard/notifications', icon: NotifIcon },
-  { name: 'Mantenimiento', href: '/dashboard/maintenance', icon: WrenchIcon },
+  { name: 'Mantenimiento', href: '/dashboard/mantenimiento', icon: WrenchIcon },
   { name: 'MercadoLibre', href: '/dashboard/ml', icon: MLIcon },
   { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon },
   { name: 'Analytics', href: '/dashboard/analytics', icon: AnalyticsIcon },
