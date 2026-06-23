@@ -457,21 +457,23 @@ export async function scrapeUrls(
 
     console.log(`[Scrape] Fetching: ${targetUrl} (portal: ${portal})`)
 
-    const html = await fetchPage(targetUrl, portal)
     let raw: any[]
 
-    switch (portal) {
-      case 'zonaprop':
-        raw = extractZonaprop(html)
-        break
-      case 'argenprop':
-        raw = extractArgenprop(html)
-        break
-      case 'mercadolibre':
-        raw = await extractMercadoLibreAPI(targetUrl, maxItems)
-        break
-      default:
-        raw = extractGeneric(html, targetUrl)
+    // ML usa API directa, no necesita fetchPage
+    if (portal === 'mercadolibre') {
+      raw = await extractMercadoLibreAPI(targetUrl, maxItems)
+    } else {
+      const html = await fetchPage(targetUrl, portal)
+      switch (portal) {
+        case 'zonaprop':
+          raw = extractZonaprop(html)
+          break
+        case 'argenprop':
+          raw = extractArgenprop(html)
+          break
+        default:
+          raw = extractGeneric(html, targetUrl)
+      }
     }
 
     console.log(`[Scrape] Extracted ${raw.length} items from ${portal}`)
