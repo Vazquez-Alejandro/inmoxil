@@ -15,7 +15,15 @@ export async function POST(request: NextRequest) {
         const session = event.data.object as any
         const workspaceId = session.metadata?.workspaceId
 
-        if (workspaceId && session.subscription) {
+        if (workspaceId && session.metadata?.type === 'payment') {
+          const paymentId = session.metadata.paymentId
+          if (paymentId) {
+            await queryOne(
+              `UPDATE payments SET status='paid', paid_at=NOW(), payment_method='stripe' WHERE id=$1`,
+              [paymentId]
+            )
+          }
+        } else if (workspaceId && session.subscription) {
           await query(
             'UPDATE workspaces SET stripe_subscription_id=$1 WHERE id=$2',
             [session.subscription as string, workspaceId]

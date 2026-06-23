@@ -16,7 +16,9 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/propiedades') ||
     request.nextUrl.pathname.startsWith('/p/') ||
     request.nextUrl.pathname.startsWith('/owner') ||
-    request.nextUrl.pathname.startsWith('/firmar')
+    request.nextUrl.pathname.startsWith('/firmar') ||
+    request.nextUrl.pathname.startsWith('/inquilino') ||
+    request.nextUrl.pathname.startsWith('/pagar')
 
   if (!token && !isAuthPage && !isPublicPage) {
     const url = request.nextUrl.clone()
