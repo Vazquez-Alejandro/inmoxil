@@ -7,7 +7,13 @@ export async function GET() {
   try {
     const filePath = path.join(process.cwd(), 'src/migrations/010_features.sql')
     const sql = fs.readFileSync(filePath, 'utf8')
-    const statements = sql.split(';').map(s => s.trim()).filter(s => s.length > 0 && !s.startsWith('--'))
+    const statements = sql
+      .split('\n')
+      .filter(l => !l.trim().startsWith('--'))
+      .join('\n')
+      .split(';')
+      .map(s => s.trim())
+      .filter(s => s.length > 0)
     for (const stmt of statements) {
       await query(stmt)
     }
