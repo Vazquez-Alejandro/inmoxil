@@ -16,16 +16,7 @@ export async function POST(request: NextRequest) {
     const urls = body.urls
     const maxItems = Math.min(body.maxItems || 50, 100)
     const portalOverride = body.portalOverride
-    const portal = portalOverride || (urls[0]?.toLowerCase().includes('mercadolibre') ? 'mercadolibre' : 'other')
-
-    // MercadoLibre va directo a Apify (ScrapingBee no lo maneja bien)
-    if (portal === 'mercadolibre' && process.env.APIFY_TOKEN) {
-      console.log('[Scrape] ML → Apify directo')
-      const result = await scrapeWithApify(urls, maxItems, portalOverride)
-      return NextResponse.json({ success: true, portal: result.portal, count: result.properties.length, data: result.properties, warning: result.warning, engine: 'apify' })
-    }
-
-    // Try ScrapingBee first for other portals
+    // Try ScrapingBee first
     if (process.env.SCRAPINGBEE_API_KEY) {
       try {
         const result = await scrapeWithBee(urls, maxItems, portalOverride)

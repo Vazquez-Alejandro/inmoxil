@@ -114,6 +114,71 @@ function extractSpecs(text: string): { beds: number | null; baths: number | null
   return { beds, baths, sqm }
 }
 
+// ── MercadoLibre API extractor (directo, sin scraping) ─────────────
+async function extractMercadoLibreAPI(searchUrl: string, maxItems: number): Promise<any[]> {
+  // Build ML search API URL from the search page URL
+  let offset = 0
+  const limit = Math.min(maxItems, 50)
+  const results: any[] = []
+
+  // Extract search params from the ML URL
+  // ML search URL format: https://inmuebles.mercadolibre.com.ar/{category}/venta/{location}/
+  // ML API: https://api.mercadolibre.com/sites/MLA/search?category=...&condition=...
+  const apiUrl = searchUrl.includes('mercadolibre')
+    ? searchUrl
+      .replace('inmuebles.mercadolibre.com.ar', 'api.mercadolibre.com/sites/MLA/search?category=')
+      .replace(/\/venta\//, 'MLA1474_')  // departamentos en venta
+      .replace(/\/alquiler\//, 'MLA1474_')
+      .replace(/\/[^/]+\/?$/, '')
+    : searchUrl
+
+  // Simpler: search by category
+  const categoryMap: Record<string, string> = {
+    departamento: 'MLA1474',
+    casa: 'MLA1484',
+    terreno: 'MLA1491',
+    local: 'MLA1503',
+    oficina: 'MLA1511',
+    ph: 'MLA1498',
+  }
+
+  let category = 'MLA1459' // default: inmuebles
+  for (const [key, cat] of Object.entries(categoryMap)) {
+    if (searchUrl.includes(key)) { category = cat; break }
+  }
+
+  const operation = searchUrl.includes('venta') ? 'venta' : 'alquiler'
+  const state = searchUrl.includes('capital-federal') ? 'AR-C' : ''
+
+  try {
+    const url = `https://api.mercadolibre.com/sites/MLA/search?category=${category}&condition=used&limit=${limit}&offset=${offset}${state ? `&state=${state}` : ''}`
+    console.log(`[ML API] Fetching: ${url}`)
+    const res = await fetch(url, { signal: AbortSignal.timeout(15000) })
+    if (!res.ok) throw new Error(`ML API error ${res.status}`)
+    const data = await res.json()
+
+    for (const item of (data.results || []).slice(0, maxItems)) {
+      const pics = (item.pictures || []).map((p: any) => p.url || p.secure_url || '')
+      results.push({
+        title: item.title?.substring(0, 200) || '',
+        price: `${item.currency_id || 'USD'} ${item.price || ''}`,
+        specs: `${item.attributes?.find((a: any) => a.id === 'BEDROOMS')?.value_name || ''} ${item.attributes?.find((a: any) => a.id === 'BATHROOMS')?.value_name || ''}`,
+        url: item.permalink || '',
+        image: pics[0] || item.thumbnail || '',
+        address: `${item.address?.state_name || ''}, ${item.address?.city_name || ''}`,
+        beds: parseInt(item.attributes?.find((a: any) => a.id === 'BEDROOMS')?.value_name || '0') || null,
+        baths: parseInt(item.attributes?.find((a: any) => a.id === 'BATHROOMS')?.value_name || '0') || null,
+        sqm: parseInt(item.attributes?.find((a: any) => a.id === 'COVERED_AREA')?.value_name || '0') || null,
+      })
+    }
+  } catch (e: any) {
+    console.log(`[ML API] Error: ${e.message}`)
+    throw e
+  }
+
+  return results
+}
+
 // ── ZonaProp extractor ────────────────────────────────────────────
 function extractZonaprop(html: string): any[] {
   const $ = cheerio.load(html)
@@ -403,7 +468,7 @@ export async function scrapeUrls(
         raw = extractArgenprop(html)
         break
       case 'mercadolibre':
-        raw = extractMercadoLibre(html)
+        raw = await extractMercadoLibreAPI(targetUrl, maxItems)
         break
       default:
         raw = extractGeneric(html, targetUrl)
