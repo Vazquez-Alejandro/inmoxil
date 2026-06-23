@@ -7,7 +7,7 @@ import { useWorkspace } from '@/lib/workspace-context'
 const PORTALS = [
   { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700', country: 'AR' },
   { slug: 'argenprop', name: 'Argenprop', color: 'bg-green-100 text-green-700', country: 'AR' },
-  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700', country: 'AR' },
+  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700', country: 'AR', disabled: true },
   { slug: 'zillow', name: 'Zillow', color: 'bg-purple-100 text-purple-700', country: 'US' },
   { slug: 'realtor', name: 'Realtor', color: 'bg-red-100 text-red-700', country: 'US' },
   { slug: 'vivareal', name: 'VivaReal', color: 'bg-emerald-100 text-emerald-700', country: 'BR' },
@@ -275,10 +275,13 @@ export default function ScrapePage() {
         {PORTALS.map((portal) => (
           <button
             key={portal.slug}
-            onClick={() => handleQuickScrape(portal.slug)}
-            disabled={loading || !hasCredits}
-            className="card p-3 sm:p-4 text-center hover:shadow-corporate-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group"
+            onClick={() => portal.disabled ? null : handleQuickScrape(portal.slug)}
+            disabled={loading || !hasCredits || portal.disabled}
+            className="card p-3 sm:p-4 text-center hover:shadow-corporate-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group relative"
           >
+            {portal.disabled && (
+              <span className="absolute -top-1.5 -right-1.5 bg-navy-900 text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full">Próximamente</span>
+            )}
             <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${portal.color} flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform`}>
               <span className="text-base sm:text-lg font-bold">{portal.name[0]}</span>
             </div>
