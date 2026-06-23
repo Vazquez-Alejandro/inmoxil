@@ -59,15 +59,20 @@ export const PORTAL_INFO: Record<string, { name: string; country: string; search
   vivareal: { name: 'VivaReal', country: 'BR', searchUrl: 'https://www.vivareal.com.br/venda/sp/sao-paulo/' },
 }
 
-async function fetchPage(url: string, opts?: { waitFor?: number }): Promise<string> {
+function needsPremiumProxy(portal: Portal): boolean {
+  if (portal === 'zonaprop' || portal === 'argenprop' || portal === 'mercadolibre') return false
+  return true
+}
+
+async function fetchPage(url: string, portal: Portal = 'generic', opts?: { waitFor?: number }): Promise<string> {
   if (!API_KEY) throw new Error('SCRAPINGBEE_API_KEY not set')
 
   const params = new URLSearchParams({
     api_key: API_KEY,
     url,
     render_js: 'true',
-    premium_proxy: 'true',
-    country_code: 'ar',
+    premium_proxy: needsPremiumProxy(portal) ? 'true' : 'false',
+    country_code: portal === 'zillow' || portal === 'realtor' ? 'us' : portal === 'vivareal' ? 'br' : 'ar',
     wait: String(opts?.waitFor || 8000),
   })
 
@@ -105,19 +110,45 @@ function extractZonaprop(html: string): any[] {
   const $ = cheerio.load(html)
   const results: any[] = []
 
-  $('div.postingCard-module__posting-container').each((_, el) => {
+  // Try multiple card selectors (ZonaProp changes CSS module hashes on each deploy)
+  const cardSelectors = [
+    'div[class*="postingCard-module__posting"]',
+    'div[data-qa="posting-card"]',
+    'div[class*="PostingCard"]',
+    'div[class*="posting-card"]',
+    'div[class*="card"]',
+    'div[class*="Card"]',
+    'div[class*="listing"]',
+    'div[class*="posting"]',
+    'div[class*="result"]',
+    'div[class*="property"]',
+  ]
+
+  let cards = $('')
+  for (const sel of cardSelectors) {
+    cards = $(sel)
+    if (cards.length > 0) break
+  }
+
+  if (cards.length === 0) {
+    // Last resort: find links with typical ZonaProp property URL pattern
+    cards = $('a[href*="/propiedades/"]').parent('div')
+    if (cards.length === 0) cards = $('a[href*="zonaprop"]').closest('div[class]')
+  }
+
+  cards.each((_, el) => {
     const card = $(el)
-    const title = card.find('h2').first().text().trim()
-    const priceText = card.find('[data-qa="POSTING_CARD_PRICE"]').text().trim() || card.find('h2').first().text().trim()
-    const specsText = card.find('h3').first().text().trim()
+    const title = card.find('h2').first().text().trim() || card.find('[data-qa*="title"], [class*="title"]').first().text().trim()
+    const priceText = card.find('[data-qa="POSTING_CARD_PRICE"], [data-qa*="price"], [class*="price"]').first().text().trim()
+    const specsText = card.find('h3, [data-qa*="specs"], [class*="specs"]').first().text().trim()
     const link = card.find('a[href]').first().attr('href') || ''
     const imgs: string[] = []
     card.find('img').each((_, img) => {
       const src = $(img).attr('data-src') || $(img).attr('src') || ''
-      if (src && src.includes('zonapropcdn')) imgs.push(src)
+      if (src && (src.includes('zonapropcdn') || src.startsWith('http'))) imgs.push(src)
     })
-    const address = card.find('[data-qa="POSTING_CARD_LOCATION"], [class*="location"], [class*="address"]').first().text().trim()
-    const { beds, baths, sqm } = extractSpecs(specsText)
+    const address = card.find('[data-qa="POSTING_CARD_LOCATION"], [data-qa*="location"], [class*="location"], [class*="address"]').first().text().trim()
+    const { beds, baths, sqm } = extractSpecs(specsText || card.text())
 
     if (title) {
       results.push({
@@ -332,7 +363,7 @@ export async function scrapeUrls(
 
     console.log(`[Scrape] Fetching: ${targetUrl} (portal: ${portal})`)
 
-    const html = await fetchPage(targetUrl)
+    const html = await fetchPage(targetUrl, portal)
     let raw: any[]
 
     switch (portal) {
