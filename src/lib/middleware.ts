@@ -12,7 +12,10 @@ export async function updateSession(request: NextRequest) {
 
   const isPublicPage = request.nextUrl.pathname === '/' ||
     request.nextUrl.pathname === '/terminos' ||
-    request.nextUrl.pathname === '/privacidad'
+    request.nextUrl.pathname === '/privacidad' ||
+    request.nextUrl.pathname.startsWith('/propiedades') ||
+    request.nextUrl.pathname.startsWith('/p/') ||
+    request.nextUrl.pathname.startsWith('/owner')
 
   if (!token && !isAuthPage && !isPublicPage) {
     const url = request.nextUrl.clone()
