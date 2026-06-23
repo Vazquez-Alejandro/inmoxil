@@ -123,6 +123,56 @@ Trabajá en equipo dentro de la misma inmobiliaria.
 - **Invitación por email** — enviá acceso temporal por email
 - **Gestión de equipo** — panel para administrar miembros y roles
 
+### 💬 WhatsApp Center
+Mensajería integrada para comunicación con leads y clientes.
+
+- **Enviar mensajes** — redactá y abrí WhatsApp directo con leads y números manuales
+- **Plantillas** — creá plantillas reutilizables con variables (nombre, propiedad, etc.)
+- **Historial** — registro de todos los mensajes enviados y recibidos
+- **Integración con leads** — seleccioná un lead y su teléfono se completa automáticamente
+
+### 💰 Cobranza
+Gestión de pagos y alquileres.
+
+- **Registrar cobros** — creá pagos con monto, moneda, concepto y vencimiento
+- **Estados** — Pendiente → Cobrado → Fallido → Reembolsado
+- **Filtros por estado** — visualizá rápidamente pagos pendientes o cobrados
+- **Marcar como cobrado** — actualizá el estado con un clic
+- **Resumen** — totales por estado con montos acumulados
+
+### 📝 Firma Digital
+Solicitá y gestioná firmas de contratos online.
+
+- **Solicitud de firma** — enviá link de firma al locador o locatario desde el detalle del contrato
+- **Página pública** — el firmante accede a `/firmar/[token]` con resumen del contrato
+- **Estados** — Pendiente → Enviado → Firmado → Rechazado
+- **Validez legal** — la firma tiene validez digital según legislación vigente
+
+### 📊 Reportes Avanzados
+Estadísticas generales del portfolio en un solo lugar.
+
+- **KPIs** — propiedades, leads activos, contratos activos, cobrado total
+- **Propiedades por tipo** — gráfico de barras con distribución
+- **Leads por origen** — qué canales generan más clientes
+- **Leads mensuales** — evolución en los últimos 12 meses
+- **Últimos cobros** — pagos recientes con monto y concepto
+- **Exportar / Imprimir** — botón para generar PDF
+
+### ⚙️ Configuración del Workspace
+Personalizá toda la configuración de tu inmobiliaria.
+
+- **Información general** — nombre, slug, catálogo público
+- **Contacto** — email, teléfono, dirección, WhatsApp
+- **Redes sociales** — Instagram, Facebook, Twitter/X, LinkedIn
+- **Branding** — colores primario, secundario y de acento
+
+### 🔐 Roles y Permisos
+Control granular de acceso para cada miembro del equipo.
+
+- **3 roles** — Owner (acceso total), Admin (gestión), Agent (operativo)
+- **Permisos granular** — cada rol tiene permisos específicos sobre propiedades, leads, contratos, pagos, etc.
+- **Seed automático** — los permisos se crean automáticamente al migrar
+
 ### 🎨 Brand Kit
 Personalizá la marca de tu inmobiliaria.
 
@@ -191,7 +241,7 @@ Instalable como aplicación nativa en cualquier dispositivo.
 
 ## 🗄 Base de Datos (Neon PostgreSQL)
 
-**21 tablas:**
+**26 tablas:**
 - `workspaces` — cuentas multi-tenant con plan, créditos, marca, catálogo público
 - `users` — autenticación, roles (owner/admin/agent), workspace
 - `property_owners` — dueños de propiedades con acceso al portal
@@ -212,6 +262,11 @@ Instalable como aplicación nativa en cualquier dispositivo.
 - `scrape_schedules` — configuración de scraping automático
 - `scrape_logs` — historial de ejecuciones de scraping
 - `ml_tokens` — tokens OAuth de MercadoLibre
+- `role_permissions` — permisos granulares por rol en cada workspace
+- `whatsapp_templates` — plantillas de mensajes reutilizables
+- `whatsapp_messages` — historial de mensajes enviados/recibidos
+- `signature_requests` — solicitudes de firma digital con token único
+- `payments` — cobros con monto, concepto, estado y método de pago
 
 ## 🚀 Inicio Rápido
 
