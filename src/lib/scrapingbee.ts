@@ -52,7 +52,7 @@ function detectPortal(url: string): Portal {
 
 export const PORTAL_INFO: Record<string, { name: string; country: string; searchUrl: string }> = {
   zonaprop: { name: 'ZonaProp', country: 'AR', searchUrl: 'https://www.zonaprop.com.ar/propiedades/venta-departamentos-capital-federal.html' },
-  argenprop: { name: 'Argenprop', country: 'AR', searchUrl: 'https://www.argenprop.com/venta/departamento-capital-federal' },
+  argenprop: { name: 'Argenprop', country: 'AR', searchUrl: 'https://www.argenprop.com/departamentos/venta/capital-federal' },
   mercadolibre: { name: 'MercadoLibre', country: 'AR', searchUrl: 'https://inmuebles.mercadolibre.com.ar/departamentos/venta/capital-federal/' },
   zillow: { name: 'Zillow', country: 'US', searchUrl: 'https://www.zillow.com/for_sale/New-York-NY/' },
   realtor: { name: 'Realtor', country: 'US', searchUrl: 'https://www.realtor.com/realestateandhomes-for-sale' },
@@ -183,36 +183,53 @@ function extractArgenprop(html: string): any[] {
   const $ = cheerio.load(html)
   const results: any[] = []
 
-  // Real property cards: div.listing__item > a.card
-  $('div.listing__item a.card').each((_, el) => {
+  // Cards are a.card with href starting with /departamento-en-venta-en-
+  $('a.card[href*="departamento-en-venta-en"]').each((_, el) => {
     const card = $(el)
     const href = card.attr('href') || ''
     const fullUrl = href.startsWith('http') ? href : `https://www.argenprop.com${href}`
 
-    // Price: "USD 2.400.000\n+\n$2.200.000\nexpensas" → take first line only
-    const rawPrice = card.find('.card__price, [class*="price"]').first().text().trim()
-    const priceLine = rawPrice.split('\n')[0].trim()
-    // Extract expenses: "+ $X.XXX expensas"
-    const expensesMatch = rawPrice.match(/\+\s*\$[\d.]+/)
-    const expensesText = expensesMatch ? expensesMatch[0] : ''
+    // Price: span.card__currency + text = "USD 155.000" or "USD 2.400.000"
+    const currency = card.find('span.card__currency').first().text().trim()
+    const priceNum = card.find('p.card__price').clone().children('span').remove().end().text().trim()
+    const priceText = currency ? `${currency} ${priceNum}` : priceNum
 
-    // Extract address from URL slug: /departamento-en-venta-en-palermo-chico-5-ambientes--18799423
-    const slug = href.split('--')[0] || ''
-    const addressFromUrl = slug.replace(/.*-en-venta-en-/, '').replace(/-\d+$/, '').replace(/-/g, ' ')
+    // Expenses from span.card__expenses title attribute
+    const expensesEl = card.find('span.card__expenses')
+    const expensesText = expensesEl.attr('title') || expensesEl.text().trim()
 
-    const title = card.find('h2.card__title, h2').first().text().trim()
-    const specsText = card.find('.card__main-features').text().trim() || card.text()
-    const img = card.find('img').first().attr('data-src') || card.find('img').first().attr('src') || ''
+    // Address
+    const address = card.find('p.card__address').first().text().trim()
 
-    if (priceLine || title) {
-      const { beds, baths, sqm } = extractSpecs(specsText)
+    // Title from card__title
+    const title = card.find('h2.card__title').first().text().trim()
+
+    // Specs from ul.card__main-features
+    const specsText = card.find('ul.card__main-features').text().trim()
+
+    // Image: first img with data-src (real image, not placeholder)
+    let img = ''
+    card.find('ul.card__photos img').each((_, imgEl) => {
+      const src = $(imgEl).attr('data-src') || ''
+      if (src && !img) img = src
+    })
+    if (!img) {
+      // Fallback: try any img with data-src
+      card.find('img[data-src]').each((_, imgEl) => {
+        const src = $(imgEl).attr('data-src') || ''
+        if (src && !img) img = src
+      })
+    }
+
+    if (title || priceText) {
+      const { beds, baths, sqm } = extractSpecs(specsText || card.text())
       results.push({
-        title: title.substring(0, 200) || 'Inmueble',
-        price: priceLine,
+        title: title.substring(0, 200),
+        price: priceText,
         expenses: expensesText,
         url: fullUrl,
-        image: img.includes('listing-camera') ? '' : img,
-        address: addressFromUrl || 'Capital Federal',
+        image: img,
+        address: address || 'Capital Federal',
         beds, baths, sqm,
       })
     }
