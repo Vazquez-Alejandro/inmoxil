@@ -60,14 +60,50 @@ Publicá tus propiedades desde un solo lugar.
 - **Historial de publicaciones** — log con estado, ID externo, URL
 - **Canales configurables** — activá/desactivá cada canal desde la UI
 
-### 📱 Páginas Públicas por Propiedad
-Compartí propiedades con tus clientes al instante.
+### 🌐 Catálogo Público de Propiedades
+Vidriera online para que los clientes naveguen tus propiedades sin llamar al agente.
 
-- **Link público** — cada propiedad tiene su URL: `inmoxil.vercel.app/p/[id]`
-- **Ficha profesional** — galería de fotos, precio, ambientes, descripción
-- **WhatsApp directo** — botón "Consultar por WhatsApp" pre-armado
+- **Página pública** — `/propiedades` con buscador, filtros por tipo/precio/ambientes
+- **Ficha individual** — cada propiedad tiene su URL: `/p/[id]` con galería, mapa y datos
+- **Mapa embebido** — OpenStreetMap en cada ficha cuando hay coordenadas
+- **Solicitud de visita online** — el cliente elige fecha y se crea automáticamente un lead en el pipeline
+- **WhatsApp directo** — botón "Consultar por WhatsApp" pre-armado en cada propiedad
+- **Reportar problema** — los inquilinos pueden reportar mantenimiento desde la ficha pública
 - **Open Graph** — preview en redes sociales y WhatsApp
-- **Sin necesidad de portal** — reemplazá ZonaProp para compartir
+
+### 🛠 Editar Propiedades
+Modificá cualquier propiedad directamente desde el grid.
+
+- **Editor completo** — modal con todos los campos: título, precio, moneda, dirección, coordenadas
+- **Subir fotos** — arrastrá o seleccioná imágenes, se almacenan y sirven desde el servidor
+- **Eliminar fotos** — quitá fotos individuales
+- **Coordenadas** — latitud/longitud para el mapa
+
+### 📍 Mapa de Propiedades
+Visualizá y compartí la ubicación exacta de cada propiedad.
+
+- **Link a Google Maps** — desde el card de propiedad si tiene coordenadas
+- **Mapa embebido** — OpenStreetMap en la ficha pública `/p/[id]`
+- **Campo de coordenadas** — editable desde el formulario de crear/editar propiedad
+
+### 📅 Calendario de Visitas
+Todas las visitas agendadas del pipeline en un solo lugar.
+
+- **Vista agrupada por fecha** — todas las actividades tipo "visita" del pipeline
+- **Lead asociado** — nombre, teléfono, etapa actual
+- **Detalles** — descripción, resultado, horario
+- **Link en sidebar** — acceso directo desde el menú principal
+
+### 🔧 Órdenes de Mantenimiento
+Sistema de tickets para gestionar reparaciones y reclamos.
+
+- **Dashboard de tickets** — panel completo con filtros por estado y prioridad
+- **Estados** — Pendiente → En proceso → Resuelto → Cerrado
+- **Prioridades** — Baja, Normal, Alta, Urgente
+- **Asignación** — asignar técnicos o responsables a cada ticket
+- **Formulario público** — los inquilinos reportan problemas desde la ficha de la propiedad (`/p/[id]`)
+- **Propiedad asociada** — cada ticket se vincula a una propiedad
+- **Notificaciones** — alertas cuando se crea un ticket nuevo
 
 ### 🔔 Notificaciones Inteligentes
 Alertas automáticas en toda la app.
@@ -101,6 +137,32 @@ Vista completa del negocio en un solo vistazo.
 - **Accesos directos** — scraping, pipeline, contratos, propiedades
 - **Historial de scraping** — log de ejecuciones automáticas
 
+### 👤 Portal del Propietario
+Acceso exclusivo para dueños de propiedades con toda la información de sus inmuebles.
+
+- **Dashboard del dueño** — resumen con cantidad de propiedades, contratos activos, tickets abiertos
+- **Login propio** — ingreso con email y contraseña, completamente separado del panel del agente
+- **Mis propiedades** — listado de propiedades del dueño con fotos, precio y estado
+- **Contratos** — contratos activos con inquilino, precio, fechas y estado
+- **Mantenimiento** — tickets de reparación de sus propiedades con estado actual
+- **Navegación lateral** — sidebar con acceso rápido a cada sección
+
+### 🌙 Modo Oscuro
+Interfaz adaptable a la preferencia del usuario.
+
+- **Toggle sol/luna** — en el header de la aplicación
+- **Persistencia** — la preferencia se guarda en localStorage
+- **Auto-detección** — sigue la preferencia del sistema operativo
+- **Diseño completo** — todas las pantallas y componentes con variante oscura
+
+### 📱 PWA (Progressive Web App)
+Instalable como aplicación nativa en cualquier dispositivo.
+
+- **Manifest** — icono SVG, nombre, descripción, colores de marca
+- **Service Worker** — caché de recursos para funcionamiento offline parcial
+- **Instalable** — los usuarios pueden agregar Inmoxil a su pantalla de inicio
+- **Meta tags** — theme-color, apple-mobile-web-app
+
 ### ⚙️ Infraestructura
 - **Auth** — registro, login, recuperación de contraseña
 - **Onboarding** — wizard de 5 pasos al registrarse
@@ -129,19 +191,21 @@ Vista completa del negocio en un solo vistazo.
 
 ## 🗄 Base de Datos (Neon PostgreSQL)
 
-**18 tablas:**
-- `workspaces` — cuentas multi-tenant con plan, créditos, marca
+**21 tablas:**
+- `workspaces` — cuentas multi-tenant con plan, créditos, marca, catálogo público
 - `users` — autenticación, roles (owner/admin/agent), workspace
-- `properties` — propiedades importadas con fotos, precios, ubicación
+- `property_owners` — dueños de propiedades con acceso al portal
+- `properties` — propiedades importadas con fotos, precios, ubicación, owner_id
 - `pipeline_stages` — etapas del Kanban configurables
 - `pipeline_leads` — leads con asignación, presupuesto, requisitos
-- `pipeline_activities` — historial de actividades por lead
+- `pipeline_activities` — historial de actividades por lead (llamadas, visitas, etc.)
 - `contracts` — contratos con partes, propiedad, condiciones financieras
 - `guarantors` — garantes vinculados a contratos
 - `adjustments` — histórico de ajustes IPC/ICL
 - `alerts` — alertas configurables por contrato
 - `index_snapshots` — snapshot de índices INDEC/BCRA
 - `commissions` — comisiones por operación cerrada
+- `maintenance_tickets` — órdenes de mantenimiento con prioridad y estado
 - `notifications` — notificaciones in-app por workspace
 - `publish_channels` — configuración de canales de publicación
 - `publish_logs` — historial de publicaciones

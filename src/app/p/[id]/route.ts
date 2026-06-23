@@ -48,6 +48,24 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
     .desc p { font-size: 14px; color: #475569; line-height: 1.6; }
     .whatsapp { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; background: #25D366; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s; }
     .whatsapp:hover { background: #1da851; }
+    .btn-report { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; background: #0f172a; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s; margin-top: 12px; }
+    .btn-report:hover { background: #1e293b; }
+    .btn-report.active { background: #475569; }
+    .ticket-form { display: none; margin-top: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; }
+    .ticket-form.open { display: block; }
+    .ticket-form h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+    .ticket-form .field { margin-bottom: 14px; }
+    .ticket-form label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px; }
+    .ticket-form input, .ticket-form textarea { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif; color: #0f172a; outline: none; transition: border-color .2s; }
+    .ticket-form input:focus, .ticket-form textarea:focus { border-color: #0f172a; }
+    .ticket-form textarea { min-height: 100px; resize: vertical; }
+    .ticket-form .submit-btn { width: 100%; padding: 12px; background: #0f172a; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .ticket-form .submit-btn:hover { background: #1e293b; }
+    .ticket-form .submit-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .ticket-success { display: none; margin-top: 16px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 20px; text-align: center; }
+    .ticket-success.open { display: block; }
+    .ticket-success h3 { font-size: 16px; font-weight: 700; color: #065f46; margin-bottom: 4px; }
+    .ticket-success p { font-size: 14px; color: #047857; }
     .footer { text-align: center; padding: 24px; font-size: 12px; color: #94a3b8; }
   </style>
 </head>
@@ -71,8 +89,71 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
       Consultar por WhatsApp
     </a>
+    <button class="btn-report" id="reportBtn" onclick="toggleForm()">Reportar un problema</button>
+    <div class="ticket-form" id="ticketForm">
+      <h3>Reportar un problema de mantenimiento</h3>
+      <div class="field">
+        <label>Nombre *</label>
+        <input id="tktName" placeholder="Tu nombre" />
+      </div>
+      <div class="field">
+        <label>Teléfono</label>
+        <input id="tktPhone" placeholder="+54 11 1234-5678" />
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input id="tktEmail" type="email" placeholder="tu@email.com" />
+      </div>
+      <div class="field">
+        <label>Descripción del problema *</label>
+        <textarea id="tktDesc" placeholder="Describí el problema..."></textarea>
+      </div>
+      <button class="submit-btn" id="tktSubmit" onclick="submitTicket()">Enviar reporte</button>
+    </div>
+    <div class="ticket-success" id="ticketSuccess">
+      <h3>¡Reporte enviado!</h3>
+      <p>Nos pondremos en contacto a la brevedad para resolver el problema.</p>
+    </div>
   </div>
   <div class="footer">Publicado por Inmoxil © ${new Date().getFullYear()}</div>
+  <script>
+    const propertyId = ${params.id};
+    function toggleForm() {
+      const form = document.getElementById('ticketForm');
+      const btn = document.getElementById('reportBtn');
+      form.classList.toggle('open');
+      btn.classList.toggle('active');
+    }
+    async function submitTicket() {
+      const name = document.getElementById('tktName').value.trim();
+      const phone = document.getElementById('tktPhone').value.trim();
+      const email = document.getElementById('tktEmail').value.trim();
+      const desc = document.getElementById('tktDesc').value.trim();
+      const btn = document.getElementById('tktSubmit');
+      if (!name || !desc) { alert('Completá nombre y descripción'); return; }
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      try {
+        const res = await fetch('/api/public/tickets', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ propertyId, tenantName: name, tenantPhone: phone, tenantEmail: email, description: desc }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('ticketForm').classList.remove('open');
+          document.getElementById('ticketSuccess').classList.add('open');
+          document.getElementById('reportBtn').style.display = 'none';
+        } else {
+          alert('Error: ' + (data.error || 'No se pudo enviar'));
+        }
+      } catch(e) {
+        alert('Error de conexión');
+      }
+      btn.disabled = false;
+      btn.textContent = 'Enviar reporte';
+    }
+  </script>
   ${photos.length > 1 ? `
   <script>
     const photos = ${JSON.stringify(photos)};
