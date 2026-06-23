@@ -16,6 +16,7 @@ export default function BrandPage() {
   })
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [logoFile, setLogoFile] = useState<File | null>(null)
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function BrandPage() {
         accentColor: workspace.accent_color || '#10b981',
         companyName: workspace.name || 'Mi Inmobiliaria',
       })
+      if (workspace.logo_url) setLogoPreview(workspace.logo_url)
     }
   }, [workspace])
 
@@ -33,6 +35,21 @@ export default function BrandPage() {
     if (!workspace?.id) return
     setSaving(true)
     try {
+      if (logoFile) {
+        const reader = new FileReader()
+        const base64 = await new Promise<string>((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string)
+          reader.onerror = reject
+          reader.readAsDataURL(logoFile!)
+        })
+        const logoRes = await fetch('/api/brand', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workspaceId: workspace.id, file: base64 }),
+        })
+        const logoData = await logoRes.json()
+        if (logoData.logo_url) setLogoPreview(logoData.logo_url)
+      }
       const res = await fetch('/api/brand', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -46,6 +63,7 @@ export default function BrandPage() {
       const data = await res.json()
       if (data.success) {
         setSaved(true)
+        setLogoFile(null)
         await refresh()
         toast({ type: 'success', message: 'Brand guardado correctamente' })
         setTimeout(() => setSaved(false), 3000)
@@ -67,6 +85,7 @@ export default function BrandPage() {
       companyName: workspace?.name || 'Mi Inmobiliaria',
     })
     setLogoFile(null)
+    setLogoPreview(null)
   }
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,6 +172,12 @@ export default function BrandPage() {
                   <img
                     src={URL.createObjectURL(logoFile)}
                     alt="Logo preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : logoPreview ? (
+                  <img
+                    src={logoPreview}
+                    alt="Logo"
                     className="w-full h-full object-cover"
                   />
                 ) : (
