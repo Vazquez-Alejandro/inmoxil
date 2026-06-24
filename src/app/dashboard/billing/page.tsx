@@ -110,12 +110,35 @@ export default function BillingPage() {
     }
   }
 
+  const trialEnd = workspace?.trial_ends_at ? new Date(workspace.trial_ends_at) : null
+  const isTrialActive = trialEnd && trialEnd > new Date() && !workspace?.stripe_subscription_id
+  const trialDaysLeft = trialEnd ? Math.ceil((trialEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : 0
+
   return (
     <>
       <Header
         title="Facturación"
         subtitle="Gestioná tu plan y créditos"
       />
+
+      {isTrialActive && (
+        <div className="card p-5 mb-6 border-l-4 border-emerald-400 bg-gradient-to-r from-emerald-50 to-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-semibold text-navy-900">Prueba gratis activa</p>
+                <p className="text-sm text-navy-500">Te quedan <span className="font-semibold text-emerald-600">{trialDaysLeft} día{trialDaysLeft !== 1 ? 's' : ''}</span> de prueba gratis. Después elegí un plan para seguir.</p>
+              </div>
+            </div>
+            <span className="badge-gold text-xs whitespace-nowrap">14 días gratis</span>
+          </div>
+        </div>
+      )}
 
       {/* Current Plan */}
       <div className="card p-6 mb-8 border-l-4 border-gold-400">

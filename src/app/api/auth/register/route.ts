@@ -21,7 +21,8 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 12)
     const slug = companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
-    const workspace = await insertOne('workspaces', { name: companyName, slug })
+    const trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString()
+    const workspace = await insertOne('workspaces', { name: companyName, slug, trial_ends_at: trialEndsAt })
     const userId = crypto.randomUUID()
     await insertOne('users', { id: userId, email, password_hash: hashedPassword, full_name: name, workspace_id: workspace.id, role: 'owner' })
 

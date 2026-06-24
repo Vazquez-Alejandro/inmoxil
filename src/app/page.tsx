@@ -143,7 +143,7 @@ export default function HomePage() {
           </h1>
           <p className="text-lg md:text-xl text-navy-300 max-w-2xl mx-auto leading-relaxed mb-10">
             Importación multi-portal, generación de anuncios con tu marca y pago por créditos.
-            Todo lo que necesitás para escalar tu negocio inmobiliario en un solo lugar.
+            Probá gratis 14 días sin tarjeta de crédito.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
@@ -199,7 +199,7 @@ export default function HomePage() {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Planes simples, precios transparentes</h2>
           <p className="text-navy-400 text-lg max-w-2xl mx-auto">
-            Elegí el plan que mejor se adapte a tu inmobiliaria. Todos incluyen 14 días gratis.
+            Elegí el plan que mejor se adapte a tu inmobiliaria. Todos incluyen 14 días gratis sin riesgo.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
@@ -270,9 +270,9 @@ export default function HomePage() {
           ¿Listo para escalar tu inmobiliaria?
         </h2>
         <p className="text-navy-400 text-lg mb-10 max-w-2xl mx-auto">
-          Unite a las inmobiliarias que ya automatizaron su captación de propiedades.
-          14 días gratis, sin tarjeta de crédito.
-        </p>
+            Unite a las inmobiliarias que ya automatizaron su captación de propiedades.
+            Probá 14 días gratis, sin tarjeta de crédito.
+          </p>
         <Link
           href="/register"
           className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-lg px-10 py-4 rounded-xl shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 transition-all duration-200 hover:-translate-y-0.5"

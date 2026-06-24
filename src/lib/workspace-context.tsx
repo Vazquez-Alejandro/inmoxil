@@ -16,6 +16,7 @@ interface Workspace {
   credits_used: number
   stripe_customer_id: string | null
   stripe_subscription_id: string | null
+  trial_ends_at: string | null
   public_catalog_enabled?: boolean
   pub_catalog_slug?: string | null
   contact_email?: string | null
