@@ -519,7 +519,7 @@ export default function PipelinePage() {
             <div className="p-6 space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-navy-800 mb-1.5">Tipo de actividad</label>
-                <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" value={newActivityForm.type} onChange={e => setNewActivityForm(p => ({ ...p, type: e.target.value }))}>
+                <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" value={newActivityForm.type} onChange={e => setNewActivityForm(p => ({ ...p, type: e.target.value, scheduledAt: e.target.value !== 'visita' ? '' : p.scheduledAt }))}>
                   <option value="llamada">📞 Llamada</option>
                   <option value="visita">🏠 Visita</option>
                   <option value="mensaje">💬 Mensaje</option>
@@ -531,6 +531,12 @@ export default function PipelinePage() {
                 <label className="block text-sm font-semibold text-navy-800 mb-1.5">Descripción</label>
                 <textarea className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[90px] resize-none" placeholder="¿Qué pasó en la interacción?" value={newActivityForm.description} onChange={e => setNewActivityForm(p => ({ ...p, description: e.target.value }))} />
               </div>
+              {newActivityForm.type === 'visita' && (
+                <div>
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Fecha y hora de la visita</label>
+                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" type="datetime-local" value={newActivityForm.scheduledAt} onChange={e => setNewActivityForm(p => ({ ...p, scheduledAt: e.target.value }))} />
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-semibold text-navy-800 mb-1.5">Resultado (opcional)</label>
                 <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" placeholder="Cliente pidió más información" value={newActivityForm.outcome} onChange={e => setNewActivityForm(p => ({ ...p, outcome: e.target.value }))} />
