@@ -150,6 +150,7 @@ export default function HomePage() {
               className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-lg px-10 py-4 rounded-xl shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto"
             >
               Empezar gratis
+              <span className="text-xs bg-white/20 rounded-full px-2 py-0.5 font-normal">14 días</span>
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
