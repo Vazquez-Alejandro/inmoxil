@@ -119,43 +119,52 @@ function extractZonaprop(html: string): any[] {
   const $ = cheerio.load(html)
   const results: any[] = []
 
-  // Main card container (CSS module class, verified Jun 2026)
-  $('div.postingCard-module__posting-container').each((_, el) => {
+  // CSS module classes change frequently, try multiple patterns
+  const cardSelectors = [
+    'div.postingCard-module__posting-container',
+    '[class*="postingCard"]',
+    '[class*="posting-container"]',
+    '[data-testid*="posting"]',
+    '[class*="card"]',
+  ]
+
+  let cards = $('')
+  for (const sel of cardSelectors) {
+    cards = $(sel)
+    if (cards.length > 0) break
+  }
+
+  cards.each((_, el) => {
     const card = $(el)
 
-    // Title: h2 with posting-description class
     const title = card.find('h2.postingCard-module__posting-description').first().text().trim()
+      || card.find('h2[class*="description"]').first().text().trim()
       || card.find('h2').first().text().trim()
 
-    // Price: h2 with price class
     const priceText = card.find('h2.postingPrices-module__price').first().text().trim()
       || card.find('[class*="price"]').first().text().trim()
+      || card.find('h2').last().text().trim()
 
-    // Specs: h3 with main-features class
     const specsText = card.find('h3.postingMainFeatures-module__posting-main-features-block').first().text().trim()
+      || card.find('[class*="feature"]').first().text().trim()
+      || card.find('[class*="main-features"]').first().text().trim()
       || card.find('h3').first().text().trim()
 
-    // Link: find anchor with propiedad path
     const link = card.find('a[href*="/propiedades/"]').first().attr('href')
+      || card.find('a[href*="/propiedad"]').first().attr('href')
       || card.find('a[href]').first().attr('href')
       || ''
 
-    // Images: in gallery container
     const imgs: string[] = []
-    card.find('.postingGallery-module__gallery-container img, [class*="gallery"] img').each((_, img) => {
+    card.find('[class*="gallery"] img, [class*="photo"] img, img').each((_, img) => {
       const src = $(img).attr('data-src') || $(img).attr('src') || ''
-      if (src && !src.includes('placeholder') && !src.includes('blank')) imgs.push(src)
+      if (src && !src.includes('placeholder') && !src.includes('blank') && !src.includes('pixel')) {
+        if (src.includes('zonapropcdn') || imgs.length === 0) imgs.push(src)
+      }
     })
-    // Also try any img with zonapropcdn
-    if (imgs.length === 0) {
-      card.find('img').each((_, img) => {
-        const src = $(img).attr('data-src') || $(img).attr('src') || ''
-        if (src && src.includes('zonapropcdn')) imgs.push(src)
-      })
-    }
 
-    // Address: location block
     const addressBlock = card.find('.postingLocations-module__location-block').first()
+      || card.find('[class*="location"]').first()
     const addressStreet = addressBlock.find('h4').first().text().trim()
     const addressCity = addressBlock.find('h4').last().text().trim()
     const address = addressStreet && addressCity ? `${addressStreet}, ${addressCity}` : (addressBlock.text().trim() || '')
@@ -183,43 +192,52 @@ function extractArgenprop(html: string): any[] {
   const $ = cheerio.load(html)
   const results: any[] = []
 
-  // Cards are a.card with href starting with /departamento-en-venta-en-
-  $('a.card[href*="departamento-en-venta-en"]').each((_, el) => {
+  const cardSelectors = [
+    'a.card[href*="departamento-en-venta-en"]',
+    'a.card[href*="departamento"]',
+    'a.card[href*="propiedad"]',
+    '[class*="card"]',
+    'article',
+  ]
+
+  let cards = $('')
+  for (const sel of cardSelectors) {
+    cards = $(sel)
+    if (cards.length > 0) break
+  }
+
+  cards.each((_, el) => {
     const card = $(el)
-    const href = card.attr('href') || ''
+    const href = card.attr('href') || card.find('a[href]').first().attr('href') || ''
     const fullUrl = href.startsWith('http') ? href : `https://www.argenprop.com${href}`
 
-    // Price: span.card__currency + text = "USD 155.000" or "USD 2.400.000"
     const currency = card.find('span.card__currency').first().text().trim()
+      || card.find('[class*="currency"]').first().text().trim()
     const priceNum = card.find('p.card__price').clone().children('span').remove().end().text().trim()
+      || card.find('[class*="price"]').first().text().trim()
     const priceText = currency ? `${currency} ${priceNum}` : priceNum
 
-    // Expenses from span.card__expenses title attribute
     const expensesEl = card.find('span.card__expenses')
-    const expensesText = expensesEl.attr('title') || expensesEl.text().trim()
+      || card.find('[class*="expense"]').first()
+    const expensesText = expensesEl.attr?.('title') || expensesEl.text?.()?.trim() || ''
 
-    // Address
     const address = card.find('p.card__address').first().text().trim()
+      || card.find('[class*="address"]').first().text().trim()
+      || card.find('[class*="location"]').first().text().trim()
 
-    // Title from card__title
     const title = card.find('h2.card__title').first().text().trim()
+      || card.find('h2').first().text().trim()
 
-    // Specs from ul.card__main-features
     const specsText = card.find('ul.card__main-features').text().trim()
+      || card.find('[class*="feature"]').first().text().trim()
 
-    // Image: first img with data-src (real image, not placeholder)
     let img = ''
-    card.find('ul.card__photos img').each((_, imgEl) => {
-      const src = $(imgEl).attr('data-src') || ''
-      if (src && !img) img = src
+    card.find('ul.card__photos img, img[data-src], img[src]').each((_, imgEl) => {
+      const src = $(imgEl).attr('data-src') || $(imgEl).attr('src') || ''
+      if (src && !img && !src.includes('placeholder') && !src.includes('blank') && !src.includes('pixel')) {
+        img = src
+      }
     })
-    if (!img) {
-      // Fallback: try any img with data-src
-      card.find('img[data-src]').each((_, imgEl) => {
-        const src = $(imgEl).attr('data-src') || ''
-        if (src && !img) img = src
-      })
-    }
 
     if (title || priceText) {
       const { beds, baths, sqm } = extractSpecs(specsText || card.text())
@@ -334,6 +352,45 @@ function extractMercadoLibre(html: string): any[] {
   return results
 }
 
+// ── Universal fallback ─────────────────────────────────────────────
+function extractFallback(html: string, baseUrl: string): any[] {
+  const $ = cheerio.load(html)
+  const results: any[] = []
+
+  const linkPatterns = [
+    'a[href*="/propiedades/"]',
+    'a[href*="/departamento"]',
+    'a[href*="/casa"]',
+    'a[href*="/alquiler"]',
+    'a[href*="/venta"]',
+    'a[href*="inmueble"]',
+  ]
+
+  const seen = new Set<string>()
+  for (const pattern of linkPatterns) {
+    $(pattern).each((_, el) => {
+      const link = $(el).attr('href') || ''
+      const fullUrl = link.startsWith('http') ? link : (() => { try { return new URL(link, baseUrl).href } catch { return link } })()
+      if (seen.has(fullUrl)) return
+      seen.add(fullUrl)
+
+      const card = $(el).closest('div, li, article, [class*="card"], [class*="item"]')
+      const title = card.find('h2, h3, [class*="title"]').first().text().trim() || $(el).text().trim()
+      const price = card.find('[class*="price"], [class*="Price"], [class*="precio"]').first().text().trim()
+      const img = card.find('img[src]').first().attr('src') || ''
+      const address = card.find('[class*="address"], [class*="location"], [class*="direccion"]').first().text().trim()
+
+      if (title && title.length > 5) {
+        const { beds, baths, sqm } = extractSpecs(card.text())
+        results.push({ title: title.substring(0, 200), price, url: fullUrl, image: img, address: address.substring(0, 300), beds, baths, sqm })
+      }
+    })
+    if (results.length > 0) break
+  }
+
+  return results
+}
+
 function normalize(raw: any, portal: string): NormalizedProperty {
   const { price, currency } = parsePrice(raw.price || '')
   const expenses = raw.expenses ? parsePrice(raw.expenses).price : null
@@ -413,6 +470,10 @@ export async function scrapeUrls(
           break
         default:
           raw = extractGeneric(html, targetUrl)
+      }
+      if (raw.length === 0) {
+        console.log(`[Scrape] Specific extractor returned nothing, trying fallback...`)
+        raw = extractFallback(html, targetUrl)
       }
     }
 

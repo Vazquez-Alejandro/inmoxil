@@ -457,7 +457,7 @@ export async function generateAd(
 
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: '/usr/bin/google-chrome',
+    executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome',
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
