@@ -205,10 +205,7 @@ export default function RegisterPage() {
                   Creando cuenta...
                 </span>
               ) : (
-                <span className="flex flex-col items-center leading-tight">
-                  Crear cuenta gratis
-                  <span className="text-xs font-normal opacity-80">14 días de prueba</span>
-                </span>
+                'Crear cuenta gratis — 14 días de prueba'
               )}
             </button>
 
