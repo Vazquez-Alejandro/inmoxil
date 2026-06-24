@@ -194,7 +194,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-gold w-full disabled:opacity-50"
+              className="btn-gold w-full disabled:opacity-50 py-3"
             >
               {loading ? (
                 <span className="flex items-center gap-2 justify-center">
@@ -205,9 +205,9 @@ export default function RegisterPage() {
                   Creando cuenta...
                 </span>
               ) : (
-                <span className="flex items-center justify-center gap-2">
+                <span className="flex flex-col items-center leading-tight">
                   Crear cuenta gratis
-                  <span className="text-xs bg-white/20 rounded-full px-2 py-0.5 font-normal">14 días gratis</span>
+                  <span className="text-xs font-normal opacity-80">14 días de prueba</span>
                 </span>
               )}
             </button>
