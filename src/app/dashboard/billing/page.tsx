@@ -131,7 +131,7 @@ export default function BillingPage() {
                 </svg>
               </div>
               <div>
-                <p className="font-semibold text-navy-900">Prueba gratis activa</p>
+                <p className="font-semibold text-navy-900 dark:text-white">Prueba gratis activa</p>
                 <p className="text-sm text-navy-500">Te quedan <span className="font-semibold text-emerald-600">{trialDaysLeft} día{trialDaysLeft !== 1 ? 's' : ''}</span> de prueba gratis. Después elegí un plan para seguir.</p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export default function BillingPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-lg font-bold text-navy-900 capitalize">Plan {currentPlan}</h3>
+              <h3 className="text-lg font-bold text-navy-900 dark:text-white capitalize">Plan {currentPlan}</h3>
               <span className="badge-gold">Activo</span>
             </div>
             <p className="text-sm text-navy-500">
@@ -153,14 +153,14 @@ export default function BillingPage() {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-3xl font-bold text-navy-900">${plans.find(p => p.id === currentPlan)?.price || 29}</p>
+                <p className="text-3xl font-bold text-navy-900 dark:text-white">${plans.find(p => p.id === currentPlan)?.price || 29}</p>
             <p className="text-sm text-navy-500">/mes</p>
           </div>
         </div>
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-navy-600">Créditos utilizados</span>
-            <span className="font-medium text-navy-900">{creditsUsed} / {creditsTotal}</span>
+            <span className="font-medium text-navy-900 dark:text-white">{creditsUsed} / {creditsTotal}</span>
           </div>
           <div className="w-full bg-navy-100 rounded-full h-2">
             <div
@@ -180,7 +180,7 @@ export default function BillingPage() {
 
       {/* Plans Grid */}
       <div className="mb-8">
-        <h3 className="text-lg font-bold text-navy-900 mb-4">Planes disponibles</h3>
+        <h3 className="text-lg font-bold text-navy-900 dark:text-white mb-4">Planes disponibles</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan) => (
             <div
@@ -202,9 +202,9 @@ export default function BillingPage() {
               )}
 
               <div className="text-center mb-6">
-                <h4 className="text-xl font-bold text-navy-900 mb-2">{plan.name}</h4>
+                <h4 className="text-xl font-bold text-navy-900 dark:text-white mb-2">{plan.name}</h4>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-4xl font-bold text-navy-900">${plan.price}</span>
+                  <span className="text-4xl font-bold text-navy-900 dark:text-white">${plan.price}</span>
                   <span className="text-navy-500">/mes</span>
                 </div>
                 <p className="text-sm text-navy-500 mt-2">{plan.credits} créditos/mes</p>
@@ -243,7 +243,7 @@ export default function BillingPage() {
       {creditHistory.length > 0 && (
         <div className="card">
           <div className="p-6 border-b border-gray-100">
-            <h3 className="text-lg font-bold text-navy-900">Historial de créditos</h3>
+            <h3 className="text-lg font-bold text-navy-900 dark:text-white">Historial de créditos</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -260,7 +260,7 @@ export default function BillingPage() {
                     <td className="table-cell">{new Date(tx.created_at).toLocaleDateString('es-AR')}</td>
                     <td className="table-cell font-medium">{tx.description}</td>
                     <td className="table-cell text-right">
-                      <span className={`font-semibold ${tx.amount > 0 ? 'text-emerald-600' : 'text-navy-900'}`}>
+                      <span className={`font-semibold ${tx.amount > 0 ? 'text-emerald-600' : 'text-navy-900 dark:text-white'}`}>
                         {tx.amount > 0 ? '+' : ''}{tx.amount}
                       </span>
                     </td>
