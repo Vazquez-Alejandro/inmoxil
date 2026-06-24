@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { queryOne } from '@/lib/db'
+import { query, queryOne } from '@/lib/db'
 import { requireAuth, requireWorkspaceAuth } from '@/lib/api-auth'
 
 export async function GET(request: NextRequest) {
@@ -26,6 +26,16 @@ export async function PUT(request: NextRequest) {
     if (!workspaceId) return NextResponse.json({ error: 'Falta workspaceId' }, { status: 400 })
     const wsId = workspaceId
     await requireWorkspaceAuth(wsId)
+
+    const extraColumns = [
+      'contact_email', 'contact_phone', 'contact_address',
+      'social_instagram', 'social_facebook', 'social_twitter', 'social_linkedin',
+      'whatsapp_number', 'timezone', 'pub_catalog_slug',
+    ]
+    for (const col of extraColumns) {
+      try { await query(`ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS ${col} TEXT`) } catch {}
+    }
+    try { await query(`ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS public_catalog_enabled BOOLEAN DEFAULT false`) } catch {}
 
     const allowed = [
       'name', 'slug', 'logo_url', 'primary_color', 'secondary_color', 'accent_color',
