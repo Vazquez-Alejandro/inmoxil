@@ -98,7 +98,7 @@ function stepRow(num: number, text: string): string {
 export function welcomeEmailTemplate(name: string): string {
   const content = `
     <h1 style="margin:0 0 8px;font-size:24px;font-weight:800;color:${BRAND.navy};">
-      Bienvenido a Inmoxil 👋
+      Bienvenido/a a Inmoxil 👋
     </h1>
     <p style="margin:0 0 24px;font-size:15px;color:${BRAND.textMuted};line-height:1.6;">
       Hola <strong style="color:${BRAND.textDark};">${name}</strong>, tu cuenta ya está activa. Potenciá tu negocio inmobiliario con nuestra plataforma de scraping, ads y gestión de propiedades.

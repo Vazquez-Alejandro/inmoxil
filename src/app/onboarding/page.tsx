@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 
 const STEPS = [
-  'Bienvenido',
+  'Bienvenido/a',
   'Tu inmobiliaria',
   'Tu marca',
   'Tu plan',
@@ -208,7 +208,7 @@ function StepWelcome({ onNext }: { onNext: () => void }) {
         Ix
       </div>
       <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4 tracking-tight">
-        Bienvenido a <span className="text-gold-400">Inmoxil</span>
+        Bienvenido/a a <span className="text-gold-400">Inmoxil</span>
       </h1>
       <p className="text-navy-500 text-lg max-w-md mx-auto mb-10 leading-relaxed">
         Configurá tu inmobiliaria en menos de 2 minutos. Personalizá tu marca,

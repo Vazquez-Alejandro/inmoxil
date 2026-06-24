@@ -40,7 +40,7 @@ async function sendEmail(to: string, subject: string, html: string) {
 }
 
 export async function sendWelcomeEmail(to: string, name: string) {
-  await sendEmail(to, 'Bienvenido a Inmoxil 🎉', welcomeEmailTemplate(name))
+  await sendEmail(to, 'Bienvenido/a a Inmoxil 🎉', welcomeEmailTemplate(name))
 }
 
 export async function sendPaymentConfirmation(

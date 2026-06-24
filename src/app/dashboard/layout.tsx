@@ -29,7 +29,7 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3 mb-2">
             <div className="logo-mark w-10 h-10 text-base">Ix</div>
-            <h2 className="text-xl font-bold text-navy-900">Bienvenido a Inmoxil</h2>
+            <h2 className="text-xl font-bold text-navy-900">Bienvenido/a a Inmoxil</h2>
           </div>
           <p className="text-sm text-navy-500">Antes de continuar, necesitás aceptar nuestros Términos y Condiciones.</p>
         </div>
