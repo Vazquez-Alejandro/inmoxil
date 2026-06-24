@@ -267,61 +267,72 @@ export default function ScrapePage() {
     <>
       <Header
         title="Importar propiedades"
-        subtitle="Extraé propiedades de portales o importalas desde un archivo"
+        subtitle="Agregá propiedades a tu catálogo"
       />
 
-      {/* Portal Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8">
-        {PORTALS.map((portal) => (
-          <button
-            key={portal.slug}
-            onClick={() => portal.disabled ? null : handleQuickScrape(portal.slug)}
-            disabled={loading || !hasCredits || portal.disabled}
-            className="card p-3 sm:p-4 text-center hover:shadow-corporate-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group relative"
-          >
-            {portal.disabled && (
-              <span className="absolute -top-1.5 -right-1.5 bg-navy-900 text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full">Próximamente</span>
-            )}
-            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${portal.color} flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform`}>
-              <span className="text-base sm:text-lg font-bold">{portal.name[0]}</span>
-            </div>
-            <p className="text-xs sm:text-sm font-medium text-navy-700">{portal.name}</p>
-            <p className="text-[10px] sm:text-xs text-navy-400 mt-1">{portal.country}</p>
-          </button>
-        ))}
-      </div>
-
       {/* Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         <button
           onClick={() => setActiveTab('urls')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'urls' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
+          className={`card p-5 text-left transition-all hover:shadow-corporate-md ${activeTab === 'urls' ? 'ring-2 ring-indigo-500 shadow-corporate-md' : ''}`}
         >
-          Importar por enlaces
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="font-bold text-navy-900">Pegar enlaces</h3>
+              <p className="text-sm text-navy-500">Copiá URLs de propiedades desde ZonaProp, Argenprop y más</p>
+            </div>
+          </div>
         </button>
         <button
           onClick={() => setActiveTab('import')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'import' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
+          className={`card p-5 text-left transition-all hover:shadow-corporate-md ${activeTab === 'import' ? 'ring-2 ring-indigo-500 shadow-corporate-md' : ''}`}
         >
-          Importar CSV/JSON
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="font-bold text-navy-900">Subir archivo</h3>
+              <p className="text-sm text-navy-500">Importá desde un CSV o JSON con tus propiedades</p>
+            </div>
+          </div>
         </button>
       </div>
 
       {activeTab === 'urls' ? (
         <div className="card p-4 sm:p-6 mb-8">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Importar por enlaces</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-1">Pegar enlaces de propiedades</h3>
+          <p className="text-sm text-navy-500 mb-5">
+            Andá al portal, copiá el enlace de cada propiedad que quieras importar, y pegala abajo.
+          </p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <label className="label">URLs de propiedades (una por línea)</label>
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {PORTALS.filter(p => !p.disabled).map(p => (
+                  <span key={p.slug} className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${p.color}`}>{p.name}</span>
+                ))}
+                <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-navy-900 text-white opacity-50">MercadoLibre pronto</span>
+              </div>
+              <label className="label">URL de cada propiedad (una por línea)</label>
               <textarea
-                className="input min-h-[120px] sm:min-h-[160px] font-mono text-sm"
-                placeholder={`https://www.zonaprop.com.ar/propiedades/venta-departamento-palermo-12345.html\nhttps://www.zillow.com/homedetails/123-Main-St/12345_zpid/\nhttps://www.realtor.com/realestateandhomes-detail/123-Main-St`}
+                className="input min-h-[140px] font-mono text-sm"
+                placeholder={`https://www.zonaprop.com.ar/propiedades/departamento-palermo-123.html\nhttps://www.argenprop.com/departamento-3-ambientes-belgrano-456\nhttps://www.zillow.com/homedetails/123-Main-St/12345_zpid/`}
                 value={urls}
                 onChange={(e) => setUrls(e.target.value)}
               />
-              <p className="text-xs text-navy-400 mt-2">
-                Nota: La importación puede estar bloqueada por los portales. Si falla, usá la pestaña &quot;Importar CSV/JSON&quot;.
-              </p>
+              <div className="flex items-start gap-2 mt-2 text-xs text-navy-400">
+                <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <p>Algunos portales pueden bloquear la importación. Si falla, usá la opción &quot;Subir archivo&quot;.</p>
+              </div>
             </div>
             <div className="flex flex-col gap-4">
               <div>
@@ -347,14 +358,14 @@ export default function ScrapePage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    Scrapeando...
+                    Importando...
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
-                    Scrapear
+                    Importar propiedades
                   </span>
                 )}
               </button>
@@ -364,17 +375,20 @@ export default function ScrapePage() {
         </div>
       ) : (
         <div className="card p-4 sm:p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-navy-900">Importar propiedades</h3>
-            <button onClick={downloadSampleCSV} className="text-xs text-gold-600 hover:text-gold-700 font-medium">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-bold text-navy-900">Subir archivo</h3>
+            <button onClick={downloadSampleCSV} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">
               Descargar ejemplo CSV →
             </button>
           </div>
           <p className="text-sm text-navy-500 mb-6">
-            Subí un archivo CSV o JSON con tus propiedades. El sistema detecta automáticamente las columnas.
+            Si tenés un archivo con tus propiedades (exportado de Excel, otro sistema, etc.), subilo acá. El sistema detecta automáticamente las columnas.
           </p>
 
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-gold-400 transition-colors mb-6">
+          <div
+            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors mb-6 cursor-pointer"
+            onClick={() => fileRef.current?.click()}
+          >
             <input
               ref={fileRef}
               type="file"
@@ -392,16 +406,10 @@ export default function ScrapePage() {
               </div>
             ) : (
               <div>
-                <p className="text-sm text-navy-600 mb-1">Arrastrá tu archivo o hacé click</p>
+                <p className="text-sm text-navy-600 mb-1">Hacé click para seleccionar un archivo</p>
                 <p className="text-xs text-navy-400">CSV o JSON — hasta 1000 propiedades</p>
               </div>
             )}
-            <button
-              onClick={() => fileRef.current?.click()}
-              className="btn-outline text-sm mt-4"
-            >
-              Seleccionar archivo
-            </button>
           </div>
 
           {importPreview.length > 0 && (
@@ -560,7 +568,7 @@ export default function ScrapePage() {
           </div>
           <h3 className="text-lg font-bold text-navy-900 mb-2">Empezá a cargar propiedades</h3>
           <p className="text-sm text-navy-500 max-w-md mx-auto">
-            Usá scraping por URLs, importá un archivo CSV/JSON, o hacé click en un portal arriba para scraping rápido.
+            Elegí &quot;Pegar enlaces&quot; para importar desde portales, o &quot;Subir archivo&quot; si tenés un CSV o JSON.
           </p>
         </div>
       )}
