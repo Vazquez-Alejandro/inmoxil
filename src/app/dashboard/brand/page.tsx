@@ -98,7 +98,7 @@ export default function BrandPage() {
   return (
     <>
       <Header
-        title="Brand Kit"
+        title="Mi Marca"
         subtitle="Personalizá los colores y la marca de tu inmobiliaria"
       />
 

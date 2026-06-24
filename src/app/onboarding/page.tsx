@@ -21,21 +21,21 @@ const PRESET_COLORS = {
 const PLANS = [
   {
     id: 'starter',
-    name: 'Starter',
+    name: 'Inicial',
     price: '$29',
-    features: ['200 propiedades', 'Scraping básico', '1 usuario', 'Soporte email'],
+    features: ['200 propiedades', 'Importación básica', '1 usuario', 'Soporte email'],
   },
   {
     id: 'pro',
-    name: 'Pro',
+    name: 'Profesional',
     price: '$79',
-    features: ['1000 propiedades', 'Scraping avanzado', '5 usuarios', 'Soporte prioritario', 'Brand kit personalizado'],
+    features: ['1000 propiedades', 'Importación avanzada', '5 usuarios', 'Soporte prioritario', 'Marca personalizada'],
   },
   {
     id: 'enterprise',
-    name: 'Enterprise',
+    name: 'Empresarial',
     price: '$199',
-    features: ['Ilimitado', 'Scraping multi-portal', 'Usuarios ilimitados', 'Soporte 24/7', 'API acceso', 'Integración MLS'],
+    features: ['Ilimitado', 'Importación multi-portal', 'Usuarios ilimitados', 'Soporte 24/7', 'Acceso desarrolladores', 'Integración MLS'],
   },
 ]
 
@@ -436,7 +436,7 @@ function StepPlan({
         Elegí tu plan
       </h2>
       <p className="text-navy-500 text-center mb-8">
-        Empezá gratis con Starter. Cambiá cuando necesites más.
+        Empezá gratis con el plan Inicial. Cambiá cuando necesites más.
       </p>
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
         {PLANS.map((plan) => (
@@ -488,7 +488,7 @@ function StepPlan({
               Guardando...
             </span>
           ) : (
-            'Empezar con Starter'
+            'Empezar con Inicial'
           )}
         </button>
       </div>
@@ -553,7 +553,7 @@ function StepDone() {
         onClick={() => router.push('/dashboard')}
         className="btn-gold text-base px-10 py-4 relative z-10"
       >
-        Ir al Dashboard
+        Ir al panel principal
       </button>
     </div>
   )

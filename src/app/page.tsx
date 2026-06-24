@@ -7,7 +7,7 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9 9 0 013 12c0-1.605.42-3.113 1.157-4.418" />
       </svg>
     ),
-    title: 'Scraping Multi-Portal',
+    title: 'Importación Multi-Portal',
     description: 'ZonaProp, Argenprop, MercadoLibre y más. Datos normalizados, deduplicados y actualizados automáticamente las 24 horas.',
   },
   {
@@ -16,8 +16,8 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
       </svg>
     ),
-    title: 'Brand Kit',
-    description: 'Subí tu logo, elegí tus colores y generá ads profesionales con identidad propia en segundos.',
+    title: 'Tu Marca',
+    description: 'Subí tu logo, elegí tus colores y generá anuncios profesionales con identidad propia en segundos.',
   },
   {
     icon: (
@@ -26,7 +26,7 @@ const features = [
       </svg>
     ),
     title: 'Generación de Ads',
-    description: '6 templates optimizados para Instagram, Facebook y Google Ads. Publicá con un clic.',
+    description: '6 plantillas optimizadas para Instagram, Facebook y Google Ads. Publicá con un clic.',
   },
   {
     icon: (
@@ -34,8 +34,8 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
       </svg>
     ),
-    title: 'Billing por Créditos',
-    description: 'Pagá solo lo que uses. Planes desde $29/mes con 50 créditos. Integración con Stripe para pagos seguros.',
+    title: 'Pago por Créditos',
+    description: 'Pagá solo lo que uses. Planes desde $29/mes con 50 créditos. Integración con sistema de pagos seguros.',
   },
   {
     icon: (
@@ -43,8 +43,8 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
       </svg>
     ),
-    title: 'Analytics',
-    description: 'Dashboards con métricas de scraping, rendimiento de ads y ROI por campaña. Todo en un solo lugar.',
+    title: 'Estadísticas',
+    description: 'Paneles con métricas de importación, rendimiento de anuncios y retorno de inversión por campaña. Todo en un solo lugar.',
   },
   {
     icon: (
@@ -59,26 +59,26 @@ const features = [
 
 const plans = [
   {
-    name: 'Starter',
+    name: 'Inicial',
     price: 29,
     description: 'Para inmobiliarias que están empezando',
-    features: ['50 créditos/mes', 'Scraping de 2 portales', '3 templates de ads', 'Brand Kit básico', 'Soporte por email'],
+    features: ['50 créditos/mes', 'Importación de 2 portales', '3 plantillas de anuncios', 'Marca básica', 'Soporte por email'],
     cta: 'Empezar gratis',
     popular: false,
   },
   {
-    name: 'Pro',
+    name: 'Profesional',
     price: 79,
     description: 'Para inmobiliarias en crecimiento',
-    features: ['200 créditos/mes', 'Scraping de todos los portales', '6 templates de ads', 'Brand Kit completo', 'Analytics avanzado', 'Soporte prioritario'],
+    features: ['200 créditos/mes', 'Importación de todos los portales', '6 plantillas de anuncios', 'Marca completa', 'Estadísticas avanzadas', 'Soporte prioritario'],
     cta: 'Empezar gratis',
     popular: true,
   },
   {
-    name: 'Enterprise',
+    name: 'Empresarial',
     price: 199,
     description: 'Para grandes inmobiliarias y grupos',
-    features: ['Créditos ilimitados', 'Scraping personalizado', 'Templates custom', 'API access', 'Account manager dedicado', 'SLA 99.9%'],
+    features: ['Créditos ilimitados', 'Importación personalizada', 'Plantillas personalizadas', 'Acceso para desarrolladores', 'Account manager dedicado', 'Disponibilidad 99.9%'],
     cta: 'Contactar ventas',
     popular: false,
   },
@@ -86,7 +86,7 @@ const plans = [
 
 const faqs = [
   {
-    question: '¿Qué portales soporta el scraping?',
+    question: '¿Qué portales soporta la importación?',
     answer: 'Actualmente soportamos ZonaProp, Argenprop, MercadoLibre, Zillow, Realtor.com, Redfin, Idealista y Housing.com. Estamos agregando nuevos portales continuamente.',
   },
   {
@@ -116,7 +116,7 @@ export default function HomePage() {
           <div className="logo-mark">Ix</div>
           <div>
             <h1 className="text-white font-bold text-lg tracking-tight">Inmoxil</h1>
-            <p className="text-navy-400 text-[10px] uppercase tracking-widest font-medium">Plataforma SaaS</p>
+            <p className="text-navy-400 text-[10px] uppercase tracking-widest font-medium">Plataforma en la nube</p>
           </div>
         </div>
         <div className="hidden md:flex items-center gap-6">
@@ -137,14 +137,14 @@ export default function HomePage() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-sm text-navy-300">Plataforma SaaS para inmobiliarias</span>
+            <span className="text-sm text-navy-300">Plataforma en la nube para inmobiliarias</span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
             Automatizá la captación de<br />
             <span className="text-gold-400">propiedades para tu inmobiliaria</span>
           </h1>
           <p className="text-lg md:text-xl text-navy-300 max-w-2xl mx-auto leading-relaxed mb-10">
-            Scraping multi-portal, generación de ads con tu marca y billing por créditos.
+            Importación multi-portal, generación de anuncios con tu marca y pago por créditos.
             Todo lo que necesitás para escalar tu negocio inmobiliario en un solo lugar.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

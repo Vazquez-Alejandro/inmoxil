@@ -266,8 +266,8 @@ export default function ScrapePage() {
   return (
     <>
       <Header
-        title="Scraping Multi-Portal"
-        subtitle="Scrapeá propiedades o importalas desde un archivo"
+        title="Importar propiedades"
+        subtitle="Extraé propiedades de portales o importalas desde un archivo"
       />
 
       {/* Portal Cards */}
@@ -297,7 +297,7 @@ export default function ScrapePage() {
           onClick={() => setActiveTab('urls')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'urls' ? 'bg-navy-900 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
         >
-          Scraping por URLs
+          Importar por enlaces
         </button>
         <button
           onClick={() => setActiveTab('import')}
@@ -309,7 +309,7 @@ export default function ScrapePage() {
 
       {activeTab === 'urls' ? (
         <div className="card p-4 sm:p-6 mb-8">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Scraping por URLs</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4">Importar por enlaces</h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <label className="label">URLs de propiedades (una por línea)</label>
@@ -320,7 +320,7 @@ export default function ScrapePage() {
                 onChange={(e) => setUrls(e.target.value)}
               />
               <p className="text-xs text-navy-400 mt-2">
-                Nota: El scraping puede estar bloqueado por los portales. Si falla, usá la pestaña &quot;Importar CSV/JSON&quot;.
+                Nota: La importación puede estar bloqueada por los portales. Si falla, usá la pestaña &quot;Importar CSV/JSON&quot;.
               </p>
             </div>
             <div className="flex flex-col gap-4">

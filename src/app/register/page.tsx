@@ -82,7 +82,7 @@ export default function RegisterPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
-              <span className="text-navy-200 text-sm">Scraping multi-portal incluido</span>
+              <span className="text-navy-200 text-sm">Importación multi-portal incluida</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gold-500/20 flex items-center justify-center">
@@ -90,7 +90,7 @@ export default function RegisterPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
-              <span className="text-navy-200 text-sm">Brand kit con tu marca personalizada</span>
+              <span className="text-navy-200 text-sm">Marca personalizada con tu identidad</span>
             </div>
           </div>
         </div>

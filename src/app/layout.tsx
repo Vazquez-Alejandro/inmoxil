@@ -4,12 +4,12 @@ import { ThemeProvider } from '@/lib/theme-context'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Inmoxil — Scraping y Marketing para Inmobiliarias',
+  title: 'Inmoxil — Importación y Marketing para Inmobiliarias',
   other: {
     'theme-color': '#0f172a',
   },
   description:
-    'Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con tu marca, billing por créditos.',
+    'Plataforma en la nube para inmobiliarias. Importación multi-portal, generación de anuncios con tu marca, pago por créditos.',
   keywords: [
     'inmobiliaria',
     'scraping inmobiliario',
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     'Argentina',
   ],
   openGraph: {
-    title: 'Inmoxil — Scraping y Marketing para Inmobiliarias',
+    title: 'Inmoxil — Importación y Marketing para Inmobiliarias',
     description:
-      'Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con tu marca, billing por créditos.',
+      'Plataforma en la nube para inmobiliarias. Importación multi-portal, generación de anuncios con tu marca, pago por créditos.',
     url: 'https://inmoxil.com',
     siteName: 'Inmoxil',
     locale: 'es_AR',
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Inmoxil — Scraping y Marketing para Inmobiliarias',
+    title: 'Inmoxil — Importación y Marketing para Inmobiliarias',
     description:
-      'Plataforma SaaS para inmobiliarias. Scraping multi-portal, generación de ads con tu marca, billing por créditos.',
+      'Plataforma en la nube para inmobiliarias. Importación multi-portal, generación de anuncios con tu marca, pago por créditos.',
   },
 }
 

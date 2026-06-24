@@ -136,13 +136,13 @@ export default function WhatsAppPage() {
         <div className="card p-6 space-y-4">
           <h3 className="font-bold text-navy-900">Enviar mensaje por WhatsApp</h3>
           <div>
-            <label className="label">Lead (opcional)</label>
+            <label className="label">Cliente (opcional)</label>
             <select className="input" value={selectedLead} onChange={e => {
               setSelectedLead(e.target.value)
               const lead = leads.find((l: any) => l.id === e.target.value)
               if (lead) setPhone(lead.phone || '')
             }}>
-              <option value="">Seleccionar lead...</option>
+              <option value="">Seleccionar cliente...</option>
               {leads.map((l: any) => (
                 <option key={l.id} value={l.id}>{l.full_name} - {l.phone}</option>
               ))}

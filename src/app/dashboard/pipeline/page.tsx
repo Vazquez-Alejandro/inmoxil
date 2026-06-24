@@ -231,14 +231,14 @@ export default function PipelinePage() {
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between p-4 border-b border-navy-100 shrink-0">
         <div>
-          <h1 className="text-xl font-bold text-navy-900">Pipeline</h1>
-          <p className="text-sm text-navy-500">{leads.length} leads activos</p>
+          <h1 className="text-xl font-bold text-navy-900">Clientes</h1>
+          <p className="text-sm text-navy-500">{leads.length} clientes activos</p>
         </div>
         <div className="flex items-center gap-3">
-          <input type="text" placeholder="Buscar lead por nombre o teléfono..." value={search} onChange={e => setSearch(e.target.value)} className="px-3 py-1.5 text-sm border border-navy-200 rounded-lg w-64 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          <input type="text" placeholder="Buscar cliente por nombre o teléfono..." value={search} onChange={e => setSearch(e.target.value)} className="px-3 py-1.5 text-sm border border-navy-200 rounded-lg w-64 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
           <button onClick={() => { setNewLeadStageId(stages[0]?.id || ''); setShowNewLead(true) }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-            Nuevo lead
+            Nuevo cliente
           </button>
         </div>
       </div>
@@ -303,7 +303,7 @@ export default function PipelinePage() {
                       </div>
                     ))}
                     {stageLeads.length === 0 && (
-                      <div className="text-center py-8 text-xs text-navy-400">Sin leads</div>
+                      <div className="text-center py-8 text-xs text-navy-400">Sin clientes</div>
                     )}
                   </div>
                 </div>
@@ -317,7 +317,7 @@ export default function PipelinePage() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowNewLead(false)}>
           <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100">
-              <h2 className="text-lg font-bold text-navy-900">Nuevo lead</h2>
+              <h2 className="text-lg font-bold text-navy-900">Nuevo cliente</h2>
               <button onClick={() => setShowNewLead(false)} className="text-navy-400 hover:text-navy-600 p-1"><svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
             <div className="p-6 space-y-4">
@@ -360,7 +360,7 @@ export default function PipelinePage() {
                 </div>
               </div>
               <button onClick={createLead} disabled={saving || !leadForm.fullName || !leadForm.phone} className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50">
-                {saving ? 'Guardando...' : 'Crear lead'}
+                {saving ? 'Guardando...' : 'Crear cliente'}
               </button>
             </div>
           </div>
@@ -408,7 +408,7 @@ export default function PipelinePage() {
 
               <div className="flex gap-2">
                 <button onClick={moveToWon} className="px-3 py-1.5 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors">Marcar como ganado</button>
-                <button onClick={moveToLost} className="px-3 py-1.5 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">Descartar lead</button>
+                <button onClick={moveToLost} className="px-3 py-1.5 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">Descartar cliente</button>
               </div>
 
               <div>

@@ -8,41 +8,41 @@ import { useToast } from '@/lib/toast-context'
 const plans = [
   {
     id: 'starter',
-    name: 'Starter',
+    name: 'Inicial',
     price: 29,
     credits: 50,
     features: [
       '50 créditos/mes',
-      'Scraping multi-portal',
-      'Brand kit básico',
+      'Importación multi-portal',
+      'Marca básica',
       'Soporte email',
     ],
   },
   {
     id: 'pro',
-    name: 'Pro',
+    name: 'Profesional',
     price: 79,
     credits: 200,
     features: [
       '200 créditos/mes',
-      'Todo del Starter',
-      'API acceso',
+      'Todo del Inicial',
+      'Acceso para desarrolladores',
       'Soporte prioritario',
-      'Analytics avanzados',
+      'Estadísticas avanzadas',
     ],
     popular: true,
   },
   {
     id: 'enterprise',
-    name: 'Enterprise',
+    name: 'Empresarial',
     price: 199,
     credits: 1000,
     features: [
       '1.000 créditos/mes',
-      'Todo del Pro',
+      'Todo del Profesional',
       'Multi-usuario',
-      'Custom branding',
-      'SLA 99.9%',
+      'Marca personalizada',
+      'Disponibilidad 99.9%',
       'Account manager dedicado',
     ],
   },
@@ -113,7 +113,7 @@ export default function BillingPage() {
   return (
     <>
       <Header
-        title="Billing & Suscripción"
+        title="Facturación"
         subtitle="Gestioná tu plan y créditos"
       />
 

@@ -86,7 +86,7 @@ export default function SchedulingPage() {
 
   return (
     <>
-      <Header title="Scraping Automático" subtitle="Programá scraping recurrente de portales" />
+      <Header title="Importación Automática" subtitle="Programá importación recurrente de portales" />
 
       <div className="flex gap-3 mb-6">
         <button onClick={() => setTab('schedules')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'schedules' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'}`}>Configuración</button>

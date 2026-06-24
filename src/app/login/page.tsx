@@ -38,12 +38,12 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col justify-center px-16">
           <div className="logo-mark w-16 h-16 mb-8">Ix</div>
           <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">
-            La plataforma SaaS<br />
+            La plataforma en la nube<br />
             <span className="text-gold-400">para inmobiliarias</span>
           </h1>
           <p className="text-navy-300 text-lg max-w-md leading-relaxed">
-            Scraping multi-portal, generación de ads con tu marca, 
-            billing por créditos y todo lo que necesitás para escalar 
+            Importación multi-portal, generación de anuncios con tu marca, 
+            pago por créditos y todo lo que necesitás para escalar 
             tu negocio inmobiliario.
           </p>
           <div className="flex gap-8 mt-12">
@@ -53,11 +53,11 @@ export default function LoginPage() {
             </div>
             <div>
               <p className="text-3xl font-bold text-gold-400">6</p>
-              <p className="text-navy-400 text-sm">Templates de ads</p>
+              <p className="text-navy-400 text-sm">Plantillas de anuncios</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gold-400">24/7</p>
-              <p className="text-navy-400 text-sm">Scraping automático</p>
+              <p className="text-navy-400 text-sm">Importación automática</p>
             </div>
           </div>
         </div>

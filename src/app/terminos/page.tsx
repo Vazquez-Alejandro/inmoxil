@@ -29,8 +29,8 @@ export default function TerminosPage() {
           <section>
             <h2 className="text-xl font-bold text-navy-900 mb-3">1. Descripción del Servicio</h2>
             <p className="text-navy-700 leading-relaxed">
-              Inmoxil es una plataforma SaaS que ofrece herramientas de scraping de propiedades inmobiliarias,
-              generación de anuncios publicitarios con personalización de marca y sistema de billing por créditos.
+              Inmoxil es una plataforma en la nube que ofrece herramientas de importación de propiedades inmobiliarias,
+              generación de anuncios publicitarios con personalización de marca y sistema de pago por créditos.
               El servicio está dirigido a inmobiliarias, agentes inmobiliarios y profesionales del sector inmobiliario.
             </p>
           </section>
@@ -85,19 +85,19 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3">6. Uso del Scraping y Datos de Terceros</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3">6. Uso de la Importación de Datos de Terceros</h2>
             <p className="text-navy-700 leading-relaxed mb-3">
               La plataforma permite recopilar información de propiedades inmobiliarias publicadas en portales web públicos
               (ZonaProp, Argenprop, MercadoLibre, entre otros). El usuario reconoce y acepta que:
             </p>
             <ul className="list-disc list-inside text-navy-700 space-y-2 ml-4">
-              <li>El scraping debe realizarse de buena fe y con fines lícitos, exclusivamente para monitoreo de mercado o gestión de las propias propiedades.</li>
+              <li>La importación debe realizarse de buena fe y con fines lícitos, exclusivamente para monitoreo de mercado o gestión de las propias propiedades.</li>
               <li>Queda estrictamente prohibido copiar, reproducir o publicar como propias las publicaciones de otras inmobiliarias o agentes.</li>
-              <li>El usuario es el único responsable del uso que le dé a la información obtenida a través del scraping.</li>
-              <li>Los portales inmobiliarios pueden modificar sus términos de servicio, estructura HTML o políticas de acceso en cualquier momento, lo que puede afectar el funcionamiento del scraping.</li>
-              <li>Inmoxil no garantiza la exactitud, completitud ni vigencia de los datos recopilados mediante scraping.</li>
+              <li>El usuario es el único responsable del uso que le dé a la información obtenida a través de la importación.</li>
+              <li>Los portales inmobiliarios pueden modificar sus términos de servicio, estructura HTML o políticas de acceso en cualquier momento, lo que puede afectar la importación.</li>
+              <li>Inmoxil no garantiza la exactitud, completitud ni vigencia de los datos importados.</li>
               <li>El usuario debe respetar los términos de servicio de cada portal inmobiliario al que acceda a través de la plataforma.</li>
-              <li>Inmoxil no se responsabiliza por cualquier reclamo, sanción o consecuencia legal derivada del uso indebido del scraping por parte del usuario.</li>
+              <li>Inmoxil no se responsabiliza por cualquier reclamo, sanción o consecuencia legal derivada del uso indebido de la importación por parte del usuario.</li>
             </ul>
           </section>
 
@@ -106,7 +106,7 @@ export default function TerminosPage() {
             <p className="text-navy-700 leading-relaxed">
               Inmoxil no será responsable por daños indirectos, incidentales, especiales o consecuentes que resulten
               del uso o imposibilidad de uso de la plataforma. No garantizamos la disponibilidad ininterrumpida del
-              servicio ni la exactitud de los datos obtenidos mediante el scraping. El usuario reconoce que los datos
+              servicio ni la exactitud de los datos obtenidos mediante la importación. El usuario reconoce que los datos
               de portales inmobiliarios pueden cambiar sin previo aviso y que Inmoxil no controla dichos portales.
             </p>
           </section>

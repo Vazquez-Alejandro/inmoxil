@@ -30,7 +30,7 @@ export default function OwnerDashboardPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-navy-900">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-navy-900">Panel</h1>
         <p className="text-sm text-navy-500 mt-1">
           Bienvenido, {owner?.name || 'Propietario'}
         </p>

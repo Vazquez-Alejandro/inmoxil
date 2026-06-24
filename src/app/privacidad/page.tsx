@@ -36,7 +36,7 @@ export default function PrivacidadPage() {
               <li><strong>Datos de facturación:</strong> información de pago procesada por Stripe (no almacenamos datos de tarjetas).</li>
               <li><strong>Datos de uso:</strong> estadísticas de uso de la plataforma, propiedades scrapeadas, ads generados.</li>
               <li><strong>Datos de marca:</strong> logos, colores y elementos visuales subidos por el usuario para la generación de ads.</li>
-              <li><strong>Datos de scraping:</strong> información de propiedades inmobiliarias recopilada de portales públicos.</li>
+              <li><strong>Datos importados:</strong> información de propiedades inmobiliarias recopilada de portales públicos.</li>
             </ul>
           </section>
 

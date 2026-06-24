@@ -59,7 +59,7 @@ export default function AnalyticsPage() {
   return (
     <>
       <Header
-        title="Analytics"
+        title="Estadísticas"
         subtitle="Resumen de actividad y métricas de tu cuenta"
       />
 

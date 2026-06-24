@@ -6,33 +6,33 @@ import { useAuth } from '@/lib/auth'
 import { useWorkspace } from '@/lib/workspace-context'
 
 const PLAN_LABELS: Record<string, { name: string; credits: number }> = {
-  starter: { name: 'Starter', credits: 50 },
-  pro: { name: 'Pro', credits: 200 },
-  enterprise: { name: 'Enterprise', credits: 1000 },
+  starter: { name: 'Inicial', credits: 50 },
+  pro: { name: 'Profesional', credits: 200 },
+  enterprise: { name: 'Empresarial', credits: 1000 },
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: DashboardIcon },
-  { name: 'Pipeline', href: '/dashboard/pipeline', icon: PipelineIcon },
+  { name: 'Panel', href: '/dashboard', icon: DashboardIcon },
+  { name: 'Clientes', href: '/dashboard/pipeline', icon: PipelineIcon },
   { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
   { name: 'Contratos', href: '/dashboard/contracts', icon: ContractIcon },
   { name: 'Comisiones', href: '/dashboard/commissions', icon: CashIcon },
   { name: 'Equipo', href: '/dashboard/team', icon: UsersIcon },
   { name: 'Configuración', href: '/dashboard/settings', icon: SettingsIcon },
-  { name: 'Scraping', href: '/dashboard/scrape', icon: ScrapingIcon },
+  { name: 'Importar', href: '/dashboard/scrape', icon: ScrapingIcon },
   { name: 'Propiedades', href: '/dashboard/properties', icon: PropertiesIcon },
   { name: 'WhatsApp', href: '/dashboard/whatsapp', icon: ChatIcon },
   { name: 'Publicaciones', href: '/dashboard/publish', icon: SendIcon },
-  { name: 'Scraping Autom.', href: '/dashboard/schedule', icon: ClockIcon },
+  { name: 'Importación Auto.', href: '/dashboard/schedule', icon: ClockIcon },
   { name: 'Notificaciones', href: '/dashboard/notifications', icon: NotifIcon },
   { name: 'Mantenimiento', href: '/dashboard/mantenimiento', icon: WrenchIcon },
   { name: 'MercadoLibre', href: '/dashboard/ml', icon: MLIcon },
   { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon },
-  { name: 'Analytics', href: '/dashboard/analytics', icon: AnalyticsIcon },
+  { name: 'Estadísticas', href: '/dashboard/analytics', icon: AnalyticsIcon },
   { name: 'Reportes', href: '/dashboard/reports', icon: ChartIcon },
   { name: 'Cobranza', href: '/dashboard/pagos', icon: CashIcon },
-  { name: 'Billing', href: '/dashboard/billing', icon: BillingIcon },
-  { name: 'Brand Kit', href: '/dashboard/brand', icon: BrandIcon },
+  { name: 'Facturación', href: '/dashboard/billing', icon: BillingIcon },
+  { name: 'Mi Marca', href: '/dashboard/brand', icon: BrandIcon },
   { name: 'API Docs', href: '/dashboard/api-docs', icon: CodeIcon, ownerOnly: true },
 ]
 
@@ -54,7 +54,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
           <div className="logo-mark">Ix</div>
           <div>
             <h1 className="text-white font-bold text-lg tracking-tight">Inmoxil</h1>
-            <p className="text-navy-400 text-[10px] uppercase tracking-widest font-medium">Plataforma SaaS</p>
+            <p className="text-navy-400 text-[10px] uppercase tracking-widest font-medium">Plataforma en la nube</p>
           </div>
         </div>
         <button

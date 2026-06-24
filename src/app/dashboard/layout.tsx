@@ -42,10 +42,10 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
           }}
         >
           <div>
-            <h3 className="font-bold text-navy-900 mb-2">Uso del Scraping</h3>
+            <h3 className="font-bold text-navy-900 mb-2">Uso de la Importación</h3>
             <p className="leading-relaxed">
               La plataforma permite recopilar información de propiedades inmobiliarias de portales públicos.
-              El scraping debe realizarse con fines lícitos (monitoreo de mercado o gestión de propias propiedades).
+              La importación debe realizarse con fines lícitos (monitoreo de mercado o gestión de propias propiedades).
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
               <li>Queda <strong>prohibido</strong> copiar o publicar como propias las publicaciones de otras inmobiliarias.</li>
@@ -58,7 +58,7 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
             <h3 className="font-bold text-navy-900 mb-2">Responsabilidad</h3>
             <p className="leading-relaxed">
               Inmoxil no se responsabiliza por reclamos, sanciones o consecuencias legales derivadas del uso
-              indebido del scraping. Los datos pueden cambiar sin previo aviso.
+              indebido de la importación. Los datos pueden cambiar sin previo aviso.
             </p>
           </div>
 
