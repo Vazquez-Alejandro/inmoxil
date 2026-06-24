@@ -236,7 +236,7 @@ export default function PipelinePage() {
         </div>
         <div className="flex items-center gap-3">
           <input type="text" placeholder="Buscar cliente por nombre o teléfono..." value={search} onChange={e => setSearch(e.target.value)} className="px-3 py-1.5 text-sm border border-navy-200 rounded-lg w-64 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-          <button onClick={() => { setNewLeadStageId(stages[0]?.id || ''); setShowNewLead(true) }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">
+          <button onClick={() => { setLeadForm({ fullName: '', phone: '', email: '', source: 'manual', budgetMin: '', budgetMax: '', currency: 'ARS', notes: '', requirements: '' }); setNewLeadStageId(stages[0]?.id || ''); setShowNewLead(true) }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Nuevo cliente
           </button>
@@ -269,7 +269,7 @@ export default function PipelinePage() {
                       <span className="font-semibold text-sm text-navy-800">{stage.name}</span>
                       <span className="text-xs text-navy-400 font-medium bg-navy-100 px-1.5 py-0.5 rounded">{stageLeads.length}</span>
                     </div>
-                    <button onClick={() => { setNewLeadStageId(stage.id!); setShowNewLead(true) }} className="text-navy-400 hover:text-navy-600 transition-colors p-0.5">
+                    <button onClick={() => { setLeadForm({ fullName: '', phone: '', email: '', source: 'manual', budgetMin: '', budgetMax: '', currency: 'ARS', notes: '', requirements: '' }); setNewLeadStageId(stage.id!); setShowNewLead(true) }} className="text-navy-400 hover:text-navy-600 transition-colors p-0.5">
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                     </button>
                   </div>
@@ -461,7 +461,7 @@ export default function PipelinePage() {
                     <svg className="w-4 h-4 text-navy-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
                     <h3 className="text-sm font-semibold text-navy-900">Actividades</h3>
                   </div>
-                  <button onClick={() => setShowNewActivity(true)} className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">
+                  <button onClick={() => { setNewActivityForm({ type: 'llamada', description: '', outcome: '', scheduledAt: '' }); setShowNewActivity(true) }} className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                     Agregar
                   </button>
@@ -470,7 +470,7 @@ export default function PipelinePage() {
                   <div className="text-center py-8 bg-navy-50 rounded-xl">
                     <svg className="w-8 h-8 text-navy-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <p className="text-sm text-navy-400">Sin actividades registradas</p>
-                    <button onClick={() => setShowNewActivity(true)} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium mt-1">Registrar primera actividad</button>
+                    <button onClick={() => { setNewActivityForm({ type: 'llamada', description: '', outcome: '', scheduledAt: '' }); setShowNewActivity(true) }} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium mt-1">Registrar primera actividad</button>
                   </div>
                 ) : (
                   <div className="space-y-2">
