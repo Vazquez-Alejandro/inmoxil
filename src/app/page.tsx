@@ -119,7 +119,8 @@ export default function HomePage() {
             <p className="text-navy-400 text-[10px] uppercase tracking-widest font-medium">Plataforma en la nube</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-6">
+          <a href="#precios" className="text-navy-400 hover:text-white text-sm font-medium transition-colors">Precios</a>
           <Link href="/login" className="inline-flex items-center gap-2 text-navy-300 hover:text-white hover:bg-white/10 transition-all duration-200 text-sm font-medium px-5 py-2 rounded-lg border border-white/10 hover:border-white/20">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
@@ -130,7 +131,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 pt-20 md:pt-32 pb-24 md:pb-32">
+      <section className="max-w-6xl mx-auto px-6 pt-16 md:pt-24 pb-16 md:pb-20 relative">
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-500/20 to-gold-500/5 backdrop-blur-sm border border-gold-500/10 rounded-full px-5 py-2 mb-8">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
@@ -158,18 +159,23 @@ export default function HomePage() {
               href="#precios"
               className="inline-flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/10 text-lg px-10 py-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto"
             >
-              Ver planes
+              Ver precios
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
           </div>
         </div>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce">
+          <svg className="w-6 h-6 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </div>
       </section>
 
       {/* Features */}
-      <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-        <div className="text-center mb-16">
+      <section className="max-w-6xl mx-auto px-6 py-12 md:py-16">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Todo lo que necesitás, en un solo lugar</h2>
           <p className="text-navy-400 text-lg max-w-2xl mx-auto">
             Herramientas diseñadas específicamente para inmobiliarias que quieren crecer sin aumentar su equipo.
@@ -189,8 +195,8 @@ export default function HomePage() {
       </section>
 
       {/* Pricing */}
-      <section id="precios" className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-        <div className="text-center mb-16">
+      <section id="precios" className="max-w-6xl mx-auto px-6 py-12 md:py-16">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Planes simples, precios transparentes</h2>
           <p className="text-navy-400 text-lg max-w-2xl mx-auto">
             Elegí el plan que mejor se adapte a tu inmobiliaria. Todos incluyen 14 días gratis.
@@ -243,8 +249,8 @@ export default function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section className="max-w-3xl mx-auto px-6 py-16 md:py-20">
-        <div className="text-center mb-16">
+      <section className="max-w-3xl mx-auto px-6 py-12 md:py-16">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Preguntas frecuentes</h2>
           <p className="text-navy-400 text-lg">Resolvemos tus dudas.</p>
         </div>
@@ -259,7 +265,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA */}
-      <section className="max-w-4xl mx-auto px-6 py-16 md:py-20 text-center">
+      <section className="max-w-4xl mx-auto px-6 py-12 md:py-16 text-center">
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
           ¿Listo para escalar tu inmobiliaria?
         </h2>

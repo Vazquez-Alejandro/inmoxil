@@ -376,7 +376,7 @@ export default function ContractDetailPage() {
                 <p className="text-sm text-navy-500 mb-1">Fecha estimada</p>
                 <p className="text-xl font-bold text-navy-900">{formatDateShort(contract.nextAdjustmentDate)}</p>
                 {new Date(contract.nextAdjustmentDate) <= new Date() && (
-                  <p className="text-xs text-amber-600 mt-2 font-medium">⚠ Ajuste pendiente — hacé clic en "Calcular ajuste"</p>
+                  <p className="text-xs text-amber-600 mt-2 font-medium">⚠ Ajuste pendiente — hacé clic en &ldquo;Calcular ajuste&rdquo;</p>
                 )}
               </div>
             ) : (

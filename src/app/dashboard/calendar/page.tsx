@@ -52,7 +52,7 @@ export default function CalendarPage() {
               </svg>
             </div>
             <h3 className="text-lg font-bold text-navy-900 mb-2">Sin visitas agendadas</h3>
-            <p className="text-sm text-navy-500 max-w-md mx-auto">Las visitas se registran automáticamente cuando agregás una actividad de tipo "visita" a un lead en el pipeline.</p>
+            <p className="text-sm text-navy-500 max-w-md mx-auto">Las visitas se registran automáticamente cuando agregás una actividad de tipo &ldquo;visita&rdquo; a un lead en el pipeline.</p>
           </div>
         ) : (
           <div className="space-y-8">
