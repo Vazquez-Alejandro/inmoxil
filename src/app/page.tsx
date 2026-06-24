@@ -248,6 +248,10 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+        <p className="text-center text-sm text-navy-500 mt-8 max-w-xl mx-auto">
+          Cada crédito equivale a importar una propiedad, generar un anuncio o publicar en un portal.
+          Los créditos no usados se acumulan mes a mes y nunca vencen.
+        </p>
       </section>
 
       {/* FAQ */}

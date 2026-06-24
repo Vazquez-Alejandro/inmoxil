@@ -177,6 +177,7 @@ export default function RegisterPage() {
                 required
                 minLength={8}
               />
+              <p className="text-xs text-navy-400 mt-1.5">Mínimo 8 caracteres, 1 mayúscula y 1 número</p>
             </div>
 
             <div>
