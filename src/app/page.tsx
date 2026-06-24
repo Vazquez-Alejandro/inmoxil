@@ -71,7 +71,7 @@ const plans = [
     price: 79,
     description: 'Para inmobiliarias en crecimiento',
     features: ['200 créditos/mes', 'Importación de todos los portales', '6 plantillas de anuncios', 'Marca completa', 'Estadísticas avanzadas', 'Soporte prioritario'],
-    cta: 'Empezar gratis',
+    cta: 'Probar gratis',
     popular: true,
   },
   {
