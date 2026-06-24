@@ -70,7 +70,7 @@ export default function LoginPage() {
             <div className="logo-mark">Ix</div>
             <div>
               <h1 className="text-xl font-bold text-navy-900">Inmoxil</h1>
-              <p className="text-navy-500 text-[10px] uppercase tracking-widest">Plataforma SaaS</p>
+              <p className="text-navy-500 text-[10px] uppercase tracking-widest">Plataforma en la nube</p>
             </div>
           </div>
 

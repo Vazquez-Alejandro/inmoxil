@@ -91,11 +91,11 @@ const faqs = [
   },
   {
     question: '¿Cómo funcionan los créditos?',
-    answer: 'Cada crédito equivale a una acción en la plataforma: un scraping de propiedad, la generación de un ad, o una publicación. Los créditos se renuevan mensualmente según tu plan.',
+    answer: 'Cada crédito equivale a una acción en la plataforma: importar una propiedad, generar un anuncio, o hacer una publicación. Los créditos se renuevan mensualmente según tu plan.',
   },
   {
     question: '¿Puedo cancelar en cualquier momento?',
-    answer: 'Sí, podés cancelar tu suscripción en cualquier momento desde tu dashboard. No hay permanencia ni penalidades. Tu acceso se mantiene hasta el final del período facturado.',
+    answer: 'Sí, podés cancelar tu suscripción en cualquier momento desde tu panel. No hay permanencia ni penalidades. Tu acceso se mantiene hasta el final del período facturado.',
   },
   {
     question: '¿Mis datos están seguros?',
@@ -119,15 +119,12 @@ export default function HomePage() {
             <p className="text-navy-400 text-[10px] uppercase tracking-widest font-medium">Plataforma en la nube</p>
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-6">
-          <a href="#precios" className="text-navy-300 hover:text-white hover:bg-white/10 transition-colors text-sm font-medium px-4 py-2 rounded-lg">Precios</a>
-        </div>
         <div className="flex items-center gap-3">
-          <Link href="/login" className="btn-ghost text-navy-300 hover:text-white hover:bg-white/10 hidden sm:inline-flex">
+          <Link href="/login" className="inline-flex items-center gap-2 text-navy-300 hover:text-white hover:bg-white/10 transition-all duration-200 text-sm font-medium px-5 py-2 rounded-lg border border-white/10 hover:border-white/20">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+            </svg>
             Iniciar sesión
-          </Link>
-          <Link href="/register" className="btn-gold">
-            Empezar gratis
           </Link>
         </div>
       </nav>
@@ -135,24 +132,36 @@ export default function HomePage() {
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-20 md:pt-32 pb-24 md:pb-32">
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-500/20 to-gold-500/5 backdrop-blur-sm border border-gold-500/10 rounded-full px-5 py-2 mb-8">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-sm text-navy-300">Plataforma en la nube para inmobiliarias</span>
+            <span className="text-sm font-medium text-gold-300">Plataforma en la nube para inmobiliarias</span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
             Automatizá la captación de<br />
-            <span className="text-gold-400">propiedades para tu inmobiliaria</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-300">propiedades para tu inmobiliaria</span>
           </h1>
           <p className="text-lg md:text-xl text-navy-300 max-w-2xl mx-auto leading-relaxed mb-10">
             Importación multi-portal, generación de anuncios con tu marca y pago por créditos.
             Todo lo que necesitás para escalar tu negocio inmobiliario en un solo lugar.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/register" className="btn-gold text-lg px-8 py-4 w-full sm:w-auto">
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-lg px-10 py-4 rounded-xl shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto"
+            >
               Empezar gratis
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
             </Link>
-            <a href="#precios" className="btn-outline border-white/20 text-white hover:bg-white/10 text-lg px-8 py-4 w-full sm:w-auto">
-              Ver precios
+            <a
+              href="#precios"
+              className="inline-flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/10 text-lg px-10 py-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto"
+            >
+              Ver planes
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
             </a>
           </div>
         </div>
@@ -187,18 +196,18 @@ export default function HomePage() {
             Elegí el plan que mejor se adapte a tu inmobiliaria. Todos incluyen 14 días gratis.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
           {plans.map((plan) => (
             <div
               key={plan.name}
               className={`relative rounded-2xl p-8 transition-all duration-300 flex flex-col ${
                 plan.popular
-                  ? 'bg-white border-2 border-gold-500 shadow-gold-glow hover:scale-105 hover:shadow-xl'
-                  : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-105 hover:shadow-lg'
+                  ? 'bg-white ring-2 ring-gold-500 shadow-xl shadow-gold-500/10 scale-105 md:scale-110 z-10'
+                  : 'bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 hover:shadow-lg'
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold-500 text-white text-xs font-bold px-4 py-1.5 rounded-full">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 text-xs font-bold px-5 py-1.5 rounded-full shadow-lg">
                   Más popular
                 </div>
               )}
@@ -210,8 +219,8 @@ export default function HomePage() {
               </div>
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3">
-                    <svg className={`w-5 h-5 flex-shrink-0 ${plan.popular ? 'text-gold-500' : 'text-gold-400'}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                  <li key={feature} className="flex items-start gap-3">
+                    <svg className={`w-5 h-5 flex-shrink-0 mt-0.5 ${plan.popular ? 'text-gold-500' : 'text-gold-400'}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     <span className={`text-sm ${plan.popular ? 'text-navy-700' : 'text-navy-300'}`}>{feature}</span>
@@ -220,10 +229,10 @@ export default function HomePage() {
               </ul>
               <Link
                 href="/register"
-                className={`w-full text-center mt-auto ${
+                className={`w-full text-center py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
                   plan.popular
-                    ? 'btn-gold'
-                    : 'btn-outline border-white/20 text-white hover:bg-white/10'
+                    ? 'bg-gold-500 hover:bg-gold-400 text-navy-950 shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 hover:-translate-y-0.5'
+                    : 'border border-white/20 text-white hover:bg-white/10 hover:border-white/30'
                 }`}
               >
                 {plan.cta}
@@ -258,8 +267,14 @@ export default function HomePage() {
           Unite a las inmobiliarias que ya automatizaron su captación de propiedades.
           14 días gratis, sin tarjeta de crédito.
         </p>
-        <Link href="/register" className="btn-gold text-lg px-10 py-4">
+        <Link
+          href="/register"
+          className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-lg px-10 py-4 rounded-xl shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 transition-all duration-200 hover:-translate-y-0.5"
+        >
           Empezar gratis
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
         </Link>
       </section>
 
