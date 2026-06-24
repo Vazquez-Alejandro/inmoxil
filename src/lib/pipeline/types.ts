@@ -16,6 +16,7 @@ export interface PipelineLead {
   id?: string
   workspaceId: string
   stageId: string
+  stageName?: string
   propertyId?: string
   propertyTitle?: string
   fullName: string

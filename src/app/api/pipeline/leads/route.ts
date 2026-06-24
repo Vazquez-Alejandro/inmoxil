@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || undefined
     const user = await requireAuth()
 
-    const userRole = (user as any)?.role_in_workspace || 'owner'
+    const userRole = user?.role_in_workspace || 'owner'
     const assignedTo = userRole === 'agent' ? user!.id : undefined
 
     const leads = await getLeads(workspaceId, stageId, search, assignedTo)

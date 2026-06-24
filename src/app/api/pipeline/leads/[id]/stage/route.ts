@@ -18,7 +18,7 @@ export async function PATCH(request: NextRequest) {
     if (error) return error
 
     const user = await requireAuth()
-    const oldStageName = (lead as any).stageName || 'anterior'
+    const oldStageName = lead.stageName || 'anterior'
     const result = await moveLeadStage(leadId, stageId, stageOrder || 0)
 
     const stageRows = await import('@/lib/pipeline/db').then(m => m.getStages(lead.workspaceId))
@@ -37,7 +37,7 @@ export async function PATCH(request: NextRequest) {
       try {
         const { createCommission } = await import('@/lib/commissions/db')
         const titleParts = [lead.fullName]
-        if ((lead as any).propertyTitle) titleParts.push((lead as any).propertyTitle)
+        if (lead.propertyTitle) titleParts.push(lead.propertyTitle)
         await createCommission({
           workspaceId: lead.workspaceId,
           leadId: lead.id,

@@ -8,7 +8,7 @@ export async function requireAuth() {
   if (!session?.user) return null
   const user = session.user as any
   if (!user.id) return null
-  return { id: user.id as string, email: user.email as string, name: user.name as string | null, role: user.role as string }
+  return { id: user.id as string, email: user.email as string, name: user.name as string | null, role: user.role as string, role_in_workspace: user.role_in_workspace as string | undefined }
 }
 
 export async function requireWorkspaceAuth(workspaceId: string) {

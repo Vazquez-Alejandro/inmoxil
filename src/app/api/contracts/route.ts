@@ -12,8 +12,8 @@ export async function GET(request: NextRequest) {
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
 
-    const status = searchParams.get('status') as any
-    const type = searchParams.get('type') as any
+    const status = searchParams.get('status') as import('@/lib/contracts/types').ContractStatus | undefined
+    const type = searchParams.get('type') as import('@/lib/contracts/types').ContractType | undefined
     const search = searchParams.get('search') || undefined
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
