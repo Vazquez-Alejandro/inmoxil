@@ -144,7 +144,7 @@ export default function HomePage() {
             Importación multi-portal, generación de anuncios con tu marca y pago por créditos.
             Probá gratis 14 días sin tarjeta de crédito.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:max-w-lg mx-auto">
+          <div className="flex flex-col sm:flex-row items-stretch justify-center gap-4">
             <Link
               href="/register"
               className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-lg px-10 py-4 rounded-xl shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 transition-all duration-200 hover:-translate-y-0.5 flex-1"
