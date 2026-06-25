@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     if (error) return error
 
     const users = await query(
-      `SELECT id, email, name, role_in_workspace, phone, avatar_url, created_at
+      `SELECT id, email, full_name as name, role_in_workspace, phone, avatar_url, created_at
        FROM users WHERE workspace_id=$1 ORDER BY created_at ASC`,
       [workspaceId]
     )
@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
     const hashed = await bcrypt.hash(tempPass, 10)
 
     const result = await query(
-      `INSERT INTO users (email, name, password, workspace_id, role_in_workspace)
-       VALUES ($1,$2,$3,$4,$5) RETURNING id, email, name, role_in_workspace, created_at`,
+      `INSERT INTO users (email, full_name, password_hash, workspace_id, role_in_workspace)
+       VALUES ($1,$2,$3,$4,$5) RETURNING id, email, full_name as name, role_in_workspace, created_at`,
       [email, name, hashed, workspaceId, role || 'agent']
     )
 

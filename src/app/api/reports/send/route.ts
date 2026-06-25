@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     // Build report data
     const totalProperties = await queryOne('SELECT COUNT(*) as count FROM properties WHERE workspace_id=$1', [workspaceId])
     const activeContracts = await queryOne('SELECT COUNT(*) as count FROM contracts WHERE workspace_id=$1 AND (status=$2 OR status=$3)', [workspaceId, 'activo', 'vigente'])
-    const totalLeads = await queryOne('SELECT COUNT(*) as count FROM leads WHERE workspace_id=$1', [workspaceId])
+    const totalLeads = await queryOne('SELECT COUNT(*) as count FROM pipeline_leads WHERE workspace_id=$1', [workspaceId])
     const recentPayments = await query("SELECT * FROM payments WHERE workspace_id=$1 AND created_at > NOW() - INTERVAL '30 days' ORDER BY created_at DESC", [workspaceId])
 
     const totalAmount = recentPayments.reduce((sum: number, p: any) => {
