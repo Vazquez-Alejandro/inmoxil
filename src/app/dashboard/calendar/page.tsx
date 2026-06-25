@@ -51,8 +51,8 @@ export default function CalendarPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
               </svg>
             </div>
-            <h3 className="text-lg font-bold text-navy-900 mb-2">Sin visitas agendadas</h3>
-            <p className="text-sm text-navy-500 max-w-md mx-auto">Las visitas aparecen acá cuando registrás una actividad de tipo &ldquo;visita&rdquo; con fecha asignada desde el panel de Clientes.</p>
+            <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Sin visitas agendadas</h3>
+            <p className="text-sm text-navy-500 max-w-md mx-auto dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Las visitas aparecen acá cuando registrás una actividad de tipo &ldquo;visita&rdquo; con fecha asignada desde el panel de Clientes.</p>
           </div>
         ) : (
           <div className="space-y-8">
@@ -61,12 +61,12 @@ export default function CalendarPage() {
               const isUnscheduled = date === 'sin-fecha'
               return (
                 <div key={date}>
-                  <h3 className="text-sm font-bold text-navy-800 mb-3 flex items-center gap-2">
-                    <svg className="w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <h3 className="text-sm font-bold text-navy-800 mb-3 flex items-center gap-2 dark:text-navy-200">
+                    <svg className="w-4 h-4 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
                     {isUnscheduled ? 'Sin fecha asignada' : formatDate(date)}
-                    <span className="text-xs font-normal text-navy-400 bg-navy-50 px-2 py-0.5 rounded">{items.length} visita{items.length !== 1 ? 's' : ''}</span>
+                    <span className="text-xs font-normal text-navy-400 bg-navy-50 dark:bg-navy-800 px-2 py-0.5 rounded dark:text-navy-300">{items.length} visita{items.length !== 1 ? 's' : ''}</span>
                   </h3>
                   <div className="space-y-2">
                     {items.map((v: any) => (
@@ -79,15 +79,15 @@ export default function CalendarPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-sm text-navy-900">{v.full_name}</span>
-                            <span className="text-xs text-navy-400">{v.phone}</span>
-                            <span className="badge text-[10px] bg-navy-200 text-navy-700">{v.stage_name}</span>
+                            <span className="font-semibold text-sm text-navy-900 dark:text-white">{v.full_name}</span>
+                            <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{v.phone}</span>
+                            <span className="badge text-[10px] bg-navy-200 text-navy-700 dark:text-navy-300 dark:text-navy-100">{v.stage_name}</span>
                           </div>
-                          {v.description && <p className="text-sm text-navy-600 mb-1">{v.description}</p>}
-                          <div className="flex items-center gap-3 text-xs text-navy-400">
+                          {v.description && <p className="text-sm text-navy-600 mb-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{v.description}</p>}
+                          <div className="flex items-center gap-3 text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">
                             <span>{v.type}</span>
                             {v.scheduled_at && <span><svg className="w-3.5 h-3.5 inline mr-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {formatTime(v.scheduled_at)}</span>}
-                            {v.outcome && <span className="text-navy-500">→ {v.outcome}</span>}
+                            {v.outcome && <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">→ {v.outcome}</span>}
                           </div>
                         </div>
                       </div>

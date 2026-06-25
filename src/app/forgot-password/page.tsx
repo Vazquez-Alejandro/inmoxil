@@ -39,8 +39,8 @@ export default function ForgotPasswordPage() {
         <div className="flex items-center gap-3 mb-8 justify-center">
           <div className="logo-mark">Ix</div>
           <div>
-            <h1 className="text-xl font-bold text-navy-900">Inmoxil</h1>
-            <p className="text-navy-500 text-[10px] uppercase tracking-widest">Plataforma SaaS</p>
+            <h1 className="text-xl font-bold text-navy-900 dark:text-white">Inmoxil</h1>
+            <p className="text-navy-500 text-[10px] uppercase tracking-widest dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Plataforma SaaS</p>
           </div>
         </div>
 
@@ -52,8 +52,8 @@ export default function ForgotPasswordPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
               </div>
-              <h2 className="text-xl font-bold text-navy-900 mb-2">Email enviado</h2>
-              <p className="text-navy-500 text-sm mb-6">
+              <h2 className="text-xl font-bold text-navy-900 mb-2 dark:text-white">Email enviado</h2>
+              <p className="text-navy-500 text-sm mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 Si existe una cuenta con ese email, recibíste un enlace para restablecer tu contraseña.
               </p>
               <Link href="/login" className="btn-primary">
@@ -62,8 +62,8 @@ export default function ForgotPasswordPage() {
             </div>
           ) : (
             <>
-              <h2 className="text-xl font-bold text-navy-900 mb-2 text-center">¿Olvidaste tu contraseña?</h2>
-              <p className="text-navy-500 text-sm mb-6 text-center">
+              <h2 className="text-xl font-bold text-navy-900 mb-2 text-center dark:text-white">¿Olvidaste tu contraseña?</h2>
+              <p className="text-navy-500 text-sm mb-6 text-center dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 Ingresá tu email y te enviaremos un enlace para restablecerla.
               </p>
 
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
 
               <div className="divider my-6" />
 
-              <p className="text-center text-sm text-navy-500">
+              <p className="text-center text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 ¿Recordaste tu contraseña?{' '}
                 <Link href="/login" className="text-gold-600 hover:text-gold-700 font-semibold">
                   Iniciá sesión

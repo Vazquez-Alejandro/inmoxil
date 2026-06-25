@@ -144,7 +144,7 @@ export default function AdsPage() {
         {/* Left: Property Selection */}
         <div className="xl:col-span-2 space-y-6">
           <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-4">1. Seleccioná una propiedad</h3>
+            <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">1. Seleccioná una propiedad</h3>
 
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -154,7 +154,7 @@ export default function AdsPage() {
               </div>
             ) : properties.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-sm text-navy-500 mb-3">No tenés propiedades cargadas</p>
+                <p className="text-sm text-navy-500 mb-3 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">No tenés propiedades cargadas</p>
                 <a href="/dashboard/scrape" className="btn-gold text-sm">
                   Ir a Scraping
                 </a>
@@ -177,11 +177,11 @@ export default function AdsPage() {
                       className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-navy-900 truncate">{property.title}</p>
-                      <p className="text-xs text-navy-500 truncate">
+                      <p className="text-sm font-semibold text-navy-900 truncate dark:text-white">{property.title}</p>
+                      <p className="text-xs text-navy-500 truncate dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                         {property.address || property.neighborhood}
                       </p>
-                      <p className="text-xs font-bold text-navy-700 mt-0.5">
+                      <p className="text-xs font-bold text-navy-700 mt-0.5 dark:text-navy-300 dark:text-navy-100">
                         {formatPrice(property.price, property.currency)}
                       </p>
                     </div>
@@ -193,7 +193,7 @@ export default function AdsPage() {
 
           {/* Ad Type Selection */}
           <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-4">2. Tipo de ad</h3>
+            <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">2. Tipo de ad</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {AD_TYPES.map(type => (
                 <button
@@ -205,8 +205,8 @@ export default function AdsPage() {
                       : 'border-gray-200 hover:border-navy-200'
                   }`}
                 >
-                  <p className="font-semibold text-navy-900 text-sm">{type.name}</p>
-                  <p className="text-xs text-navy-400 mt-1">{type.dims}</p>
+                  <p className="font-semibold text-navy-900 text-sm dark:text-white">{type.name}</p>
+                  <p className="text-xs text-navy-400 mt-1 dark:text-navy-300 dark:text-navy-100">{type.dims}</p>
                 </button>
               ))}
             </div>
@@ -214,7 +214,7 @@ export default function AdsPage() {
 
           {/* Template Selection */}
           <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-4">3. Template</h3>
+            <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">3. Template</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {TEMPLATES.map(template => (
                 <button
@@ -227,8 +227,8 @@ export default function AdsPage() {
                   }`}
                 >
                   <div className={`w-full h-12 rounded-lg bg-gradient-to-br ${template.color} mb-3`} />
-                  <p className="font-semibold text-navy-900 text-sm">{template.name}</p>
-                  <p className="text-xs text-navy-400 mt-0.5">{template.description}</p>
+                  <p className="font-semibold text-navy-900 text-sm dark:text-white">{template.name}</p>
+                  <p className="text-xs text-navy-400 mt-0.5 dark:text-navy-300 dark:text-navy-100">{template.description}</p>
                   {selectedTemplate === template.id && (
                     <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-gold-500 flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
@@ -245,7 +245,7 @@ export default function AdsPage() {
         {/* Right: Preview & Generate */}
         <div className="space-y-6">
           <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-4">Vista previa</h3>
+            <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Vista previa</h3>
             {selectedProp ? (
               <div className="space-y-4">
                 <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden relative">
@@ -257,7 +257,7 @@ export default function AdsPage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-navy-100 to-navy-200">
-                      <span className="text-navy-400 text-sm">Sin imagen</span>
+                      <span className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Sin imagen</span>
                     </div>
                   )}
                   <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent">
@@ -272,7 +272,7 @@ export default function AdsPage() {
               </div>
             ) : (
               <div className="aspect-square bg-gray-50 rounded-lg flex items-center justify-center">
-                <p className="text-sm text-navy-400">Elegí una propiedad para ver la preview</p>
+                <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Elegí una propiedad para ver la preview</p>
               </div>
             )}
 
@@ -293,24 +293,24 @@ export default function AdsPage() {
                 'Generar Ad'
               )}
             </button>
-            <p className="text-xs text-navy-400 text-center mt-2">1 crédito por ad generado</p>
+            <p className="text-xs text-navy-400 text-center mt-2 dark:text-navy-300 dark:text-navy-100">1 crédito por ad generado</p>
           </div>
 
           {/* Stats */}
           <div className="card p-6">
-            <h3 className="font-bold text-navy-900 mb-3">Resumen</h3>
+            <h3 className="font-bold text-navy-900 mb-3 dark:text-white">Resumen</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-navy-500">Créditos restantes</span>
-                <span className="font-semibold text-navy-900">{workspace?.credits_remaining ?? 0}</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Créditos restantes</span>
+                <span className="font-semibold text-navy-900 dark:text-white">{workspace?.credits_remaining ?? 0}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-navy-500">Ads generados hoy</span>
-                <span className="font-semibold text-navy-900">{ads.length}</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Ads generados hoy</span>
+                <span className="font-semibold text-navy-900 dark:text-white">{ads.length}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-navy-500">Costo</span>
-                <span className="font-semibold text-navy-900">1 crédito / ad</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Costo</span>
+                <span className="font-semibold text-navy-900 dark:text-white">1 crédito / ad</span>
               </div>
             </div>
           </div>
@@ -321,7 +321,7 @@ export default function AdsPage() {
       {ads.length > 0 && (
         <div className="card p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-navy-900">Ads generados</h3>
+            <h3 className="text-lg font-bold text-navy-900 dark:text-white">Ads generados</h3>
             <span className="badge-navy">{ads.length} total</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -349,7 +349,7 @@ export default function AdsPage() {
                     </svg>
                   </a>
                 </div>
-                <p className="text-xs text-navy-400 mt-2 truncate">
+                <p className="text-xs text-navy-400 mt-2 truncate dark:text-navy-300 dark:text-navy-100">
                   {new Date(ad.created_at).toLocaleDateString('es-AR')}
                 </p>
               </div>
@@ -361,12 +361,12 @@ export default function AdsPage() {
       {!loading && properties.length === 0 && (
         <div className="card p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-navy-50 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <svg className="w-8 h-8 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V5.25a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v14.25a1.5 1.5 0 001.5 1.5z" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Necesitás propiedades</h3>
-          <p className="text-sm text-navy-500 max-w-md mx-auto mb-6">
+          <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Necesitás propiedades</h3>
+          <p className="text-sm text-navy-500 max-w-md mx-auto mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             Empezá a scrapear propiedades para poder generar ads increíbles.
           </p>
           <a href="/dashboard/scrape" className="btn-gold">

@@ -49,45 +49,45 @@ export default function DashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d={s.icon} />
               </svg>
             </div>
-            <p className="text-2xl font-bold text-navy-900">{s.value}</p>
-            <p className="text-xs text-navy-500 mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-navy-900 dark:text-white">{s.value}</p>
+            <p className="text-xs text-navy-500 mt-0.5 dark:text-navy-100">{s.label}</p>
           </Link>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Acciones rápidas</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Acciones rápidas</h3>
           <div className="space-y-3">
-            <Link href="/dashboard/scrape" className="flex items-center gap-3 p-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 transition-colors group">
+            <Link href="/dashboard/scrape" className="flex items-center gap-3 p-3 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors group">
               <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
               </div>
-              <div><p className="font-medium text-navy-900">Nuevo scraping</p><p className="text-xs text-navy-500">Importar propiedades de ZP o Argenprop</p></div>
+              <div><p className="font-medium text-navy-900 dark:text-white">Nuevo scraping</p><p className="text-xs text-navy-500 dark:text-navy-100">Importar propiedades de ZP o Argenprop</p></div>
             </Link>
-            <Link href="/dashboard/pipeline" className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 transition-colors group">
+            <Link href="/dashboard/pipeline" className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-colors group">
               <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
               </div>
-              <div><p className="font-medium text-navy-900">Nuevo lead</p><p className="text-xs text-navy-500">Agregar cliente al pipeline</p></div>
+              <div><p className="font-medium text-navy-900 dark:text-white">Nuevo cliente</p><p className="text-xs text-navy-500 dark:text-navy-100">Agregar cliente al embudo de ventas</p></div>
             </Link>
-            <Link href="/dashboard/contracts/new" className="flex items-center gap-3 p-3 rounded-xl bg-amber-50 hover:bg-amber-100 transition-colors group">
+            <Link href="/dashboard/contracts/new" className="flex items-center gap-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-colors group">
               <div className="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
               </div>
-              <div><p className="font-medium text-navy-900">Nuevo contrato</p><p className="text-xs text-navy-500">Crear contrato con ajuste IPC/ICL</p></div>
+              <div><p className="font-medium text-navy-900 dark:text-white">Nuevo contrato</p><p className="text-xs text-navy-500 dark:text-navy-100">Crear contrato con ajuste IPC/ICL</p></div>
             </Link>
-            <Link href="/dashboard/properties" className="flex items-center gap-3 p-3 rounded-xl bg-navy-50 hover:bg-navy-100 transition-colors group">
+            <Link href="/dashboard/properties" className="flex items-center gap-3 p-3 rounded-xl bg-navy-50 dark:bg-navy-800 hover:bg-navy-100 dark:hover:bg-navy-700 transition-colors group">
               <div className="w-10 h-10 rounded-lg bg-navy-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21" /></svg>
               </div>
-              <div><p className="font-medium text-navy-900">Ver propiedades</p><p className="text-xs text-navy-500">Gestionar el inventario</p></div>
+              <div><p className="font-medium text-navy-900 dark:text-white">Ver propiedades</p><p className="text-xs text-navy-500 dark:text-navy-100">Gestionar el inventario</p></div>
             </Link>
           </div>
         </div>
 
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Información del workspace</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Información del workspace</h3>
           {workspace ? (
             <div className="space-y-4">
               <div className="flex items-center gap-4">
@@ -95,25 +95,25 @@ export default function DashboardPage() {
                   {workspace.name[0]}
                 </div>
                 <div>
-                  <h4 className="font-bold text-navy-900 text-lg">{workspace.name}</h4>
-                  <p className="text-sm text-navy-500">
-                    Plan <span className="font-semibold capitalize">{workspace.plan}</span> • <code className="text-xs bg-navy-50 px-1.5 py-0.5 rounded">{workspace.slug}</code>
+                  <h4 className="font-bold text-navy-900 text-lg dark:text-white">{workspace.name}</h4>
+                  <p className="text-sm text-navy-500 dark:text-navy-300">
+                    Plan <span className="font-semibold capitalize">{workspace.plan}</span> • <code className="text-xs bg-navy-50 dark:bg-navy-700 px-1.5 py-0.5 rounded dark:text-navy-200">{workspace.slug}</code>
                   </p>
                 </div>
               </div>
-              <div className="bg-navy-50 rounded-xl p-4">
+              <div className="bg-navy-50 dark:bg-navy-800 rounded-xl p-4">
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-navy-600 font-medium">Créditos</span>
-                  <span className="text-navy-900 font-bold">{workspace.credits_remaining} disponibles</span>
+                  <span className="text-navy-600 font-medium dark:text-navy-300">Créditos</span>
+                  <span className="text-navy-900 font-bold dark:text-white">{workspace.credits_remaining} disponibles</span>
                 </div>
                 <div className="w-full bg-white rounded-full h-2">
                   <div className="bg-gold-500 h-2 rounded-full transition-all" style={{ width: `${(workspace.credits_remaining / 200) * 100}%` }} />
                 </div>
-                <p className="text-xs text-navy-400 mt-1.5">{workspace.credits_used} usados este período</p>
+                <p className="text-xs text-navy-400 mt-1.5 dark:text-navy-300">{workspace.credits_used} usados este período</p>
               </div>
             </div>
           ) : (
-            <p className="text-navy-400 text-sm">Cargando...</p>
+            <p className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Cargando...</p>
           )}
         </div>
       </div>

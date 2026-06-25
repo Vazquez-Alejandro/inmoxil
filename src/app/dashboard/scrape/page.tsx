@@ -5,12 +5,12 @@ import Header from '@/components/Header'
 import { useWorkspace } from '@/lib/workspace-context'
 
 const PORTALS = [
-  { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700', country: 'AR' },
-  { slug: 'argenprop', name: 'Argenprop', color: 'bg-green-100 text-green-700', country: 'AR' },
-  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700', country: 'AR', disabled: true },
-  { slug: 'zillow', name: 'Zillow', color: 'bg-purple-100 text-purple-700', country: 'US' },
-  { slug: 'realtor', name: 'Realtor', color: 'bg-red-100 text-red-700', country: 'US' },
-  { slug: 'vivareal', name: 'VivaReal', color: 'bg-emerald-100 text-emerald-700', country: 'BR' },
+  { slug: 'zonaprop', name: 'ZonaProp', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400', country: 'AR' },
+  { slug: 'argenprop', name: 'Argenprop', color: 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400', country: 'AR' },
+  { slug: 'mercadolibre', name: 'MercadoLibre', color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400', country: 'AR', disabled: true },
+  { slug: 'zillow', name: 'Zillow', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400', country: 'US' },
+  { slug: 'realtor', name: 'Realtor', color: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400', country: 'US' },
+  { slug: 'vivareal', name: 'VivaReal', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400', country: 'BR' },
 ]
 
 const formatPrice = (price: number, currency: string) => {
@@ -283,8 +283,8 @@ export default function ScrapePage() {
               </svg>
             </div>
             <div>
-              <h3 className="font-bold text-navy-900">Pegar enlaces</h3>
-              <p className="text-sm text-navy-500">Copiá URLs de propiedades desde ZonaProp, Argenprop y más</p>
+              <h3 className="font-bold text-navy-900 dark:text-white">Pegar enlaces</h3>
+              <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Copiá URLs de propiedades desde ZonaProp, Argenprop y más</p>
             </div>
           </div>
         </button>
@@ -299,8 +299,8 @@ export default function ScrapePage() {
               </svg>
             </div>
             <div>
-              <h3 className="font-bold text-navy-900">Subir archivo</h3>
-              <p className="text-sm text-navy-500">Importá desde un CSV o JSON con tus propiedades</p>
+              <h3 className="font-bold text-navy-900 dark:text-white">Subir archivo</h3>
+              <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Importá desde un CSV o JSON con tus propiedades</p>
             </div>
           </div>
         </button>
@@ -308,8 +308,8 @@ export default function ScrapePage() {
 
       {activeTab === 'urls' ? (
         <div className="card p-4 sm:p-6 mb-8">
-          <h3 className="text-lg font-bold text-navy-900 mb-1">Pegar enlaces de propiedades</h3>
-          <p className="text-sm text-navy-500 mb-5">
+          <h3 className="text-lg font-bold text-navy-900 mb-1 dark:text-white">Pegar enlaces de propiedades</h3>
+          <p className="text-sm text-navy-500 mb-5 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             Andá al portal, copiá el enlace de cada propiedad que quieras importar, y pegala abajo.
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -327,7 +327,7 @@ export default function ScrapePage() {
                 value={urls}
                 onChange={(e) => setUrls(e.target.value)}
               />
-              <div className="flex items-start gap-2 mt-2 text-xs text-navy-400">
+              <div className="flex items-start gap-2 mt-2 text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                 </svg>
@@ -369,19 +369,19 @@ export default function ScrapePage() {
                   </span>
                 )}
               </button>
-              <p className="text-xs text-navy-400 text-center">1 crédito por consulta</p>
+              <p className="text-xs text-navy-400 text-center dark:text-navy-300 dark:text-navy-100">1 crédito por consulta</p>
             </div>
           </div>
         </div>
       ) : (
         <div className="card p-4 sm:p-6 mb-8">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-lg font-bold text-navy-900">Subir archivo</h3>
+            <h3 className="text-lg font-bold text-navy-900 dark:text-white">Subir archivo</h3>
             <button onClick={downloadSampleCSV} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">
               Descargar ejemplo CSV →
             </button>
           </div>
-          <p className="text-sm text-navy-500 mb-6">
+          <p className="text-sm text-navy-500 mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             Si tenés un archivo con tus propiedades (exportado de Excel, otro sistema, etc.), subilo acá. El sistema detecta automáticamente las columnas.
           </p>
 
@@ -396,31 +396,31 @@ export default function ScrapePage() {
               onChange={handleFileSelect}
               className="hidden"
             />
-            <svg className="w-12 h-12 text-navy-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <svg className="w-12 h-12 text-navy-300 mx-auto mb-3 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
             {importFile ? (
               <div>
-                <p className="text-sm font-medium text-navy-700">{importFile.name}</p>
-                <p className="text-xs text-navy-400">{(importFile.size / 1024).toFixed(1)} KB</p>
+                <p className="text-sm font-medium text-navy-700 dark:text-navy-300 dark:text-navy-100">{importFile.name}</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{(importFile.size / 1024).toFixed(1)} KB</p>
               </div>
             ) : (
               <div>
-                <p className="text-sm text-navy-600 mb-1">Hacé click para seleccionar un archivo</p>
-                <p className="text-xs text-navy-400">CSV o JSON — hasta 1000 propiedades</p>
+                <p className="text-sm text-navy-600 mb-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Hacé click para seleccionar un archivo</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">CSV o JSON — hasta 1000 propiedades</p>
               </div>
             )}
           </div>
 
           {importPreview.length > 0 && (
             <div className="mb-6">
-              <h4 className="text-sm font-semibold text-navy-700 mb-2">Vista previa ({importPreview.length} filas)</h4>
+              <h4 className="text-sm font-semibold text-navy-700 mb-2 dark:text-navy-300 dark:text-navy-100">Vista previa ({importPreview.length} filas)</h4>
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
                     <tr className="border-b border-gray-200">
                       {Object.keys(importPreview[0]).slice(0, 8).map(k => (
-                        <th key={k} className="text-left py-2 px-3 font-medium text-navy-600">{k}</th>
+                        <th key={k} className="text-left py-2 px-3 font-medium text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{k}</th>
                       ))}
                     </tr>
                   </thead>
@@ -428,7 +428,7 @@ export default function ScrapePage() {
                     {importPreview.map((row, i) => (
                       <tr key={i} className="border-b border-gray-100">
                         {Object.values(row).slice(0, 8).map((v, j) => (
-                          <td key={j} className="py-2 px-3 text-navy-700 truncate max-w-[150px]">{String(v || '').substring(0, 50)}</td>
+                          <td key={j} className="py-2 px-3 text-navy-700 truncate max-w-[150px] dark:text-navy-300 dark:text-navy-100">{String(v || '').substring(0, 50)}</td>
                         ))}
                       </tr>
                     ))}
@@ -497,10 +497,10 @@ export default function ScrapePage() {
           <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-lg font-bold text-navy-900">
+                <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                   {results.count} propiedades encontradas
                 </h3>
-                <p className="text-sm text-navy-500">
+                <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                   Portal: {results.portal} • Crédito utilizado
                 </p>
               </div>
@@ -531,9 +531,9 @@ export default function ScrapePage() {
                     <span className="portal-badge bg-navy-900/80 text-white">{property.portal}</span>
                   </div>
                   <div className="p-4">
-                    <h4 className="font-semibold text-navy-900 truncate mb-1">{property.title}</h4>
-                    <p className="text-sm text-navy-500 truncate mb-3">{property.address}</p>
-                    <div className="flex items-center gap-4 text-xs text-navy-400 mb-3">
+                    <h4 className="font-semibold text-navy-900 truncate mb-1 dark:text-white">{property.title}</h4>
+                    <p className="text-sm text-navy-500 truncate mb-3 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{property.address}</p>
+                    <div className="flex items-center gap-4 text-xs text-navy-400 mb-3 dark:text-navy-300 dark:text-navy-100">
                       {property.beds > 0 && <span>{property.beds} hab</span>}
                       {property.baths > 0 && <span>{property.baths} baños</span>}
                       {property.sqm > 0 && <span>{property.sqm} m²</span>}
@@ -552,7 +552,7 @@ export default function ScrapePage() {
             </div>
           ) : (
             <div className="p-8 text-center">
-              <p className="text-navy-500 text-sm">{results.warning || 'No se encontraron propiedades'}</p>
+              <p className="text-navy-500 text-sm dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{results.warning || 'No se encontraron propiedades'}</p>
             </div>
           )}
         </div>
@@ -562,12 +562,12 @@ export default function ScrapePage() {
       {!results && !loading && !error && (
         <div className="card p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-navy-50 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <svg className="w-8 h-8 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9 9 0 013 12c0-1.605.42-3.113 1.157-4.418" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Empezá a cargar propiedades</h3>
-          <p className="text-sm text-navy-500 max-w-md mx-auto">
+          <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Empezá a cargar propiedades</h3>
+          <p className="text-sm text-navy-500 max-w-md mx-auto dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             Elegí &quot;Pegar enlaces&quot; para importar desde portales, o &quot;Subir archivo&quot; si tenés un CSV o JSON.
           </p>
         </div>

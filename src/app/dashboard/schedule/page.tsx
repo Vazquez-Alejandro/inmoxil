@@ -89,12 +89,12 @@ export default function SchedulingPage() {
       <Header title="Importación Automática" subtitle="Programá importación recurrente de portales" />
 
       <div className="flex gap-3 mb-6">
-        <button onClick={() => setTab('schedules')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'schedules' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'}`}>Configuración</button>
-        <button onClick={() => setTab('logs')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'logs' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'}`}>Historial</button>
+        <button onClick={() => setTab('schedules')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'schedules' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'} dark:text-navy-400 dark:text-navy-300 dark:text-navy-100`}>Configuración</button>
+        <button onClick={() => setTab('logs')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'logs' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'} dark:text-navy-400 dark:text-navy-300 dark:text-navy-100`}>Historial</button>
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-sm text-navy-400">Cargando...</div>
+        <div className="text-center py-12 text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Cargando...</div>
       ) : tab === 'schedules' ? (
         <div className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -107,11 +107,11 @@ export default function SchedulingPage() {
                       <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253" /></svg>
                     </div>
                     <div>
-                      <p className="font-bold text-navy-900">{p.label}</p>
+                      <p className="font-bold text-navy-900 dark:text-white">{p.label}</p>
                       {sched ? (
-                        <p className="text-xs text-navy-500">{sched.frequencyHours}h • {sched.active ? 'Activo' : 'Pausado'}</p>
+                        <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{sched.frequencyHours}h • {sched.active ? 'Activo' : 'Pausado'}</p>
                       ) : (
-                        <p className="text-xs text-navy-400">No configurado</p>
+                        <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">No configurado</p>
                       )}
                     </div>
                   </div>
@@ -120,23 +120,23 @@ export default function SchedulingPage() {
                     <div className="space-y-3">
                       <label className="flex items-center gap-2 text-sm">
                         <input type="checkbox" checked={form.active} onChange={e => setForm(f => ({ ...f, active: e.target.checked }))} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                        <span className="text-navy-700">Activo</span>
+                        <span className="text-navy-700 dark:text-navy-300 dark:text-navy-100">Activo</span>
                       </label>
 
                       <div>
-                        <label className="text-xs text-navy-500 font-medium mb-1 block">Frecuencia</label>
+                        <label className="text-xs text-navy-500 font-medium mb-1 block dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Frecuencia</label>
                         <select value={form.frequencyHours} onChange={e => setForm(f => ({ ...f, frequencyHours: parseInt(e.target.value) }))} className="input w-full text-sm">
                           {FREQUENCIES.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
                         </select>
                       </div>
 
                       <div>
-                        <label className="text-xs text-navy-500 font-medium mb-1 block">Máx. propiedades</label>
+                        <label className="text-xs text-navy-500 font-medium mb-1 block dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Máx. propiedades</label>
                         <input type="number" value={form.maxItems} onChange={e => setForm(f => ({ ...f, maxItems: parseInt(e.target.value) || 50 }))} className="input w-full text-sm" min={1} max={200} />
                       </div>
 
                       <div>
-                        <label className="text-xs text-navy-500 font-medium mb-1 block">URLs a scrapear (una por línea)</label>
+                        <label className="text-xs text-navy-500 font-medium mb-1 block dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">URLs a scrapear (una por línea)</label>
                         <textarea value={form.urls} onChange={e => setForm(f => ({ ...f, urls: e.target.value }))} className="input w-full text-sm" rows={3} placeholder="https://www.zonaprop.com.ar/propiedades/..." />
                       </div>
 
@@ -149,7 +149,7 @@ export default function SchedulingPage() {
                     <div className="space-y-2">
                       {sched ? (
                         <>
-                          <div className="text-xs text-navy-500">
+                          <div className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                             <p>URLs: {sched.urls?.length || 0}</p>
                             <p>Último: {sched.lastRunAt ? new Date(sched.lastRunAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit' }) : 'Nunca'}</p>
                           </div>
@@ -169,8 +169,8 @@ export default function SchedulingPage() {
           </div>
 
           <div className="card p-6 mt-4">
-            <h3 className="text-sm font-bold text-navy-900 mb-2">¿Cómo funciona?</h3>
-            <p className="text-xs text-navy-500 leading-relaxed">
+            <h3 className="text-sm font-bold text-navy-900 mb-2 dark:text-white">¿Cómo funciona?</h3>
+            <p className="text-xs text-navy-500 leading-relaxed dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
               Configurá URLs de búsqueda de ZonaProp o Argenprop, elegí la frecuencia, y el sistema scrapea automáticamente
               en segundo plano. Las propiedades nuevas se importan solas. Recibís notificaciones cuando se complete cada ciclo.
               El cron se ejecuta aproximadamente cada hora en Vercel.
@@ -181,7 +181,7 @@ export default function SchedulingPage() {
         <div>
           {logs.length === 0 ? (
             <div className="card p-12 text-center">
-              <p className="text-navy-500">Sin historial de scraping automático</p>
+              <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin historial de scraping automático</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -199,13 +199,13 @@ export default function SchedulingPage() {
                     </svg>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-navy-900 capitalize">{l.portal}</p>
-                    <p className="text-xs text-navy-500">
+                    <p className="text-sm font-medium text-navy-900 capitalize dark:text-white">{l.portal}</p>
+                    <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                       {l.itemsScraped} scrapeadas • {l.itemsImported} importadas
                       {l.error && ` • Error: ${l.error.slice(0, 100)}`}
                     </p>
                   </div>
-                  <span className="text-xs text-navy-400">{l.startedAt ? new Date(l.startedAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}</span>
+                  <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{l.startedAt ? new Date(l.startedAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}</span>
                 </div>
               ))}
             </div>

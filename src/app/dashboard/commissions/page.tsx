@@ -82,18 +82,18 @@ export default function CommissionsPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="card p-4">
-          <p className="text-xs text-navy-500 font-medium">Pendientes</p>
-          <p className="text-2xl font-bold text-navy-900 mt-1">{stats.totalPending}</p>
-          <p className="text-sm text-amber-600 font-medium">{formatPrice(stats.pendingAmount, 'ARS')}</p>
+          <p className="text-xs text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Pendientes</p>
+          <p className="text-2xl font-bold text-navy-900 mt-1 dark:text-white">{stats.totalPending}</p>
+          <p className="text-sm text-amber-600 dark:text-amber-400 font-medium">{formatPrice(stats.pendingAmount, 'ARS')}</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-navy-500 font-medium">Cobradas</p>
-          <p className="text-2xl font-bold text-navy-900 mt-1">{stats.totalPaid}</p>
-          <p className="text-sm text-emerald-600 font-medium">{formatPrice(stats.paidAmount, 'ARS')}</p>
+          <p className="text-xs text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Cobradas</p>
+          <p className="text-2xl font-bold text-navy-900 mt-1 dark:text-white">{stats.totalPaid}</p>
+          <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">{formatPrice(stats.paidAmount, 'ARS')}</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-navy-500 font-medium">Cobrado este mes</p>
-          <p className="text-2xl font-bold text-navy-900 mt-1">{formatPrice(stats.thisMonth, 'ARS')}</p>
+          <p className="text-xs text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Cobrado este mes</p>
+          <p className="text-2xl font-bold text-navy-900 mt-1 dark:text-white">{formatPrice(stats.thisMonth, 'ARS')}</p>
         </div>
         <div className="card p-4 flex items-center justify-center">
           <button onClick={() => setShowForm(!showForm)} className="btn-primary text-sm">
@@ -105,7 +105,7 @@ export default function CommissionsPage() {
       {/* Add form */}
       {showForm && (
         <div className="card p-5 mb-6 border-2 border-indigo-200">
-          <h3 className="font-bold text-navy-900 mb-4">Nueva comisión</h3>
+          <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Nueva comisión</h3>
           <form onSubmit={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="lg:col-span-2">
               <label className="label">Título / operación</label>
@@ -141,21 +141,21 @@ export default function CommissionsPage() {
       {/* Tabs */}
       <div className="flex gap-3 mb-6">
         {(['pending', 'paid', 'all'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === t ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'}`}>
+          <button key={t} onClick={() => setTab(t)} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === t ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'} dark:text-white`}>
             {t === 'pending' ? 'Pendientes' : t === 'paid' ? 'Cobradas' : 'Todas'}
           </button>
         ))}
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-sm text-navy-400">Cargando...</div>
+        <div className="text-center py-12 text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Cargando...</div>
       ) : commissions.length === 0 ? (
         <div className="card p-12 text-center">
-          <svg className="w-12 h-12 text-navy-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
+          <svg className="w-12 h-12 text-navy-300 mx-auto mb-3 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
           </svg>
-          <p className="text-navy-500 font-medium">Sin comisiones registradas</p>
-          <p className="text-navy-400 text-sm mt-1">Agregá una comisión nueva para empezar a trackear tus ingresos</p>
+          <p className="text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin comisiones registradas</p>
+          <p className="text-navy-400 text-sm mt-1 dark:text-navy-300 dark:text-navy-100">Agregá una comisión nueva para empezar a trackear tus ingresos</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -174,15 +174,15 @@ export default function CommissionsPage() {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-navy-900">{c.title || 'Comisión'}</p>
-                <p className="text-xs text-navy-500">
+                <p className="font-medium text-navy-900 dark:text-white">{c.title || 'Comisión'}</p>
+                <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                   {c.description && `${c.description} • `}
                   {c.dueDate && `Vence: ${new Date(c.dueDate).toLocaleDateString('es-AR')} • `}
                   {c.createdAt && new Date(c.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })}
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-navy-900">{formatPrice(c.amount, c.currency)}</p>
+                <p className="font-bold text-navy-900 dark:text-white">{formatPrice(c.amount, c.currency)}</p>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                   c.status === 'paid' ? 'bg-emerald-100 text-emerald-700' :
                   c.status === 'cancelled' ? 'bg-red-100 text-red-600' :

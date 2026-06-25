@@ -134,8 +134,8 @@ export default function AdminPage() {
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-navy-900 tracking-tight">{stat.value}</p>
-              <p className="text-sm text-navy-500 mt-1">{stat.label}</p>
+              <p className="text-3xl font-bold text-navy-900 tracking-tight dark:text-white">{stat.value}</p>
+              <p className="text-sm text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{stat.label}</p>
             </div>
           </div>
         ))}
@@ -145,18 +145,18 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Credits by Workspace Chart */}
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Créditos por workspace</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Créditos por workspace</h3>
           <div className="space-y-3">
             {chartBars.map((bar) => (
               <div key={bar.name} className="flex items-center gap-3">
-                <span className="text-xs text-navy-500 w-24 text-right truncate">{bar.name}</span>
+                <span className="text-xs text-navy-500 w-24 text-right truncate dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{bar.name}</span>
                 <div className="flex-1 bg-navy-50 rounded-full h-5 overflow-hidden">
                   <div
                     className="bg-gradient-gold h-5 rounded-full transition-all duration-500"
                     style={{ width: `${bar.pct}%` }}
                   />
                 </div>
-                <span className="text-xs font-semibold text-navy-700 w-10 text-right">{bar.value}</span>
+                <span className="text-xs font-semibold text-navy-700 w-10 text-right dark:text-navy-300 dark:text-navy-100">{bar.value}</span>
               </div>
             ))}
           </div>
@@ -164,13 +164,13 @@ export default function AdminPage() {
 
         {/* Plan Distribution Chart */}
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Distribución de planes</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Distribución de planes</h3>
           <div className="space-y-4">
             {planBars.map((bar) => (
               <div key={bar.plan}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-navy-700">{bar.plan}</span>
-                  <span className="text-sm font-semibold text-navy-900">{bar.count} workspaces</span>
+                  <span className="text-sm font-medium text-navy-700 dark:text-navy-300 dark:text-navy-100">{bar.plan}</span>
+                  <span className="text-sm font-semibold text-navy-900 dark:text-white">{bar.count} workspaces</span>
                 </div>
                 <div className="w-full bg-navy-50 rounded-full h-6 overflow-hidden">
                   <div
@@ -191,7 +191,7 @@ export default function AdminPage() {
       {/* Workspaces Table */}
       <div className="card mb-8">
         <div className="p-6 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-navy-900">Workspaces</h3>
+          <h3 className="text-lg font-bold text-navy-900 dark:text-white">Workspaces</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -209,12 +209,12 @@ export default function AdminPage() {
                 <tr key={ws.id} className="hover:bg-gray-50 transition-colors">
                   <td className="table-cell font-medium">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-navy-100 flex items-center justify-center text-navy-600 font-bold text-xs">
+                      <div className="w-8 h-8 rounded-lg bg-navy-100 flex items-center justify-center text-navy-600 font-bold text-xs dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                         {ws.name[0]}
                       </div>
                       <div>
-                        <p className="font-semibold text-navy-900">{ws.name}</p>
-                        <p className="text-xs text-navy-400">{ws.slug}</p>
+                        <p className="font-semibold text-navy-900 dark:text-white">{ws.name}</p>
+                        <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{ws.slug}</p>
                       </div>
                     </div>
                   </td>
@@ -223,7 +223,7 @@ export default function AdminPage() {
                       ws.plan === 'enterprise' ? 'badge-gold' :
                       ws.plan === 'pro' ? 'bg-navy-100 text-navy-700' :
                       'bg-gray-100 text-gray-600'
-                    }`}>
+                    } dark:text-navy-300 dark:text-navy-100`}>
                       {ws.plan || 'starter'}
                     </span>
                   </td>
@@ -240,7 +240,7 @@ export default function AdminPage() {
               ))}
               {workspaces.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-navy-400 text-sm">
+                  <td colSpan={5} className="px-6 py-12 text-center text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">
                     No hay workspaces registrados
                   </td>
                 </tr>
@@ -253,7 +253,7 @@ export default function AdminPage() {
       {/* Users Table */}
       <div className="card">
         <div className="p-6 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-navy-900">Usuarios</h3>
+          <h3 className="text-lg font-bold text-navy-900 dark:text-white">Usuarios</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -276,10 +276,10 @@ export default function AdminPage() {
                         <div className="w-8 h-8 rounded-full bg-navy-900 flex items-center justify-center text-gold-400 font-bold text-xs">
                           {u.full_name?.[0] || u.email?.[0]?.toUpperCase() || 'U'}
                         </div>
-                        <span className="font-semibold text-navy-900">{u.full_name || 'Sin nombre'}</span>
+                        <span className="font-semibold text-navy-900 dark:text-white">{u.full_name || 'Sin nombre'}</span>
                       </div>
                     </td>
-                    <td className="table-cell text-navy-500">{u.email}</td>
+                    <td className="table-cell text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{u.email}</td>
                     <td className="table-cell">{ws?.name || '—'}</td>
                     <td className="table-cell">
                       <span className={`badge ${
@@ -296,7 +296,7 @@ export default function AdminPage() {
               })}
               {users.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-navy-400 text-sm">
+                  <td colSpan={5} className="px-6 py-12 text-center text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">
                     No hay usuarios registrados
                   </td>
                 </tr>

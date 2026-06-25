@@ -7,11 +7,11 @@ import Link from 'next/link'
 import type { ContractData, AdjustmentRecord } from '@/lib/contracts/types'
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; textColor: string }> = {
-  borrador: { label: 'Borrador', color: 'bg-gray-100', textColor: 'text-gray-700' },
-  activo: { label: 'Activo', color: 'bg-emerald-50', textColor: 'text-emerald-700' },
-  vigente: { label: 'Vigente', color: 'bg-blue-50', textColor: 'text-blue-700' },
-  vencido: { label: 'Vencido', color: 'bg-red-50', textColor: 'text-red-700' },
-  rescindido: { label: 'Rescindido', color: 'bg-amber-50', textColor: 'text-amber-700' },
+  borrador: { label: 'Borrador', color: 'bg-gray-100 dark:bg-gray-800', textColor: 'text-gray-700 dark:text-gray-300' },
+  activo: { label: 'Activo', color: 'bg-emerald-50 dark:bg-emerald-900/20', textColor: 'text-emerald-700 dark:text-emerald-400' },
+  vigente: { label: 'Vigente', color: 'bg-blue-50 dark:bg-blue-900/20', textColor: 'text-blue-700 dark:text-blue-400' },
+  vencido: { label: 'Vencido', color: 'bg-red-50 dark:bg-red-900/20', textColor: 'text-red-700 dark:text-red-400' },
+  rescindido: { label: 'Rescindido', color: 'bg-amber-50 dark:bg-amber-900/20', textColor: 'text-amber-700 dark:text-amber-400' },
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -170,16 +170,16 @@ export default function ContractDetailPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
-        <Link href="/dashboard/contracts" className="text-navy-400 hover:text-navy-600">
+        <Link href="/dashboard/contracts" className="text-navy-400 hover:text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
         </Link>
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-navy-900">{contract.title}</h1>
+            <h1 className="text-2xl font-bold text-navy-900 dark:text-white">{contract.title}</h1>
             <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusCfg.color} ${statusCfg.textColor}`}>{statusCfg.label}</span>
-            <span className="text-xs font-mono text-navy-400 bg-navy-50 px-2 py-0.5 rounded">{contract.number}</span>
+            <span className="text-xs font-mono text-navy-400 bg-navy-50 dark:bg-navy-800 px-2 py-0.5 rounded dark:text-navy-300">{contract.number}</span>
           </div>
-          <p className="text-sm text-navy-500 mt-1">{TYPE_LABELS[contract.type]} · {contract.property.address}, {contract.property.city}</p>
+          <p className="text-sm text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{TYPE_LABELS[contract.type]} · {contract.property.address}, {contract.property.city}</p>
         </div>
       </div>
 
@@ -188,7 +188,7 @@ export default function ContractDetailPage() {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
           Descargar PDF
         </Link>
-        <Link href={`/api/contracts/${contract.id}/pdf?preview=true&workspaceId=${workspace?.id}`} target="_blank" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-navy-600 border border-navy-200 rounded-lg hover:bg-navy-50 transition-colors">
+        <Link href={`/api/contracts/${contract.id}/pdf?preview=true&workspaceId=${workspace?.id}`} target="_blank" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-navy-600 border border-navy-200 rounded-lg hover:bg-navy-50 transition-colors dark:text-navy-300">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
           Vista previa
         </Link>
@@ -218,7 +218,7 @@ export default function ContractDetailPage() {
       {/* Signature section */}
       {showSignForm && (
         <div className="card p-6 mb-6 border border-purple-200">
-          <h3 className="font-bold text-navy-900 mb-4">Solicitar firma digital</h3>
+          <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Solicitar firma digital</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="label">Nombre del firmante *</label>
@@ -253,13 +253,13 @@ export default function ContractDetailPage() {
 
       {signatures.length > 0 && (
         <div className="card p-6 mb-6">
-          <h3 className="font-bold text-navy-900 mb-3">Firmas digitales</h3>
+          <h3 className="font-bold text-navy-900 mb-3 dark:text-white">Firmas digitales</h3>
           <div className="space-y-2">
             {signatures.map((s: any) => (
               <div key={s.id} className="flex items-center justify-between p-3 bg-navy-50 rounded-lg">
                 <div>
-                  <p className="text-sm font-medium text-navy-900">{s.signer_name}</p>
-                  <p className="text-xs text-navy-400">{s.signer_email} · {s.signer_type === 'lessor' ? 'Locador' : 'Locatario'}</p>
+                  <p className="text-sm font-medium text-navy-900 dark:text-white">{s.signer_name}</p>
+                  <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{s.signer_email} · {s.signer_type === 'lessor' ? 'Locador' : 'Locatario'}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`badge ${
@@ -270,7 +270,7 @@ export default function ContractDetailPage() {
                   }`}>
                     {s.status === 'pending' ? 'Pendiente' : s.status === 'sent' ? 'Enviado' : s.status === 'signed' ? 'Firmado' : s.status === 'declined' ? 'Rechazado' : s.status}
                   </span>
-                  {s.signed_at && <span className="text-xs text-navy-400">{new Date(s.signed_at).toLocaleDateString('es-AR')}</span>}
+                  {s.signed_at && <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{new Date(s.signed_at).toLocaleDateString('es-AR')}</span>}
                 </div>
               </div>
             ))}
@@ -281,52 +281,52 @@ export default function ContractDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Partes</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Partes</h2>
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Locador</h3>
-                <p className="font-medium text-navy-900">{contract.lessor.fullName}</p>
-                <p className="text-sm text-navy-500">{contract.lessor.documentType}: {contract.lessor.documentNumber}</p>
-                {contract.lessor.address && <p className="text-sm text-navy-500">Domicilio: {contract.lessor.address}</p>}
-                {contract.lessor.phone && <p className="text-sm text-navy-500">Tel: {contract.lessor.phone}</p>}
-                {contract.lessor.email && <p className="text-sm text-navy-500">Email: {contract.lessor.email}</p>}
+                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2 dark:text-navy-300 dark:text-navy-100">Locador</h3>
+                <p className="font-medium text-navy-900 dark:text-white">{contract.lessor.fullName}</p>
+                <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.lessor.documentType}: {contract.lessor.documentNumber}</p>
+                {contract.lessor.address && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Domicilio: {contract.lessor.address}</p>}
+                {contract.lessor.phone && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Tel: {contract.lessor.phone}</p>}
+                {contract.lessor.email && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Email: {contract.lessor.email}</p>}
               </div>
               <div>
-                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Locatario</h3>
-                <p className="font-medium text-navy-900">{contract.lessee.fullName}</p>
-                <p className="text-sm text-navy-500">{contract.lessee.documentType}: {contract.lessee.documentNumber}</p>
-                {contract.lessee.address && <p className="text-sm text-navy-500">Domicilio: {contract.lessee.address}</p>}
-                {contract.lessee.phone && <p className="text-sm text-navy-500">Tel: {contract.lessee.phone}</p>}
-                {contract.lessee.email && <p className="text-sm text-navy-500">Email: {contract.lessee.email}</p>}
+                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2 dark:text-navy-300 dark:text-navy-100">Locatario</h3>
+                <p className="font-medium text-navy-900 dark:text-white">{contract.lessee.fullName}</p>
+                <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.lessee.documentType}: {contract.lessee.documentNumber}</p>
+                {contract.lessee.address && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Domicilio: {contract.lessee.address}</p>}
+                {contract.lessee.phone && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Tel: {contract.lessee.phone}</p>}
+                {contract.lessee.email && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Email: {contract.lessee.email}</p>}
               </div>
             </div>
           </div>
 
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Inmueble</h2>
-            <p className="font-medium text-navy-900">{contract.property.address}</p>
-            <p className="text-sm text-navy-500">{contract.property.city}, {contract.property.province}{contract.property.cpa ? ` - CPA: ${contract.property.cpa}` : ''}</p>
-            {contract.property.description && <p className="text-sm text-navy-500 mt-1">{contract.property.description}</p>}
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Inmueble</h2>
+            <p className="font-medium text-navy-900 dark:text-white">{contract.property.address}</p>
+            <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.property.city}, {contract.property.province}{contract.property.cpa ? ` - CPA: ${contract.property.cpa}` : ''}</p>
+            {contract.property.description && <p className="text-sm text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.property.description}</p>}
           </div>
 
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Términos</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Términos</h2>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-navy-500">Inicio:</span>
-                <span className="ml-2 font-medium text-navy-900">{formatDate(contract.startDate)}</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Inicio:</span>
+                <span className="ml-2 font-medium text-navy-900 dark:text-white">{formatDate(contract.startDate)}</span>
               </div>
               <div>
-                <span className="text-navy-500">Fin:</span>
-                <span className="ml-2 font-medium text-navy-900">{formatDate(contract.endDate)}</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Fin:</span>
+                <span className="ml-2 font-medium text-navy-900 dark:text-white">{formatDate(contract.endDate)}</span>
               </div>
               <div>
-                <span className="text-navy-500">Duración:</span>
-                <span className="ml-2 font-medium text-navy-900">{contract.durationMonths} meses</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Duración:</span>
+                <span className="ml-2 font-medium text-navy-900 dark:text-white">{contract.durationMonths} meses</span>
               </div>
               <div>
-                <span className="text-navy-500">Creado:</span>
-                <span className="ml-2 font-medium text-navy-900">{contract.createdAt ? formatDate(contract.createdAt) : '—'}</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Creado:</span>
+                <span className="ml-2 font-medium text-navy-900 dark:text-white">{contract.createdAt ? formatDate(contract.createdAt) : '—'}</span>
               </div>
             </div>
           </div>
@@ -334,53 +334,53 @@ export default function ContractDetailPage() {
 
         <div className="space-y-6">
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Económico</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Económico</h2>
             <div className="text-center mb-4">
-              <p className="text-xs text-navy-400 uppercase tracking-wider mb-1">Canon mensual</p>
-              <p className="text-3xl font-bold text-navy-900">{formatCurrency(contract.financial.amount, contract.financial.currency)}</p>
+              <p className="text-xs text-navy-400 uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Canon mensual</p>
+              <p className="text-3xl font-bold text-navy-900 dark:text-white">{formatCurrency(contract.financial.amount, contract.financial.currency)}</p>
             </div>
             <div className="space-y-3 text-sm border-t border-navy-100 pt-4">
               <div className="flex justify-between">
-                <span className="text-navy-500">Ajuste</span>
-                <span className="font-medium text-navy-900">{contract.financial.adjustmentIndex === 'NONE' ? 'Sin ajuste' : contract.financial.adjustmentIndex}</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Ajuste</span>
+                <span className="font-medium text-navy-900 dark:text-white">{contract.financial.adjustmentIndex === 'NONE' ? 'Sin ajuste' : contract.financial.adjustmentIndex}</span>
               </div>
               {contract.financial.adjustmentIndex !== 'NONE' && (
                 <div className="flex justify-between">
-                  <span className="text-navy-500">Frecuencia</span>
-                  <span className="font-medium text-navy-900">C/{contract.financial.adjustmentFrequencyMonths} meses</span>
+                  <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Frecuencia</span>
+                  <span className="font-medium text-navy-900 dark:text-white">C/{contract.financial.adjustmentFrequencyMonths} meses</span>
                 </div>
               )}
               {contract.financial.depositAmount && contract.financial.depositAmount > 0 && (
                 <div className="flex justify-between">
-                  <span className="text-navy-500">Depósito</span>
-                  <span className="font-medium text-navy-900">{formatCurrency(contract.financial.depositAmount, contract.financial.currency)}</span>
+                  <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Depósito</span>
+                  <span className="font-medium text-navy-900 dark:text-white">{formatCurrency(contract.financial.depositAmount, contract.financial.currency)}</span>
                 </div>
               )}
               {contract.financial.commissionPercentage && contract.financial.commissionPercentage > 0 && (
                 <div className="flex justify-between">
-                  <span className="text-navy-500">Comisión</span>
-                  <span className="font-medium text-navy-900">{contract.financial.commissionPercentage}%</span>
+                  <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Comisión</span>
+                  <span className="font-medium text-navy-900 dark:text-white">{contract.financial.commissionPercentage}%</span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-navy-500">Expensas</span>
+                <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Expensas</span>
                 <span className={`font-medium ${contract.financial.expensesIncluded ? 'text-emerald-600' : 'text-amber-600'}`}>{contract.financial.expensesIncluded ? 'Incluidas' : 'No incluidas'}</span>
               </div>
             </div>
           </div>
 
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Próximo ajuste</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Próximo ajuste</h2>
             {contract.nextAdjustmentDate ? (
               <div>
-                <p className="text-sm text-navy-500 mb-1">Fecha estimada</p>
-                <p className="text-xl font-bold text-navy-900">{formatDateShort(contract.nextAdjustmentDate)}</p>
+                <p className="text-sm text-navy-500 mb-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Fecha estimada</p>
+                <p className="text-xl font-bold text-navy-900 dark:text-white">{formatDateShort(contract.nextAdjustmentDate)}</p>
                 {new Date(contract.nextAdjustmentDate) <= new Date() && (
                   <p className="text-xs text-amber-600 mt-2 font-medium">⚠ Ajuste pendiente — hacé clic en &ldquo;Calcular ajuste&rdquo;</p>
                 )}
               </div>
             ) : (
-              <p className="text-sm text-navy-400">Sin ajuste configurado</p>
+              <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin ajuste configurado</p>
             )}
           </div>
         </div>
@@ -388,28 +388,28 @@ export default function ContractDetailPage() {
 
       {adjustments.length > 0 && (
         <div className="bg-white border border-navy-200 rounded-xl p-6 mb-8">
-          <h2 className="text-lg font-semibold text-navy-900 mb-4">Historial de ajustes</h2>
+          <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Historial de ajustes</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-navy-100">
-                  <th className="text-left py-3 px-4 text-navy-500 font-medium">Fecha</th>
-                  <th className="text-left py-3 px-4 text-navy-500 font-medium">Índice anterior</th>
-                  <th className="text-left py-3 px-4 text-navy-500 font-medium">Índice actual</th>
-                  <th className="text-left py-3 px-4 text-navy-500 font-medium">Variación</th>
-                  <th className="text-left py-3 px-4 text-navy-500 font-medium">Monto anterior</th>
-                  <th className="text-left py-3 px-4 text-navy-500 font-medium">Nuevo monto</th>
+                  <th className="text-left py-3 px-4 text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Fecha</th>
+                  <th className="text-left py-3 px-4 text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Índice anterior</th>
+                  <th className="text-left py-3 px-4 text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Índice actual</th>
+                  <th className="text-left py-3 px-4 text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Variación</th>
+                  <th className="text-left py-3 px-4 text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Monto anterior</th>
+                  <th className="text-left py-3 px-4 text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Nuevo monto</th>
                 </tr>
               </thead>
               <tbody>
                 {adjustments.map((adj, i) => (
                   <tr key={adj.id || i} className="border-b border-navy-50 hover:bg-navy-50/50">
-                    <td className="py-3 px-4 text-navy-700">{formatDateShort(adj.adjustmentDate)}</td>
-                    <td className="py-3 px-4 text-navy-700">{adj.previousIndex}</td>
-                    <td className="py-3 px-4 text-navy-700">{adj.currentIndex}</td>
+                    <td className="py-3 px-4 text-navy-700 dark:text-navy-300 dark:text-navy-100">{formatDateShort(adj.adjustmentDate)}</td>
+                    <td className="py-3 px-4 text-navy-700 dark:text-navy-300 dark:text-navy-100">{adj.previousIndex}</td>
+                    <td className="py-3 px-4 text-navy-700 dark:text-navy-300 dark:text-navy-100">{adj.currentIndex}</td>
                     <td className={`py-3 px-4 font-medium ${adj.variation >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{adj.variation >= 0 ? '+' : ''}{adj.variation}%</td>
-                    <td className="py-3 px-4 text-navy-700">{formatCurrency(adj.previousAmount, contract.financial.currency)}</td>
-                    <td className="py-3 px-4 font-semibold text-navy-900">{formatCurrency(adj.newAmount, contract.financial.currency)}</td>
+                    <td className="py-3 px-4 text-navy-700 dark:text-navy-300 dark:text-navy-100">{formatCurrency(adj.previousAmount, contract.financial.currency)}</td>
+                    <td className="py-3 px-4 font-semibold text-navy-900 dark:text-white">{formatCurrency(adj.newAmount, contract.financial.currency)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -420,8 +420,8 @@ export default function ContractDetailPage() {
 
       {contract.notes && (
         <div className="bg-white border border-navy-200 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-navy-900 mb-2">Notas</h2>
-          <p className="text-sm text-navy-600 whitespace-pre-wrap">{contract.notes}</p>
+          <h2 className="text-lg font-semibold text-navy-900 mb-2 dark:text-white">Notas</h2>
+          <p className="text-sm text-navy-600 whitespace-pre-wrap dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.notes}</p>
         </div>
       )}
     </div>

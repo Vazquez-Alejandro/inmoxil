@@ -53,14 +53,14 @@ export default function OwnerMaintenancePage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-navy-900">Mantenimiento</h1>
-        <p className="text-sm text-navy-500 mt-1">{tickets.length} tickets registrados</p>
+        <h1 className="text-2xl font-bold text-navy-900 dark:text-white">Mantenimiento</h1>
+        <p className="text-sm text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{tickets.length} tickets registrados</p>
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
         <button
           onClick={() => setFilterStatus('')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${!filterStatus ? 'bg-navy-900 text-white' : 'bg-white border border-gray-200 text-navy-600 hover:bg-gray-50'}`}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${!filterStatus ? 'bg-navy-900 text-white' : 'bg-white border border-gray-200 text-navy-600 hover:bg-gray-50'} dark:text-navy-400 dark:text-navy-300 dark:text-navy-100`}
         >
           Todos ({tickets.length})
         </button>
@@ -72,7 +72,7 @@ export default function OwnerMaintenancePage() {
             <button
               key={s}
               onClick={() => setFilterStatus(s)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filterStatus === s ? 'bg-navy-900 text-white' : 'bg-white border border-gray-200 text-navy-600 hover:bg-gray-50'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filterStatus === s ? 'bg-navy-900 text-white' : 'bg-white border border-gray-200 text-navy-600 hover:bg-gray-50'} dark:text-navy-400 dark:text-navy-300 dark:text-navy-100`}
             >
               {info.label} ({count})
             </button>
@@ -91,12 +91,12 @@ export default function OwnerMaintenancePage() {
       {!loading && tickets.length === 0 && (
         <div className="card p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-navy-50 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <svg className="w-8 h-8 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.645 5.645a2.25 2.25 0 01-3.18-3.18l5.645-5.645m2.25 2.25l5.645-5.645a2.25 2.25 0 013.18 3.18l-5.645 5.645m-2.25-2.25l5.645-5.645M11.42 15.17l2.25-2.25m0 0l5.645-5.645M11.42 15.17l-2.25 2.25m0 0l-5.645 5.645" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Sin tickets</h3>
-          <p className="text-sm text-navy-500 max-w-md mx-auto">No hay tickets de mantenimiento para tus propiedades.</p>
+          <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Sin tickets</h3>
+          <p className="text-sm text-navy-500 max-w-md mx-auto dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">No hay tickets de mantenimiento para tus propiedades.</p>
         </div>
       )}
 
@@ -119,19 +119,19 @@ export default function OwnerMaintenancePage() {
                         <span className={`text-xs font-medium px-2 py-0.5 rounded ${statusInfo.color}`}>{statusInfo.label}</span>
                         <span className={`text-xs font-medium px-2 py-0.5 rounded ${priorityInfo.color}`}>{priorityInfo.label}</span>
                       </div>
-                      <h3 className="font-semibold text-navy-900 mb-1">
+                      <h3 className="font-semibold text-navy-900 mb-1 dark:text-white">
                         {ticket.title || ticket.description?.substring(0, 80) || 'Ticket de mantenimiento'}
                       </h3>
-                      <p className="text-sm text-navy-500">
+                      <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                         {ticket.property_title || 'Propiedad'} {ticket.property_address ? `- ${ticket.property_address}` : ''}
                       </p>
-                      <p className="text-xs text-navy-400 mt-1">{formatDate(ticket.created_at)}</p>
+                      <p className="text-xs text-navy-400 mt-1 dark:text-navy-300 dark:text-navy-100">{formatDate(ticket.created_at)}</p>
                     </div>
                     <div className="flex-shrink-0 flex flex-col items-end gap-1">
                       {ticket.tenant_name && (
-                        <span className="text-xs text-navy-500">{ticket.tenant_name}</span>
+                        <span className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{ticket.tenant_name}</span>
                       )}
-                      <svg className={`w-5 h-5 text-navy-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <svg className={`w-5 h-5 text-navy-400 transition-transform ${isExpanded ? 'rotate-180' : ''} dark:text-navy-300 dark:text-navy-100`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                       </svg>
                     </div>
@@ -142,40 +142,40 @@ export default function OwnerMaintenancePage() {
                   <div className="px-5 pb-5 border-t border-gray-100 pt-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                       <div>
-                        <p className="text-xs text-navy-400 mb-1">Descripción</p>
-                        <p className="font-medium text-navy-700 whitespace-pre-wrap">{ticket.description || 'Sin descripción'}</p>
+                        <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Descripción</p>
+                        <p className="font-medium text-navy-700 whitespace-pre-wrap dark:text-navy-300 dark:text-navy-100">{ticket.description || 'Sin descripción'}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-navy-400 mb-1">Propiedad</p>
-                        <p className="font-medium text-navy-700">{ticket.property_title || '-'}</p>
-                        {ticket.property_address && <p className="text-xs text-navy-500">{ticket.property_address}</p>}
+                        <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Propiedad</p>
+                        <p className="font-medium text-navy-700 dark:text-navy-300 dark:text-navy-100">{ticket.property_title || '-'}</p>
+                        {ticket.property_address && <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{ticket.property_address}</p>}
                       </div>
                       <div>
-                        <p className="text-xs text-navy-400 mb-1">Estado</p>
+                        <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Estado</p>
                         <span className={`text-xs font-medium px-2 py-0.5 rounded ${statusInfo.color}`}>{statusInfo.label}</span>
                       </div>
                       <div>
-                        <p className="text-xs text-navy-400 mb-1">Prioridad</p>
+                        <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Prioridad</p>
                         <span className={`text-xs font-medium px-2 py-0.5 rounded ${priorityInfo.color}`}>{priorityInfo.label}</span>
                       </div>
                       <div>
-                        <p className="text-xs text-navy-400 mb-1">Creado</p>
-                        <p className="font-medium text-navy-700">{formatDate(ticket.created_at)}</p>
+                        <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Creado</p>
+                        <p className="font-medium text-navy-700 dark:text-navy-300 dark:text-navy-100">{formatDate(ticket.created_at)}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-navy-400 mb-1">Actualizado</p>
-                        <p className="font-medium text-navy-700">{formatDate(ticket.updated_at)}</p>
+                        <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Actualizado</p>
+                        <p className="font-medium text-navy-700 dark:text-navy-300 dark:text-navy-100">{formatDate(ticket.updated_at)}</p>
                       </div>
                       {ticket.tenant_name && (
                         <div>
-                          <p className="text-xs text-navy-400 mb-1">Inquilino</p>
-                          <p className="font-medium text-navy-700">{ticket.tenant_name}</p>
+                          <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Inquilino</p>
+                          <p className="font-medium text-navy-700 dark:text-navy-300 dark:text-navy-100">{ticket.tenant_name}</p>
                         </div>
                       )}
                       {ticket.assigned_to && (
                         <div>
-                          <p className="text-xs text-navy-400 mb-1">Asignado a</p>
-                          <p className="font-medium text-navy-700">{ticket.assigned_to}</p>
+                          <p className="text-xs text-navy-400 mb-1 dark:text-navy-300 dark:text-navy-100">Asignado a</p>
+                          <p className="font-medium text-navy-700 dark:text-navy-300 dark:text-navy-100">{ticket.assigned_to}</p>
                         </div>
                       )}
                     </div>
@@ -189,7 +189,7 @@ export default function OwnerMaintenancePage() {
 
       {!loading && filterStatus && filteredTickets.length === 0 && tickets.length > 0 && (
         <div className="card p-8 text-center">
-          <p className="text-navy-500">No hay tickets con ese estado.</p>
+          <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">No hay tickets con ese estado.</p>
         </div>
       )}
     </div>

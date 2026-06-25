@@ -78,7 +78,7 @@ function PropertyCard({ property }: { property: Property }) {
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-navy-300">
+          <div className="w-full h-full flex items-center justify-center text-navy-300 dark:text-navy-100">
             <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V5.25a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v14.25a1.5 1.5 0 001.5 1.5z" />
             </svg>
@@ -95,16 +95,16 @@ function PropertyCard({ property }: { property: Property }) {
         </p>
       </div>
       <div className="p-4">
-        <h3 className="text-navy-900 font-semibold text-sm leading-snug line-clamp-2 group-hover:text-gold-600 transition-colors">
+        <h3 className="text-navy-900 font-semibold text-sm leading-snug line-clamp-2 group-hover:text-gold-600 transition-colors dark:text-white">
           {property.title}
         </h3>
-        <p className="text-navy-500 text-xs mt-1 truncate">
+        <p className="text-navy-500 text-xs mt-1 truncate dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
           {[property.address, property.neighborhood, property.city].filter(Boolean).join(', ')}
         </p>
-        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 text-navy-600 text-xs">
+        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 text-navy-600 text-xs dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
           {property.beds > 0 && (
             <span className="flex items-center gap-1">
-              <svg className="w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <svg className="w-4 h-4 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
               </svg>
               {property.beds}
@@ -112,7 +112,7 @@ function PropertyCard({ property }: { property: Property }) {
           )}
           {property.baths > 0 && (
             <span className="flex items-center gap-1">
-              <svg className="w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <svg className="w-4 h-4 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
               </svg>
               {property.baths}
@@ -120,7 +120,7 @@ function PropertyCard({ property }: { property: Property }) {
           )}
           {property.sqm > 0 && (
             <span className="flex items-center gap-1">
-              <svg className="w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <svg className="w-4 h-4 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
               </svg>
               {property.sqm} m²
@@ -196,8 +196,8 @@ function VisitModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-corporate-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-navy-900">Solicitar visita</h2>
-          <button onClick={onClose} className="p-1 rounded text-navy-400 hover:text-navy-900 hover:bg-gray-100 transition-colors">
+          <h2 className="text-lg font-bold text-navy-900 dark:text-white">Solicitar visita</h2>
+          <button onClick={onClose} className="p-1 rounded text-navy-400 hover:text-navy-900 hover:bg-gray-100 transition-colors dark:text-white dark:text-navy-300 dark:text-navy-100">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -211,8 +211,8 @@ function VisitModal({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
               </svg>
             </div>
-            <h3 className="text-lg font-bold text-navy-900 mb-2">¡Solicitud enviada!</h3>
-            <p className="text-navy-500 text-sm mb-6">Nos pondremos en contacto a la brevedad para coordinar la visita.</p>
+            <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">¡Solicitud enviada!</h3>
+            <p className="text-navy-500 text-sm mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Nos pondremos en contacto a la brevedad para coordinar la visita.</p>
             <button onClick={onClose} className="btn-gold px-8">Cerrar</button>
           </div>
         ) : (
@@ -223,8 +223,8 @@ function VisitModal({
               </div>
             )}
             {propertyTitle && (
-              <p className="text-navy-600 text-sm mb-2">
-                Propiedad: <span className="font-semibold text-navy-900">{propertyTitle}</span>
+              <p className="text-navy-600 text-sm mb-2 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
+                Propiedad: <span className="font-semibold text-navy-900 dark:text-white">{propertyTitle}</span>
               </p>
             )}
             <div>
@@ -306,7 +306,7 @@ function PropertyDetailView({ property, workspaceSlug }: { property: Property; w
 
   return (
     <div id={`detail-${property.id}`} className="max-w-4xl mx-auto space-y-6">
-      <Link href={`/propiedades?slug=${workspaceSlug}`} className="inline-flex items-center gap-2 text-navy-500 hover:text-gold-600 text-sm font-medium transition-colors">
+      <Link href={`/propiedades?slug=${workspaceSlug}`} className="inline-flex items-center gap-2 text-navy-500 hover:text-gold-600 text-sm font-medium transition-colors dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
@@ -317,7 +317,7 @@ function PropertyDetailView({ property, workspaceSlug }: { property: Property; w
         {photo ? (
           <img src={photo} alt={property.title} className="w-full h-72 object-cover" />
         ) : (
-          <div className="w-full h-72 bg-navy-100 flex items-center justify-center text-navy-300">
+          <div className="w-full h-72 bg-navy-100 flex items-center justify-center text-navy-300 dark:text-navy-100">
             <svg className="w-24 h-24" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V5.25a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v14.25a1.5 1.5 0 001.5 1.5z" />
             </svg>
@@ -326,8 +326,8 @@ function PropertyDetailView({ property, workspaceSlug }: { property: Property; w
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
             <div>
-              <h2 className="text-2xl font-bold text-navy-900">{property.title}</h2>
-              <p className="text-navy-500 mt-1">{property.address}</p>
+              <h2 className="text-2xl font-bold text-navy-900 dark:text-white">{property.title}</h2>
+              <p className="text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{property.address}</p>
             </div>
             <div className="text-right">
               <p className="price-tag">{formatPrice(property.price, property.currency)}</p>
@@ -335,16 +335,16 @@ function PropertyDetailView({ property, workspaceSlug }: { property: Property; w
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-6 py-4 border-y border-gray-100 text-navy-700 text-sm">
+          <div className="flex flex-wrap gap-6 py-4 border-y border-gray-100 text-navy-700 text-sm dark:text-navy-300 dark:text-navy-100">
             {property.beds > 0 && <span>{property.beds} dorm.</span>}
             {property.baths > 0 && <span>{property.baths} baños</span>}
             {property.sqm > 0 && <span>{property.sqm} m²</span>}
-            {property.neighborhood && <span className="text-navy-400">{property.neighborhood}</span>}
-            {property.city && <span className="text-navy-400">{property.city}</span>}
+            {property.neighborhood && <span className="text-navy-400 dark:text-navy-300 dark:text-navy-100">{property.neighborhood}</span>}
+            {property.city && <span className="text-navy-400 dark:text-navy-300 dark:text-navy-100">{property.city}</span>}
           </div>
 
           {property.description && (
-            <p className="text-navy-600 mt-4 leading-relaxed whitespace-pre-line">{property.description}</p>
+            <p className="text-navy-600 mt-4 leading-relaxed whitespace-pre-line dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{property.description}</p>
           )}
 
           <div className="mt-6">
@@ -361,7 +361,7 @@ function PropertyDetailView({ property, workspaceSlug }: { property: Property; w
 
           {property.lat && property.lng && (
             <div className="mt-6">
-              <h3 className="text-sm font-semibold text-navy-700 mb-3">Ubicación</h3>
+              <h3 className="text-sm font-semibold text-navy-700 mb-3 dark:text-navy-300 dark:text-navy-100">Ubicación</h3>
               <MapEmbed lat={property.lat} lng={property.lng} title={property.title} />
             </div>
           )}
@@ -456,9 +456,9 @@ export default function PublicCatalogPage() {
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">Propiedades</h1>
             {workspace && (
-              <p className="mt-3 text-navy-400 text-lg">{workspace.name}</p>
+              <p className="mt-3 text-navy-400 text-lg dark:text-navy-300 dark:text-navy-100">{workspace.name}</p>
             )}
-            <p className="mt-2 text-navy-400 text-sm">
+            <p className="mt-2 text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">
               {total > 0 ? `${total} propiedad${total !== 1 ? 'es' : ''} disponible${total !== 1 ? 's' : ''}` : ''}
             </p>
           </div>
@@ -521,7 +521,7 @@ export default function PublicCatalogPage() {
           </div>
           {hasFilters && (
             <div className="mt-3 flex items-center justify-between">
-              <p className="text-sm text-navy-500">{total} resultado{total !== 1 ? 's' : ''}</p>
+              <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{total} resultado{total !== 1 ? 's' : ''}</p>
               <button onClick={clearFilters} className="text-sm text-gold-600 hover:text-gold-700 font-medium">
                 Limpiar filtros
               </button>
@@ -549,11 +549,11 @@ export default function PublicCatalogPage() {
             <PropertyDetailView property={selectedProperty} workspaceSlug={searchParams.slug} />
           ) : properties.length === 0 ? (
             <div className="text-center py-20">
-              <svg className="w-16 h-16 mx-auto text-navy-300 mb-4" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
+              <svg className="w-16 h-16 mx-auto text-navy-300 mb-4 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
-              <h3 className="text-lg font-semibold text-navy-700 mb-1">No se encontraron propiedades</h3>
-              <p className="text-navy-500 text-sm mb-4">Intenta ajustar los filtros de búsqueda.</p>
+              <h3 className="text-lg font-semibold text-navy-700 mb-1 dark:text-navy-300 dark:text-navy-100">No se encontraron propiedades</h3>
+              <p className="text-navy-500 text-sm mb-4 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Intenta ajustar los filtros de búsqueda.</p>
               {hasFilters && (
                 <button onClick={clearFilters} className="btn-outline text-sm">
                   Limpiar filtros

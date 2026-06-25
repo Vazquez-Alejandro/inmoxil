@@ -54,12 +54,12 @@ export default function PublishPage() {
       <Header title="Canales de Publicación" subtitle="Configurá dónde publicar tus propiedades" />
 
       <div className="flex gap-3 mb-6">
-        <button onClick={() => setTab('channels')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'channels' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'}`}>Canales</button>
-        <button onClick={() => setTab('logs')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'logs' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'}`}>Historial</button>
+        <button onClick={() => setTab('channels')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'channels' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'} dark:text-navy-400 dark:text-navy-300 dark:text-navy-100`}>Canales</button>
+        <button onClick={() => setTab('logs')} className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${tab === 'logs' ? 'bg-navy-900 text-white' : 'bg-navy-100 text-navy-600 hover:bg-navy-200'} dark:text-navy-400 dark:text-navy-300 dark:text-navy-100`}>Historial</button>
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-sm text-navy-400">Cargando...</div>
+        <div className="text-center py-12 text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Cargando...</div>
       ) : tab === 'channels' ? (
         <div className="space-y-4">
           {AVAILABLE_CHANNELS.map(ch => {
@@ -72,8 +72,8 @@ export default function PublishPage() {
                     {CHANNEL_ICONS[ch.type]}
                   </div>
                   <div>
-                    <p className="font-bold text-navy-900">{ch.label}</p>
-                    <p className="text-sm text-navy-500">{ch.description}</p>
+                    <p className="font-bold text-navy-900 dark:text-white">{ch.label}</p>
+                    <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{ch.description}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -93,7 +93,7 @@ export default function PublishPage() {
                       </button>
                     </>
                   ) : (
-                    <span className="text-xs text-navy-400 bg-navy-50 px-2.5 py-1 rounded-full">Próximamente</span>
+                    <span className="text-xs text-navy-400 bg-navy-50 dark:bg-navy-800 px-2.5 py-1 rounded-full dark:text-navy-300">Próximamente</span>
                   )}
                 </div>
               </div>
@@ -104,11 +104,11 @@ export default function PublishPage() {
         <div>
           {logs.length === 0 ? (
             <div className="card p-12 text-center">
-              <svg className="w-12 h-12 text-navy-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
+              <svg className="w-12 h-12 text-navy-300 mx-auto mb-3 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
               </svg>
-              <p className="text-navy-500 font-medium">Sin publicaciones aún</p>
-              <p className="text-navy-400 text-sm mt-1">Las publicaciones aparecerán aquí cuando publiques desde una propiedad</p>
+              <p className="text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin publicaciones aún</p>
+              <p className="text-navy-400 text-sm mt-1 dark:text-navy-300 dark:text-navy-100">Las publicaciones aparecerán aquí cuando publiques desde una propiedad</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -126,8 +126,8 @@ export default function PublishPage() {
                     </svg>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-navy-900">{l.propertyTitle || 'Propiedad'}</p>
-                    <p className="text-xs text-navy-500">
+                    <p className="text-sm font-medium text-navy-900 dark:text-white">{l.propertyTitle || 'Propiedad'}</p>
+                    <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                       {l.channelType} • {l.status === 'success' ? 'Publicada' : l.status === 'error' ? `Error: ${(l.error || '').slice(0, 80)}` : l.status}
                     </p>
                   </div>
@@ -135,7 +135,7 @@ export default function PublishPage() {
                     {l.externalUrl && (
                       <a href={l.externalUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">Ver en ML →</a>
                     )}
-                    <span className="text-xs text-navy-400">{l.createdAt ? new Date(l.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit' }) : ''}</span>
+                    <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{l.createdAt ? new Date(l.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit' }) : ''}</span>
                   </div>
                 </div>
               ))}

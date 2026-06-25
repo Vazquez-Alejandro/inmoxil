@@ -45,8 +45,8 @@ export default function TenantPortalPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
           </svg>
         </div>
-        <h2 className="text-lg font-bold text-navy-900 mb-2">Acceso no válido</h2>
-        <p className="text-sm text-navy-500">{error}</p>
+        <h2 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Acceso no válido</h2>
+        <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{error}</p>
       </div>
     </div>
   )
@@ -59,8 +59,8 @@ export default function TenantPortalPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="logo-mark inline-flex mx-auto mb-3">Ix</div>
-          <h1 className="text-2xl font-bold text-navy-900">Hola, {tenant?.name}</h1>
-          <p className="text-sm text-navy-500">{workspace?.name}</p>
+          <h1 className="text-2xl font-bold text-navy-900 dark:text-white">Hola, {tenant?.name}</h1>
+          <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{workspace?.name}</p>
         </div>
 
         {/* Tabs */}
@@ -69,7 +69,7 @@ export default function TenantPortalPage() {
             <button key={t} onClick={() => setTab(t)}
               className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
                 tab === t ? 'bg-white text-navy-900 shadow-sm' : 'text-navy-500 hover:text-navy-700'
-              }`}>
+              } dark:text-white dark:text-navy-300 dark:text-navy-400 dark:text-navy-100`}>
               {t === 'contrato' ? 'Mi contrato' : t === 'pagos' ? 'Pagos' : 'Mantenimiento'}
             </button>
           ))}
@@ -79,45 +79,45 @@ export default function TenantPortalPage() {
         {tab === 'contrato' && contract && (
           <div className="card p-6 space-y-4">
             <div className="text-center pb-4 border-b border-navy-100">
-              <h2 className="text-xl font-bold text-navy-900">{contract.title}</h2>
-              <p className="text-sm text-navy-400">N° {contract.number}</p>
+              <h2 className="text-xl font-bold text-navy-900 dark:text-white">{contract.title}</h2>
+              <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">N° {contract.number}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-navy-400 text-xs uppercase tracking-wider mb-1">Propiedad</p>
-                <p className="font-medium text-navy-900">{contract.propertyAddress}</p>
-                <p className="text-navy-500">{contract.propertyCity}</p>
+                <p className="text-navy-400 text-xs uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Propiedad</p>
+                <p className="font-medium text-navy-900 dark:text-white">{contract.propertyAddress}</p>
+                <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.propertyCity}</p>
               </div>
               <div>
-                <p className="text-navy-400 text-xs uppercase tracking-wider mb-1">Locador</p>
-                <p className="font-medium text-navy-900">{contract.lessorName}</p>
-                <p className="text-navy-500">{contract.lessorEmail}</p>
-                {contract.lessorPhone && <p className="text-navy-500">Tel: {contract.lessorPhone}</p>}
+                <p className="text-navy-400 text-xs uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Locador</p>
+                <p className="font-medium text-navy-900 dark:text-white">{contract.lessorName}</p>
+                <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.lessorEmail}</p>
+                {contract.lessorPhone && <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Tel: {contract.lessorPhone}</p>}
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
               <div className="p-3 bg-navy-50 rounded-lg">
-                <p className="text-xs text-navy-400">Inicio</p>
-                <p className="font-semibold text-navy-900">{contract.startDate ? new Date(contract.startDate).toLocaleDateString('es-AR') : '-'}</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">Inicio</p>
+                <p className="font-semibold text-navy-900 dark:text-white">{contract.startDate ? new Date(contract.startDate).toLocaleDateString('es-AR') : '-'}</p>
               </div>
               <div className="p-3 bg-navy-50 rounded-lg">
-                <p className="text-xs text-navy-400">Fin</p>
-                <p className="font-semibold text-navy-900">{contract.endDate ? new Date(contract.endDate).toLocaleDateString('es-AR') : '-'}</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">Fin</p>
+                <p className="font-semibold text-navy-900 dark:text-white">{contract.endDate ? new Date(contract.endDate).toLocaleDateString('es-AR') : '-'}</p>
               </div>
               <div className="p-3 bg-navy-50 rounded-lg">
-                <p className="text-xs text-navy-400">Estado</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">Estado</p>
                 <p className={`font-semibold ${contract.status === 'vigente' || contract.status === 'activo' ? 'text-emerald-600' : 'text-amber-600'}`}>{contract.status}</p>
               </div>
               <div className="p-3 bg-navy-50 rounded-lg">
-                <p className="text-xs text-navy-400">Alquiler</p>
-                <p className="font-bold text-navy-900">{formatPrice(contract.amount, contract.currency)}</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">Alquiler</p>
+                <p className="font-bold text-navy-900 dark:text-white">{formatPrice(contract.amount, contract.currency)}</p>
               </div>
             </div>
             <div className="flex gap-3 pt-2">
               <a href={`https://wa.me/${workspace?.whatsapp || ''}?text=${encodeURIComponent('Hola, soy ' + tenant?.name + ', inquilino del contrato ' + contract.number)}`} target="_blank" rel="noopener" className="flex-1 text-center px-4 py-2.5 bg-emerald-500 text-white font-semibold rounded-lg hover:bg-emerald-600 transition-colors text-sm">
                 Contactar por WhatsApp
               </a>
-              <a href={`mailto:${workspace?.contactEmail || ''}`} className="flex-1 text-center px-4 py-2.5 border border-navy-200 text-navy-700 font-semibold rounded-lg hover:bg-navy-50 transition-colors text-sm">
+              <a href={`mailto:${workspace?.contactEmail || ''}`} className="flex-1 text-center px-4 py-2.5 border border-navy-200 text-navy-700 font-semibold rounded-lg hover:bg-navy-50 transition-colors text-sm dark:text-navy-300">
                 Enviar email
               </a>
             </div>
@@ -127,19 +127,19 @@ export default function TenantPortalPage() {
         {/* Payments Tab */}
         {tab === 'pagos' && (
           <div className="card p-6">
-            <h3 className="font-bold text-navy-900 mb-4">Historial de pagos</h3>
+            <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Historial de pagos</h3>
             {(!payments || payments.length === 0) ? (
-              <p className="text-sm text-navy-400 text-center py-8">Sin pagos registrados</p>
+              <p className="text-sm text-navy-400 text-center py-8 dark:text-navy-300 dark:text-navy-100">Sin pagos registrados</p>
             ) : (
               <div className="space-y-2">
                 {payments.map((p: any) => (
                   <div key={p.id} className="flex items-center justify-between p-3 bg-navy-50 rounded-lg">
                     <div>
-                      <p className="text-sm font-medium text-navy-900">{CONCEPT_LABELS[p.concept] || p.concept}</p>
-                      <p className="text-xs text-navy-400">{p.due_date ? new Date(p.due_date).toLocaleDateString('es-AR') : '-'}</p>
+                      <p className="text-sm font-medium text-navy-900 dark:text-white">{CONCEPT_LABELS[p.concept] || p.concept}</p>
+                      <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{p.due_date ? new Date(p.due_date).toLocaleDateString('es-AR') : '-'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-navy-900">{formatPrice(p.amount, p.currency)}</p>
+                      <p className="text-sm font-bold text-navy-900 dark:text-white">{formatPrice(p.amount, p.currency)}</p>
                       <span className={`text-xs font-medium ${
                         p.status === 'paid' ? 'text-emerald-600' : p.status === 'pending' ? 'text-amber-600' : 'text-red-600'
                       }`}>{STATUS_LABELS[p.status] || p.status}</span>
@@ -157,22 +157,22 @@ export default function TenantPortalPage() {
         {/* Maintenance Tab */}
         {tab === 'tickets' && (
           <div className="card p-6">
-            <h3 className="font-bold text-navy-900 mb-4">Reportes de mantenimiento</h3>
+            <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Reportes de mantenimiento</h3>
             {(!tickets || tickets.length === 0) ? (
-              <p className="text-sm text-navy-400 text-center py-8">Sin reportes de mantenimiento</p>
+              <p className="text-sm text-navy-400 text-center py-8 dark:text-navy-300 dark:text-navy-100">Sin reportes de mantenimiento</p>
             ) : (
               <div className="space-y-2">
                 {tickets.map((t: any) => (
                   <div key={t.id} className="p-3 bg-navy-50 rounded-lg">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-medium text-navy-900">{t.description?.slice(0, 60)}</p>
+                      <p className="text-sm font-medium text-navy-900 dark:text-white">{t.description?.slice(0, 60)}</p>
                       <span className={`badge text-xs ${
                         t.status === 'pendiente' ? 'bg-yellow-100 text-yellow-700' :
                         t.status === 'en_proceso' ? 'bg-blue-100 text-blue-700' :
                         'bg-emerald-100 text-emerald-700'
                       }`}>{t.status}</span>
                     </div>
-                    <p className="text-xs text-navy-400">{t.created_at ? new Date(t.created_at).toLocaleDateString('es-AR') : ''}</p>
+                    <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{t.created_at ? new Date(t.created_at).toLocaleDateString('es-AR') : ''}</p>
                   </div>
                 ))}
               </div>
@@ -180,7 +180,7 @@ export default function TenantPortalPage() {
           </div>
         )}
 
-        <p className="text-center text-xs text-navy-400 mt-6">Powered by Inmoxil</p>
+        <p className="text-center text-xs text-navy-400 mt-6 dark:text-navy-300 dark:text-navy-100">Powered by Inmoxil</p>
       </div>
     </div>
   )

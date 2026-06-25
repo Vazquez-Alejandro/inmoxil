@@ -9,10 +9,10 @@ function formatPrice(n: number, currency = 'ARS') {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-700',
-  paid: 'bg-emerald-100 text-emerald-700',
-  failed: 'bg-red-100 text-red-700',
-  refunded: 'bg-gray-100 text-gray-700',
+  pending: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400',
+  paid: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400',
+  failed: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400',
+  refunded: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
 }
 
 const CONCEPT_LABELS: Record<string, string> = {
@@ -97,9 +97,9 @@ export default function PagosPage() {
           return (
             <button key={item.status} onClick={() => setFilter(filter === item.status ? '' : item.status)}
               className={`card p-4 text-left transition-all ${filter === item.status ? 'ring-2 ring-gold-500' : ''}`}>
-              <p className="text-xs text-navy-400">{item.label}</p>
-              <p className="text-xl font-bold text-navy-900">{s?.count || 0}</p>
-              <p className="text-xs text-navy-500">{formatPrice(s?.total || 0)}</p>
+              <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{item.label}</p>
+              <p className="text-xl font-bold text-navy-900 dark:text-white">{s?.count || 0}</p>
+              <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{formatPrice(s?.total || 0)}</p>
             </button>
           )
         })}
@@ -116,7 +116,7 @@ export default function PagosPage() {
       {/* New payment form */}
       {showForm && (
         <div className="card p-6 mb-6">
-          <h3 className="font-bold text-navy-900 mb-4">Registrar cobro</h3>
+          <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Registrar cobro</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="label">Monto *</label>
@@ -163,8 +163,8 @@ export default function PagosPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
             </svg>
           </div>
-          <p className="text-navy-500 font-medium">Sin cobros registrados</p>
-          <p className="text-sm text-navy-400 mt-1">Registrá tu primer cobro para empezar a trackear.</p>
+          <p className="text-navy-500 font-medium dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin cobros registrados</p>
+          <p className="text-sm text-navy-400 mt-1 dark:text-navy-300 dark:text-navy-100">Registrá tu primer cobro para empezar a trackear.</p>
         </div>
       ) : (
         <div className="card overflow-hidden">
@@ -172,29 +172,29 @@ export default function PagosPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-navy-50 border-b border-navy-100">
-                  <th className="text-left px-4 py-3 font-semibold text-navy-700">Concepto</th>
-                  <th className="text-left px-4 py-3 font-semibold text-navy-700">Monto</th>
-                  <th className="text-left px-4 py-3 font-semibold text-navy-700">Estado</th>
-                  <th className="text-left px-4 py-3 font-semibold text-navy-700">Vencimiento</th>
-                  <th className="text-left px-4 py-3 font-semibold text-navy-700">Contrato</th>
-                  <th className="text-left px-4 py-3 font-semibold text-navy-700">Acción</th>
+                  <th className="text-left px-4 py-3 font-semibold text-navy-700 dark:text-navy-300 dark:text-navy-100">Concepto</th>
+                  <th className="text-left px-4 py-3 font-semibold text-navy-700 dark:text-navy-300 dark:text-navy-100">Monto</th>
+                  <th className="text-left px-4 py-3 font-semibold text-navy-700 dark:text-navy-300 dark:text-navy-100">Estado</th>
+                  <th className="text-left px-4 py-3 font-semibold text-navy-700 dark:text-navy-300 dark:text-navy-100">Vencimiento</th>
+                  <th className="text-left px-4 py-3 font-semibold text-navy-700 dark:text-navy-300 dark:text-navy-100">Contrato</th>
+                  <th className="text-left px-4 py-3 font-semibold text-navy-700 dark:text-navy-300 dark:text-navy-100">Acción</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-navy-50">
                 {payments.map((p: any) => (
                   <tr key={p.id} className="hover:bg-navy-25 transition-colors">
                     <td className="px-4 py-3">
-                      <span className="font-medium text-navy-900 capitalize">{CONCEPT_LABELS[p.concept] || p.concept}</span>
-                      {p.notes && <p className="text-xs text-navy-400">{p.notes}</p>}
+                      <span className="font-medium text-navy-900 capitalize dark:text-white">{CONCEPT_LABELS[p.concept] || p.concept}</span>
+                      {p.notes && <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{p.notes}</p>}
                     </td>
-                    <td className="px-4 py-3 font-bold text-navy-900">{formatPrice(p.amount, p.currency)}</td>
+                    <td className="px-4 py-3 font-bold text-navy-900 dark:text-white">{formatPrice(p.amount, p.currency)}</td>
                     <td className="px-4 py-3">
                       <span className={`badge ${STATUS_STYLES[p.status] || 'bg-gray-100 text-gray-700'}`}>
                         {p.status === 'paid' ? 'Cobrado' : p.status === 'pending' ? 'Pendiente' : p.status === 'failed' ? 'Fallido' : 'Reembolsado'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-navy-500">{p.due_date ? new Date(p.due_date).toLocaleDateString('es-AR') : '-'}</td>
-                    <td className="px-4 py-3 text-navy-500 max-w-[160px] truncate">{p.contract_title || '-'}</td>
+                    <td className="px-4 py-3 text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{p.due_date ? new Date(p.due_date).toLocaleDateString('es-AR') : '-'}</td>
+                    <td className="px-4 py-3 text-navy-500 max-w-[160px] truncate dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{p.contract_title || '-'}</td>
                     <td className="px-4 py-3">
                       {p.status === 'pending' && (
                         <button onClick={() => markPaid(p.id)} className="text-xs text-emerald-600 hover:text-emerald-700 font-medium">

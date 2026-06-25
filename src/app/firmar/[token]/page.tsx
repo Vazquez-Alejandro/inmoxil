@@ -59,8 +59,8 @@ export default function SignPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
           </svg>
         </div>
-        <h2 className="text-lg font-bold text-navy-900 mb-2">Error</h2>
-        <p className="text-sm text-navy-500">{error}</p>
+        <h2 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Error</h2>
+        <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{error}</p>
       </div>
     </div>
   )
@@ -73,8 +73,8 @@ export default function SignPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h2 className="text-lg font-bold text-navy-900 mb-2">¡Listo!</h2>
-        <p className="text-sm text-navy-500">{actionMsg}</p>
+        <h2 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">¡Listo!</h2>
+        <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{actionMsg}</p>
       </div>
     </div>
   )
@@ -84,37 +84,37 @@ export default function SignPage() {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <div className="logo-mark inline-flex mx-auto mb-3">Ix</div>
-          <h1 className="text-2xl font-bold text-navy-900">Firma digital de contrato</h1>
-          <p className="text-sm text-navy-500">{sig?.workspace_name}</p>
+          <h1 className="text-2xl font-bold text-navy-900 dark:text-white">Firma digital de contrato</h1>
+          <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{sig?.workspace_name}</p>
         </div>
 
         <div className="card p-8 space-y-6">
           <div className="text-center pb-4 border-b border-navy-100">
-            <h2 className="text-xl font-bold text-navy-900">{sig?.contract_title}</h2>
-            <p className="text-sm text-navy-500">Contrato N° {sig?.contract_number}</p>
+            <h2 className="text-xl font-bold text-navy-900 dark:text-white">{sig?.contract_title}</h2>
+            <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Contrato N° {sig?.contract_number}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="text-navy-400 text-xs uppercase tracking-wider mb-1">Locador</p>
-              <p className="font-medium text-navy-900">{sig?.lessor_name}</p>
-              <p className="text-navy-500">{sig?.lessor_document_type}: {sig?.lessor_document_number}</p>
+              <p className="text-navy-400 text-xs uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Locador</p>
+              <p className="font-medium text-navy-900 dark:text-white">{sig?.lessor_name}</p>
+              <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{sig?.lessor_document_type}: {sig?.lessor_document_number}</p>
             </div>
             <div>
-              <p className="text-navy-400 text-xs uppercase tracking-wider mb-1">Locatario (firmante)</p>
-              <p className="font-medium text-navy-900">{sig?.lessee_name}</p>
-              <p className="text-navy-500">{sig?.lessee_document_type}: {sig?.lessee_document_number}</p>
+              <p className="text-navy-400 text-xs uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Locatario (firmante)</p>
+              <p className="font-medium text-navy-900 dark:text-white">{sig?.lessee_name}</p>
+              <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{sig?.lessee_document_type}: {sig?.lessee_document_number}</p>
             </div>
           </div>
 
           <div className="text-sm">
-            <p className="text-navy-400 text-xs uppercase tracking-wider mb-1">Inmueble</p>
-            <p className="font-medium text-navy-900">{sig?.property_address}</p>
+            <p className="text-navy-400 text-xs uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Inmueble</p>
+            <p className="font-medium text-navy-900 dark:text-white">{sig?.property_address}</p>
           </div>
 
           <div className="text-sm">
-            <p className="text-navy-400 text-xs uppercase tracking-wider mb-1">Monto</p>
-            <p className="text-xl font-bold text-navy-900">
+            <p className="text-navy-400 text-xs uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Monto</p>
+            <p className="text-xl font-bold text-navy-900 dark:text-white">
               {sig?.amount ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: sig.currency || 'ARS', maximumFractionDigits: 0 }).format(sig.amount) : '-'}
             </p>
           </div>
@@ -144,7 +144,7 @@ export default function SignPage() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-navy-400 mt-6">Powered by Inmoxil - Plataforma SaaS para inmobiliarias</p>
+        <p className="text-center text-xs text-navy-400 mt-6 dark:text-navy-300 dark:text-navy-100">Powered by Inmoxil - Plataforma SaaS para inmobiliarias</p>
       </div>
     </div>
   )

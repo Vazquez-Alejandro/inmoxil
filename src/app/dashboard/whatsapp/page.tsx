@@ -124,7 +124,7 @@ export default function WhatsAppPage() {
           <button key={t} onClick={() => setTab(t)}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
               tab === t ? 'bg-white text-navy-900 shadow-sm' : 'text-navy-500 hover:text-navy-700'
-            }`}>
+            } dark:text-white dark:text-navy-300 dark:text-navy-400 dark:text-navy-100`}>
             {t === 'enviar' ? 'Enviar mensaje' : t === 'plantillas' ? 'Plantillas' : 'Historial'}
           </button>
         ))}
@@ -134,7 +134,7 @@ export default function WhatsAppPage() {
         <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-16 bg-navy-50 rounded-lg animate-pulse" />)}</div>
       ) : tab === 'enviar' && (
         <div className="card p-6 space-y-4">
-          <h3 className="font-bold text-navy-900">Enviar mensaje por WhatsApp</h3>
+          <h3 className="font-bold text-navy-900 dark:text-white">Enviar mensaje por WhatsApp</h3>
           <div>
             <label className="label">Cliente (opcional)</label>
             <select className="input" value={selectedLead} onChange={e => {
@@ -187,7 +187,7 @@ export default function WhatsAppPage() {
       {tab === 'plantillas' && (
         <div className="space-y-4">
           <div className="card p-6">
-            <h3 className="font-bold text-navy-900 mb-4">Nueva plantilla</h3>
+            <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Nueva plantilla</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="label">Nombre</label>
@@ -210,16 +210,16 @@ export default function WhatsAppPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {templates.length === 0 ? (
-              <div className="card p-6 text-center text-sm text-navy-400 col-span-2">
+              <div className="card p-6 text-center text-sm text-navy-400 col-span-2 dark:text-navy-300 dark:text-navy-100">
                 Sin plantillas todavía. Creá una para empezar.
               </div>
             ) : templates.map((t: any) => (
               <div key={t.id} className="card p-4">
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-semibold text-navy-900 text-sm">{t.name}</h4>
+                  <h4 className="font-semibold text-navy-900 text-sm dark:text-white">{t.name}</h4>
                   <button onClick={() => deleteTemplate(t.id)} className="text-red-400 hover:text-red-600 text-xs">Eliminar</button>
                 </div>
-                <p className="text-sm text-navy-600 whitespace-pre-wrap mb-2">{t.content}</p>
+                <p className="text-sm text-navy-600 whitespace-pre-wrap mb-2 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{t.content}</p>
                 {t.variables?.length > 0 && (
                   <div className="flex gap-1 flex-wrap">
                     {t.variables.map((v: string) => <span key={v} className="badge bg-indigo-50 text-indigo-600 text-[10px]">{v}</span>)}
@@ -234,7 +234,7 @@ export default function WhatsAppPage() {
       {tab === 'historial' && (
         <div className="card p-6">
           {messages.length === 0 ? (
-            <div className="text-center py-8 text-sm text-navy-400">Sin mensajes aún.</div>
+            <div className="text-center py-8 text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin mensajes aún.</div>
           ) : (
             <div className="space-y-2">
               {messages.map((m: any) => (
@@ -251,12 +251,12 @@ export default function WhatsAppPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-navy-700">{m.direction === 'sent' ? 'Enviado' : 'Recibido'}</span>
-                      {m.lead_name && <span className="text-xs text-navy-400">para {m.lead_name}</span>}
-                      {m.property_title && <span className="text-xs text-navy-400">· {m.property_title}</span>}
-                      <span className="text-[10px] text-navy-400 ml-auto">{m.created_at ? new Date(m.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}</span>
+                      <span className="text-xs font-semibold text-navy-700 dark:text-navy-300 dark:text-navy-100">{m.direction === 'sent' ? 'Enviado' : 'Recibido'}</span>
+                      {m.lead_name && <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">para {m.lead_name}</span>}
+                      {m.property_title && <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">· {m.property_title}</span>}
+                      <span className="text-[10px] text-navy-400 ml-auto dark:text-navy-300 dark:text-navy-100">{m.created_at ? new Date(m.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}</span>
                     </div>
-                    <p className="text-sm text-navy-600 mt-0.5 line-clamp-2">{m.content}</p>
+                    <p className="text-sm text-navy-600 mt-0.5 line-clamp-2 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{m.content}</p>
                   </div>
                 </div>
               ))}

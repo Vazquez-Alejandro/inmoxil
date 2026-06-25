@@ -34,8 +34,8 @@ export default function OwnerPropertiesPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-navy-900">Mis Propiedades</h1>
-        <p className="text-sm text-navy-500 mt-1">{properties.length} propiedades en tu portafolio</p>
+        <h1 className="text-2xl font-bold text-navy-900 dark:text-white">Mis Propiedades</h1>
+        <p className="text-sm text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{properties.length} propiedades en tu portafolio</p>
       </div>
 
       {loading && (
@@ -55,12 +55,12 @@ export default function OwnerPropertiesPage() {
       {!loading && properties.length === 0 && (
         <div className="card p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-navy-50 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <svg className="w-8 h-8 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Sin propiedades aún</h3>
-          <p className="text-sm text-navy-500 max-w-md mx-auto">No hay propiedades asignadas a tu cuenta. Contactá a tu administrador.</p>
+          <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Sin propiedades aún</h3>
+          <p className="text-sm text-navy-500 max-w-md mx-auto dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">No hay propiedades asignadas a tu cuenta. Contactá a tu administrador.</p>
         </div>
       )}
 
@@ -80,18 +80,18 @@ export default function OwnerPropertiesPage() {
                     <span className="absolute top-3 right-3 badge bg-gold-500 text-white">{property.currency}</span>
                   )}
                   {property.property_type && (
-                    <span className="absolute bottom-3 left-3 badge bg-white/90 text-navy-800 text-[10px] uppercase tracking-wider">
+                    <span className="absolute bottom-3 left-3 badge bg-white/90 text-navy-800 text-[10px] uppercase tracking-wider dark:text-navy-200">
                       {property.property_type}
                     </span>
                   )}
                 </div>
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-navy-900 truncate flex-1">{property.title}</h4>
+                    <h4 className="font-semibold text-navy-900 truncate flex-1 dark:text-white">{property.title}</h4>
                     <span className={`ml-2 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusInfo.color}`}>{statusInfo.label}</span>
                   </div>
-                  <p className="text-sm text-navy-500 truncate mb-3">{property.address || property.neighborhood || 'Sin dirección'}{property.city ? `, ${property.city}` : ''}</p>
-                  <div className="flex items-center gap-4 text-xs text-navy-400 mb-3">
+                  <p className="text-sm text-navy-500 truncate mb-3 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{property.address || property.neighborhood || 'Sin dirección'}{property.city ? `, ${property.city}` : ''}</p>
+                  <div className="flex items-center gap-4 text-xs text-navy-400 mb-3 dark:text-navy-300 dark:text-navy-100">
                     {property.beds > 0 && <span>{property.beds} amb</span>}
                     {property.baths > 0 && <span>{property.baths} baños</span>}
                     {property.sqm > 0 && <span>{property.sqm} m²</span>}
@@ -101,7 +101,7 @@ export default function OwnerPropertiesPage() {
                       {formatPrice(property.price || 0, property.currency || 'USD')}
                     </p>
                     {property.description && (
-                      <p className="text-xs text-navy-400 truncate max-w-[120px]">{property.description}</p>
+                      <p className="text-xs text-navy-400 truncate max-w-[120px] dark:text-navy-300 dark:text-navy-100">{property.description}</p>
                     )}
                   </div>
                 </div>

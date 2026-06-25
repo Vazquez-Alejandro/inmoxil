@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import Header from '@/components/Header'
 import { useWorkspace } from '@/lib/workspace-context'
-import Link from 'next/link'
 
 export default function MLPage() {
   const { workspace } = useWorkspace()
@@ -58,27 +57,22 @@ export default function MLPage() {
     <>
       <Header title="MercadoLibre" subtitle="Publicación y sincronización de propiedades" />
 
-      {!process.env.NEXT_PUBLIC_ML_CLIENT_ID && (
-        <div className="card p-6 mb-6 border-2 border-amber-200 bg-amber-50">
-          <h3 className="font-bold text-amber-800">Configuración pendiente</h3>
-          <p className="text-sm text-amber-700 mt-1">Creá una app en <Link href="https://developers.mercadolibre.com.ar" target="_blank" className="underline font-medium">developers.mercadolibre.com.ar</Link>, agregá <code className="bg-amber-100 px-1.5 py-0.5 rounded text-xs">{typeof window !== 'undefined' ? window.location.origin : ''}/api/ml/callback</code> como redirect URI, y configurá <code className="bg-amber-100 px-1.5 py-0.5 rounded text-xs">ML_CLIENT_ID</code> y <code className="bg-amber-100 px-1.5 py-0.5 rounded text-xs">ML_CLIENT_SECRET</code> en las variables de entorno.</p>
-        </div>
-      )}
-
-      {loading ? (
-        <div className="text-center py-12 text-sm text-navy-400">Cargando...</div>
-      ) : !connected ? (
+      {!connected && !loading && (
         <div className="card p-12 text-center max-w-lg mx-auto">
           <svg className="w-16 h-16 text-amber-400 mx-auto mb-4" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
           </svg>
-          <h3 className="text-xl font-bold text-navy-900 mb-2">Conectá MercadoLibre</h3>
-          <p className="text-sm text-navy-500 mb-6">Publicá y sincronizá tus propiedades directamente en MercadoLibre desde Inmoxil.</p>
+          <h3 className="text-xl font-bold text-navy-900 mb-2 dark:text-white">Conectá MercadoLibre</h3>
+          <p className="text-sm text-navy-500 mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Publicá y sincronizá tus propiedades directamente en MercadoLibre desde Inmoxil.</p>
           <button onClick={connectML} disabled={connecting} className="btn-primary">
             {connecting ? 'Conectando...' : 'Conectar con MercadoLibre'}
           </button>
         </div>
-      ) : (
+      )}
+
+      {loading ? (
+        <div className="text-center py-12 text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Cargando...</div>
+      ) : connected && (
         <div>
           <div className="card p-6 mb-6">
             <div className="flex items-center justify-between">
@@ -87,19 +81,19 @@ export default function MLPage() {
                   <svg className="w-6 h-6 text-amber-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" /></svg>
                 </div>
                 <div>
-                  <p className="font-bold text-navy-900">Conectado</p>
-                  <p className="text-sm text-navy-500">Seller ID: {sellerId}</p>
+                  <p className="font-bold text-navy-900 dark:text-white">Conectado</p>
+                  <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Seller ID: {sellerId}</p>
                 </div>
               </div>
               <button onClick={disconnect} className="text-sm text-red-500 hover:text-red-600 font-medium">Desconectar</button>
             </div>
           </div>
 
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Tus publicaciones en ML ({items.length})</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Tus publicaciones en ML ({items.length})</h3>
           {items.length === 0 ? (
             <div className="card p-8 text-center">
-              <p className="text-navy-500">No tenés publicaciones activas en MercadoLibre.</p>
-              <p className="text-sm text-navy-400 mt-1">Próximamente: publicar propiedades desde Inmoxil.</p>
+              <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">No tenés publicaciones activas en MercadoLibre.</p>
+              <p className="text-sm text-navy-400 mt-1 dark:text-navy-300 dark:text-navy-100">Próximamente: publicar propiedades desde Inmoxil.</p>
             </div>
           ) : (
             <div className="grid gap-4">
@@ -109,8 +103,8 @@ export default function MLPage() {
                     <img src={item.pictures[0].source} alt="" className="w-16 h-16 rounded-lg object-cover" />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-navy-900 truncate">{item.title}</p>
-                    <p className="text-sm text-navy-500">$ {item.price?.toLocaleString('es-AR')} {item.currency_id}</p>
+                    <p className="font-medium text-navy-900 truncate dark:text-white">{item.title}</p>
+                    <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">$ {item.price?.toLocaleString('es-AR')} {item.currency_id}</p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                     item.status === 'active' ? 'bg-emerald-100 text-emerald-700' :

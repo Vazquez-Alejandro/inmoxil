@@ -115,16 +115,16 @@ export default function AnalyticsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Bar Chart - Properties by Portal */}
             <div className="card p-6">
-              <h3 className="text-lg font-bold text-navy-900 mb-6">Propiedades por Portal</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-6 dark:text-white">Propiedades por Portal</h3>
               {data.portalStats.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-sm text-navy-500">Sin datos de portales disponibles</p>
+                  <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin datos de portales disponibles</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {data.portalStats.map(item => (
                     <div key={item.portal} className="flex items-center gap-4">
-                      <span className="text-sm text-navy-700 font-medium w-28 truncate text-right">
+                      <span className="text-sm text-navy-700 font-medium w-28 truncate text-right dark:text-navy-300 dark:text-navy-100">
                         {item.portal}
                       </span>
                       <div className="flex-1">
@@ -145,7 +145,7 @@ export default function AnalyticsPage() {
 
             {/* Donut Chart - Credits Usage */}
             <div className="card p-6">
-              <h3 className="text-lg font-bold text-navy-900 mb-6">Uso de Créditos</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-6 dark:text-white">Uso de Créditos</h3>
               <div className="flex flex-col items-center gap-6">
                 <div className="relative w-48 h-48">
                   <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
@@ -165,18 +165,18 @@ export default function AnalyticsPage() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-bold text-navy-900">{data.stats.creditsRemaining}</span>
-                    <span className="text-xs text-navy-500">restantes</span>
+                    <span className="text-2xl font-bold text-navy-900 dark:text-white">{data.stats.creditsRemaining}</span>
+                    <span className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">restantes</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-coral-400" />
-                    <span className="text-sm text-navy-600">Consumidos ({data.stats.creditsUsed})</span>
+                    <span className="text-sm text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Consumidos ({data.stats.creditsUsed})</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-gray-200" />
-                    <span className="text-sm text-navy-600">Restantes ({data.stats.creditsRemaining})</span>
+                    <span className="text-sm text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Restantes ({data.stats.creditsRemaining})</span>
                   </div>
                 </div>
               </div>
@@ -187,10 +187,10 @@ export default function AnalyticsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Activity Feed */}
             <div className="card p-6">
-              <h3 className="text-lg font-bold text-navy-900 mb-4">Actividad Reciente</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Actividad Reciente</h3>
               {data.transactions.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-sm text-navy-500">Sin transacciones registradas</p>
+                  <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin transacciones registradas</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -200,7 +200,7 @@ export default function AnalyticsPage() {
                         tx.type === 'consumption' ? 'bg-red-100 text-red-600' :
                         tx.type === 'topup' ? 'bg-emerald-100 text-emerald-600' :
                         'bg-navy-100 text-navy-600'
-                      }`}>
+                      } dark:text-navy-400 dark:text-navy-300 dark:text-navy-100`}>
                         {tx.type === 'consumption' ? (
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -212,10 +212,10 @@ export default function AnalyticsPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-navy-900 truncate">
+                        <p className="text-sm font-medium text-navy-900 truncate dark:text-white">
                           {tx.description || (tx.type === 'consumption' ? 'Crédito consumido' : 'Créditos agregados')}
                         </p>
-                        <p className="text-xs text-navy-500">
+                        <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                           {new Date(tx.created_at).toLocaleDateString('es-AR', {
                             day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
                           })}
@@ -234,24 +234,24 @@ export default function AnalyticsPage() {
 
             {/* Top Properties */}
             <div className="card p-6">
-              <h3 className="text-lg font-bold text-navy-900 mb-4">Propiedades Más Recientes</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Propiedades Más Recientes</h3>
               {data.topProperties.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-sm text-navy-500">Sin propiedades registradas</p>
+                  <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin propiedades registradas</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {data.topProperties.map((prop, idx) => (
                     <div key={prop.id} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                      <span className="text-sm font-bold text-navy-400 w-6">{idx + 1}</span>
+                      <span className="text-sm font-bold text-navy-400 w-6 dark:text-navy-300 dark:text-navy-100">{idx + 1}</span>
                       <div className="w-10 h-10 rounded-lg bg-navy-100 flex items-center justify-center">
-                        <PropertyIcon className="w-5 h-5 text-navy-600" />
+                        <PropertyIcon className="w-5 h-5 text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-navy-900 truncate">Propiedad {idx + 1}</p>
-                        <p className="text-xs text-navy-500">{prop.portal}</p>
+                        <p className="text-sm font-medium text-navy-900 truncate dark:text-white">Propiedad {idx + 1}</p>
+                        <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{prop.portal}</p>
                       </div>
-                      <span className="text-xs text-navy-400">
+                      <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">
                         {new Date(prop.created_at).toLocaleDateString('es-AR')}
                       </span>
                     </div>
@@ -275,8 +275,8 @@ function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label:
         </div>
       </div>
       <div>
-        <p className="text-3xl font-bold text-navy-900 tracking-tight">{value}</p>
-        <p className="text-sm text-navy-500 mt-1">{label}</p>
+        <p className="text-3xl font-bold text-navy-900 tracking-tight dark:text-white">{value}</p>
+        <p className="text-sm text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{label}</p>
       </div>
     </div>
   )

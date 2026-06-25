@@ -8,6 +8,8 @@ import { WorkspaceProvider } from '@/lib/workspace-context'
 import { ToastProvider } from '@/lib/toast-context'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import Sidebar from '@/components/Sidebar'
+import TourOverlay from '@/components/TourOverlay'
+import FAQPanel from '@/components/FAQPanel'
 
 function TermsModal({ onAccept }: { onAccept: () => void }) {
   const [loading, setLoading] = useState(false)
@@ -29,20 +31,20 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3 mb-2">
             <div className="logo-mark w-10 h-10 text-base">Ix</div>
-            <h2 className="text-xl font-bold text-navy-900">Bienvenido/a a Inmoxil</h2>
+            <h2 className="text-xl font-bold text-navy-900 dark:text-white">Bienvenido/a a Inmoxil</h2>
           </div>
-          <p className="text-sm text-navy-500">Antes de continuar, necesitás aceptar nuestros Términos y Condiciones.</p>
+          <p className="text-sm text-navy-500 dark:text-navy-300">Antes de continuar, necesitás aceptar nuestros Términos y Condiciones.</p>
         </div>
 
         <div
-          className="flex-1 overflow-y-auto p-6 text-sm text-navy-700 space-y-4"
+          className="flex-1 overflow-y-auto p-6 text-sm text-navy-700 space-y-4 dark:text-navy-300"
           onScroll={(e) => {
             const el = e.currentTarget
             setScrolled(el.scrollTop + el.clientHeight >= el.scrollHeight - 50)
           }}
         >
           <div>
-            <h3 className="font-bold text-navy-900 mb-2">Uso de la Importación</h3>
+            <h3 className="font-bold text-navy-900 mb-2 dark:text-white">Uso de la Importación</h3>
             <p className="leading-relaxed">
               La plataforma permite recopilar información de propiedades inmobiliarias de portales públicos.
               La importación debe realizarse con fines lícitos (monitoreo de mercado o gestión de propias propiedades).
@@ -55,7 +57,7 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
           </div>
 
           <div>
-            <h3 className="font-bold text-navy-900 mb-2">Responsabilidad</h3>
+            <h3 className="font-bold text-navy-900 mb-2 dark:text-white">Responsabilidad</h3>
             <p className="leading-relaxed">
               Inmoxil no se responsabiliza por reclamos, sanciones o consecuencias legales derivadas del uso
               indebido de la importación. Los datos pueden cambiar sin previo aviso.
@@ -63,7 +65,7 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
           </div>
 
           <div>
-            <h3 className="font-bold text-navy-900 mb-2">Privacidad</h3>
+            <h3 className="font-bold text-navy-900 mb-2 dark:text-white">Privacidad</h3>
             <p className="leading-relaxed">
               Al aceptar, aceptás nuestra{' '}
               <Link href="/privacidad" target="_blank" className="text-gold-600 hover:text-gold-700 underline font-medium">Política de Privacidad</Link>
@@ -84,7 +86,7 @@ function TermsModal({ onAccept }: { onAccept: () => void }) {
                 if (btn) btn.disabled = !e.target.checked
               }}
             />
-            <span className="text-sm text-navy-700">
+            <span className="text-sm text-navy-700 dark:text-navy-300">
               He leído y acepto los{' '}
               <Link href="/terminos" target="_blank" className="text-gold-600 hover:text-gold-700 underline">Términos de Servicio</Link>
               {' '}y la{' '}
@@ -111,6 +113,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [ready, setReady] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState<boolean | null>(null)
+  const [showTour, setShowTour] = useState(false)
+  const [showFAQ, setShowFAQ] = useState(false)
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -140,7 +144,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="min-h-screen bg-gray-50 dark:bg-navy-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="logo-mark w-12 h-12">Ix</div>
-          <div className="flex items-center gap-2 text-navy-500">
+          <div className="flex items-center gap-2 text-navy-500 dark:text-navy-300">
             <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -187,16 +191,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </main>
 
               <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-gray-200 dark:border-navy-700 mt-auto">
-                <div className="flex items-center justify-center gap-4 text-xs text-navy-400 dark:text-navy-500">
-                  <Link href="/terminos" target="_blank" className="hover:text-navy-600 dark:hover:text-navy-300 transition-colors">Términos y Condiciones</Link>
+                <div className="flex items-center justify-center gap-4 text-xs text-navy-400 dark:text-navy-300">
+                  <Link href="/terminos" target="_blank" className="hover:text-navy-600 dark:hover:text-navy-300 transition-colors dark:text-navy-300">Términos y Condiciones</Link>
                   <span>·</span>
-                  <Link href="/privacidad" target="_blank" className="hover:text-navy-600 dark:hover:text-navy-300 transition-colors">Política de Privacidad</Link>
+                  <Link href="/privacidad" target="_blank" className="hover:text-navy-600 dark:hover:text-navy-300 transition-colors dark:text-navy-300">Política de Privacidad</Link>
                 </div>
               </footer>
             </div>
           </div>
         </ErrorBoundary>
       </WorkspaceProvider>
+
+      {showTour && <TourOverlay onClose={() => setShowTour(false)} />}
+      {showFAQ && <FAQPanel onClose={() => setShowFAQ(false)} />}
+
+      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
+        <button
+          onClick={() => setShowFAQ(true)}
+          className="w-12 h-12 rounded-full bg-gold-500 hover:bg-gold-600 text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+          title="Asistente virtual"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+          </svg>
+        </button>
+        <button
+          onClick={() => setShowTour(true)}
+          className="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 shadow-lg hover:shadow-xl transition-all flex items-center justify-center font-bold text-lg"
+          title="Guía interactiva"
+        >
+          ?
+        </button>
+      </div>
     </ToastProvider>
   )
 }

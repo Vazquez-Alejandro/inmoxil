@@ -160,7 +160,7 @@ export default function ApiDocsPage() {
       <div className="space-y-8">
         {/* Authentication */}
         <div className="card p-6">
-          <h2 className="text-xl font-bold text-navy-900 mb-4 flex items-center gap-3">
+          <h2 className="text-xl font-bold text-navy-900 mb-4 flex items-center gap-3 dark:text-white">
             <div className="w-8 h-8 rounded-lg bg-navy-900 flex items-center justify-center">
               <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
@@ -168,29 +168,29 @@ export default function ApiDocsPage() {
             </div>
             Autenticación
           </h2>
-          <p className="text-navy-600 mb-4">
+          <p className="text-navy-600 mb-4 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             Todas las requests requieren un API Key en el header de autorización.
           </p>
           <div className="bg-navy-900 rounded-lg p-4 font-mono text-sm text-green-400 overflow-x-auto">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-navy-400 text-xs">Header</span>
+              <span className="text-navy-400 text-xs dark:text-navy-300 dark:text-navy-100">Header</span>
               <button
                 onClick={() => copyToClipboard('Authorization: Bearer YOUR_API_KEY', 'auth')}
-                className="text-xs text-navy-400 hover:text-white transition-colors"
+                className="text-xs text-navy-400 hover:text-white transition-colors dark:text-navy-300 dark:text-navy-100"
               >
                 {copiedId === 'auth' ? 'Copiado!' : 'Copiar'}
               </button>
             </div>
             Authorization: Bearer YOUR_API_KEY
           </div>
-          <p className="text-xs text-navy-400 mt-3">
+          <p className="text-xs text-navy-400 mt-3 dark:text-navy-300 dark:text-navy-100">
             Podés generar tu API Key desde el dashboard de administración.
           </p>
         </div>
 
         {/* Base URL */}
         <div className="card p-6">
-          <h2 className="text-xl font-bold text-navy-900 mb-4 flex items-center gap-3">
+          <h2 className="text-xl font-bold text-navy-900 mb-4 flex items-center gap-3 dark:text-white">
             <div className="w-8 h-8 rounded-lg bg-navy-900 flex items-center justify-center">
               <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-3.02a4.5 4.5 0 00-1.242-7.244l-4.5-4.5a4.5 4.5 0 00-6.364 6.364L5.25 8.689" />
@@ -201,14 +201,14 @@ export default function ApiDocsPage() {
           <div className="bg-navy-900 rounded-lg p-4 font-mono text-sm text-green-400 overflow-x-auto">
             https://tu-app.vercel.app/api
           </div>
-          <p className="text-xs text-navy-400 mt-3">
+          <p className="text-xs text-navy-400 mt-3 dark:text-navy-300 dark:text-navy-100">
             Reemplazá con tu dominio de producción o el de desarrollo local.
           </p>
         </div>
 
         {/* Endpoints */}
         <div>
-          <h2 className="text-xl font-bold text-navy-900 mb-4">Endpoints</h2>
+          <h2 className="text-xl font-bold text-navy-900 mb-4 dark:text-white">Endpoints</h2>
           <div className="space-y-4">
             {ENDPOINTS.map((endpoint, idx) => (
               <div key={idx} className="card p-6">
@@ -220,18 +220,18 @@ export default function ApiDocsPage() {
                   }`}>
                     {endpoint.method}
                   </span>
-                  <code className="text-sm font-mono text-navy-900 font-semibold">{endpoint.path}</code>
+                  <code className="text-sm font-mono text-navy-900 font-semibold dark:text-white">{endpoint.path}</code>
                 </div>
-                <p className="text-sm text-navy-600 mb-4">{endpoint.description}</p>
+                <p className="text-sm text-navy-600 mb-4 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{endpoint.description}</p>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {/* Request */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-semibold text-navy-500 uppercase tracking-wider">Request</span>
+                      <span className="text-xs font-semibold text-navy-500 uppercase tracking-wider dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Request</span>
                       <button
                         onClick={() => copyToClipboard(endpoint.requestExample, `req-${idx}`)}
-                        className="text-xs text-navy-400 hover:text-navy-700 transition-colors flex items-center gap-1"
+                        className="text-xs text-navy-400 hover:text-navy-700 transition-colors flex items-center gap-1 dark:text-navy-300 dark:text-navy-100"
                       >
                         {copiedId === `req-${idx}` ? (
                           <>
@@ -258,10 +258,10 @@ export default function ApiDocsPage() {
                   {/* Response */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-semibold text-navy-500 uppercase tracking-wider">Response</span>
+                      <span className="text-xs font-semibold text-navy-500 uppercase tracking-wider dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Response</span>
                       <button
                         onClick={() => copyToClipboard(endpoint.responseExample, `res-${idx}`)}
-                        className="text-xs text-navy-400 hover:text-navy-700 transition-colors flex items-center gap-1"
+                        className="text-xs text-navy-400 hover:text-navy-700 transition-colors flex items-center gap-1 dark:text-navy-300 dark:text-navy-100"
                       >
                         {copiedId === `res-${idx}` ? (
                           <>
@@ -292,7 +292,7 @@ export default function ApiDocsPage() {
 
         {/* Rate Limits */}
         <div className="card p-6">
-          <h2 className="text-xl font-bold text-navy-900 mb-4 flex items-center gap-3">
+          <h2 className="text-xl font-bold text-navy-900 mb-4 flex items-center gap-3 dark:text-white">
             <div className="w-8 h-8 rounded-lg bg-navy-900 flex items-center justify-center">
               <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -302,16 +302,16 @@ export default function ApiDocsPage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-bold text-navy-900">100</p>
-              <p className="text-sm text-navy-500">requests / minuto</p>
+              <p className="text-2xl font-bold text-navy-900 dark:text-white">100</p>
+              <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">requests / minuto</p>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-bold text-navy-900">1000</p>
-              <p className="text-sm text-navy-500">requests / hora</p>
+              <p className="text-2xl font-bold text-navy-900 dark:text-white">1000</p>
+              <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">requests / hora</p>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-bold text-navy-900">10K</p>
-              <p className="text-sm text-navy-500">requests / día</p>
+              <p className="text-2xl font-bold text-navy-900 dark:text-white">10K</p>
+              <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">requests / día</p>
             </div>
           </div>
         </div>

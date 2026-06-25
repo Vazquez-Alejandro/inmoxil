@@ -48,22 +48,22 @@ export default function OwnerLoginPage() {
             Portal del<br />
             <span className="text-gold-400">Propietario</span>
           </h1>
-          <p className="text-navy-300 text-lg max-w-md leading-relaxed">
+          <p className="text-navy-300 text-lg max-w-md leading-relaxed dark:text-navy-100">
             Accedé a tus propiedades, contratos y tickets de mantenimiento
             en un solo lugar, con toda la información actualizada.
           </p>
           <div className="flex gap-8 mt-12">
             <div>
               <p className="text-3xl font-bold text-gold-400">Mis</p>
-              <p className="text-navy-400 text-sm">Propiedades</p>
+              <p className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Propiedades</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gold-400">Contratos</p>
-              <p className="text-navy-400 text-sm">Activos</p>
+              <p className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Activos</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gold-400">Tickets</p>
-              <p className="text-navy-400 text-sm">Mantenimiento</p>
+              <p className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Mantenimiento</p>
             </div>
           </div>
         </div>
@@ -74,15 +74,15 @@ export default function OwnerLoginPage() {
           <div className="lg:hidden flex items-center gap-3 mb-12">
             <div className="logo-mark">Ix</div>
             <div>
-              <h1 className="text-xl font-bold text-navy-900">Inmoxil</h1>
-              <p className="text-navy-500 text-[10px] uppercase tracking-widest">Portal del Propietario</p>
+              <h1 className="text-xl font-bold text-navy-900 dark:text-white">Inmoxil</h1>
+              <p className="text-navy-500 text-[10px] uppercase tracking-widest dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Portal del Propietario</p>
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-navy-900 mb-2">Iniciar sesión</h2>
-          <p className="text-navy-500 mb-8">Accedé a tu panel de propietario</p>
+          <h2 className="text-2xl font-bold text-navy-900 mb-2 dark:text-white">Iniciar sesión</h2>
+          <p className="text-navy-500 mb-8 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Accedé a tu panel de propietario</p>
 
-          <Link href="/" className="inline-flex items-center gap-1 text-sm text-navy-400 hover:text-navy-600 transition-colors mb-6">
+          <Link href="/" className="inline-flex items-center gap-1 text-sm text-navy-400 hover:text-navy-600 transition-colors mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>

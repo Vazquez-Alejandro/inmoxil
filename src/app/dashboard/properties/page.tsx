@@ -290,7 +290,7 @@ export default function PropertiesPage() {
       {/* Add Form */}
       {showAddForm && (
         <div className="card p-6 mb-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Agregar propiedad manualmente</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Agregar propiedad manualmente</h3>
           {addSuccess ? (
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
               <p className="text-emerald-700 font-medium">Propiedad agregada correctamente</p>
@@ -381,7 +381,7 @@ export default function PropertiesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
           <div className="sm:col-span-2 lg:col-span-2">
             <div className="relative">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
               <input type="text" className="input pl-10" placeholder="Buscar título, dirección, barrio..." value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -409,7 +409,7 @@ export default function PropertiesPage() {
         </div>
         {(search || filterPortal !== 'all' || filterType || filterBeds || priceMin || priceMax) && (
           <div className="mt-3 flex items-center gap-2">
-            <span className="text-xs text-navy-400">{filtered.length} resultados con estos filtros</span>
+            <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{filtered.length} resultados con estos filtros</span>
             <button onClick={() => { setSearch(''); setFilterPortal('all'); setFilterType(''); setFilterBeds(''); setPriceMin(''); setPriceMax('') }} className="text-xs text-gold-600 hover:text-gold-700 font-medium">Limpiar filtros</button>
           </div>
         )}
@@ -434,12 +434,12 @@ export default function PropertiesPage() {
       {!loading && properties.length === 0 && (
         <div className="card p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-navy-50 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <svg className="w-8 h-8 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Sin propiedades aún</h3>
-          <p className="text-sm text-navy-500 max-w-md mx-auto mb-6">
+          <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Sin propiedades aún</h3>
+          <p className="text-sm text-navy-500 max-w-md mx-auto mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             Agregá propiedades manualmente, importá un CSV o scrapeá portales inmobiliarios.
           </p>
           <div className="flex gap-3 justify-center">
@@ -453,7 +453,7 @@ export default function PropertiesPage() {
       {!loading && filtered.length > 0 && (
         <>
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-navy-500">{filtered.length} propiedades</p>
+            <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{filtered.length} propiedades</p>
             {filtered.length > 0 && (
               <button onClick={exportCSV} className="btn-outline text-sm">
                 <svg className="w-4 h-4 mr-1 inline" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -478,7 +478,7 @@ export default function PropertiesPage() {
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); openEdit(property) }}
-                    className="absolute top-3 left-3 w-7 h-7 rounded-full bg-white/80 text-navy-700 flex items-center justify-center hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-3 left-3 w-7 h-7 rounded-full bg-white/80 text-navy-700 flex items-center justify-center hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity dark:text-navy-300 dark:text-navy-100"
                     title="Editar"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -496,13 +496,13 @@ export default function PropertiesPage() {
                   </button>
                 </div>
                 <div className="p-4">
-                  <h4 className="font-semibold text-navy-900 truncate mb-1">{property.title}</h4>
-                  <p className="text-sm text-navy-500 truncate mb-3">{property.address || property.neighborhood || 'Sin dirección'}</p>
-                  <div className="flex items-center gap-4 text-xs text-navy-400 mb-3">
+                  <h4 className="font-semibold text-navy-900 truncate mb-1 dark:text-white">{property.title}</h4>
+                  <p className="text-sm text-navy-500 truncate mb-3 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{property.address || property.neighborhood || 'Sin dirección'}</p>
+                  <div className="flex items-center gap-4 text-xs text-navy-400 mb-3 dark:text-navy-300 dark:text-navy-100">
                     {property.beds > 0 && <span>{property.beds} amb</span>}
                     {property.baths > 0 && <span>{property.baths} baños</span>}
                     {property.sqm > 0 && <span>{property.sqm} m²</span>}
-                    {property.property_type && <span className="badge bg-navy-50 text-navy-600">{property.property_type}</span>}
+                    {property.property_type && <span className="badge bg-navy-50 dark:bg-navy-800 text-navy-600 dark:text-navy-300">{property.property_type}</span>}
                     {property.lat && property.lng && (
                       <a href={mapUrl(property.lat, property.lng)} target="_blank" rel="noopener" className="text-indigo-500 hover:text-indigo-700 font-medium" title="Ver en mapa">
                         <svg className="w-4 h-4 inline" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -543,13 +543,13 @@ export default function PropertiesPage() {
                           <div className="fixed inset-0 z-40" onClick={() => setPublishDrop(null)} />
                           <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-navy-200 rounded-lg shadow-lg z-50 py-1">
                             {channels.length === 0 ? (
-                              <p className="px-3 py-2 text-xs text-navy-400">Sin canales activos</p>
+                              <p className="px-3 py-2 text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin canales activos</p>
                             ) : (
                               channels.map((ch: any) => (
                                 <button
                                   key={ch.id}
                                   onClick={() => publishProperty(property.id, ch.type)}
-                                  className="w-full text-left px-3 py-2 text-sm text-navy-700 hover:bg-navy-50 flex items-center gap-2"
+                                  className="w-full text-left px-3 py-2 text-sm text-navy-700 hover:bg-navy-50 flex items-center gap-2 dark:text-navy-300"
                                 >
                                   <span className={`w-5 h-5 rounded ${ch.type === 'mercadolibre' ? 'bg-amber-500' : 'bg-navy-400'} flex items-center justify-center text-white text-[8px] font-bold`}>
                                     {ch.type === 'mercadolibre' ? 'ML' : ch.type.slice(0, 2).toUpperCase()}
@@ -575,8 +575,8 @@ export default function PropertiesPage() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setEditProperty(null)}>
           <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 sticky top-0 bg-white z-10">
-              <h2 className="text-lg font-bold text-navy-900">Editar propiedad</h2>
-              <button onClick={() => setEditProperty(null)} className="text-navy-400 hover:text-navy-600 p-1">
+              <h2 className="text-lg font-bold text-navy-900 dark:text-white">Editar propiedad</h2>
+              <button onClick={() => setEditProperty(null)} className="text-navy-400 hover:text-navy-600 p-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -660,9 +660,9 @@ export default function PropertiesPage() {
                   ))}
                   <label className="w-20 h-20 rounded-lg border-2 border-dashed border-navy-300 flex items-center justify-center cursor-pointer hover:border-indigo-400 transition-colors">
                     {uploading ? (
-                      <span className="text-xs text-navy-400">...</span>
+                      <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">...</span>
                     ) : (
-                      <svg className="w-6 h-6 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <svg className="w-6 h-6 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                       </svg>
                     )}
@@ -685,7 +685,7 @@ export default function PropertiesPage() {
       {/* No results */}
       {!loading && properties.length > 0 && filtered.length === 0 && (
         <div className="card p-8 text-center">
-          <p className="text-navy-500">No se encontraron propiedades con esos filtros.</p>
+          <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">No se encontraron propiedades con esos filtros.</p>
           <button onClick={() => { setSearch(''); setFilterPortal('all'); setFilterType(''); setFilterBeds(''); setPriceMin(''); setPriceMax('') }} className="btn-outline text-sm mt-3">Limpiar filtros</button>
         </div>
       )}

@@ -59,7 +59,7 @@ export default function NotificationBell() {
 
   return (
     <div ref={ref} className="relative">
-      <button onClick={() => setOpen(!open)} className="relative p-2 text-navy-400 hover:text-navy-600 transition-colors rounded-lg hover:bg-navy-100">
+      <button onClick={() => setOpen(!open)} className="relative p-2 text-navy-400 hover:text-navy-600 transition-colors rounded-lg hover:bg-navy-100 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
         </svg>
@@ -71,14 +71,14 @@ export default function NotificationBell() {
       {open && (
         <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-navy-200 rounded-xl shadow-lg z-50 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-navy-100">
-            <h3 className="text-sm font-semibold text-navy-900">Notificaciones</h3>
+            <h3 className="text-sm font-semibold text-navy-900 dark:text-white">Notificaciones</h3>
             {unreadCount > 0 && (
               <button onClick={markAllRead} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">Marcar todas leídas</button>
             )}
           </div>
           <div className="max-h-80 overflow-y-auto">
             {notifications.length === 0 ? (
-              <div className="text-center py-8 text-sm text-navy-400">Sin notificaciones</div>
+              <div className="text-center py-8 text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin notificaciones</div>
             ) : (
               notifications.map(n => (
                 <div key={n.id} className="flex items-start gap-3 px-4 py-3 hover:bg-navy-50 border-b border-navy-50 last:border-0 cursor-pointer" onClick={() => markAsRead(n.id!)}>
@@ -103,9 +103,9 @@ export default function NotificationBell() {
                     }</svg>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-navy-800">{n.title}</p>
-                    {n.message && <p className="text-xs text-navy-500 mt-0.5 line-clamp-2">{n.message}</p>}
-                    <p className="text-[10px] text-navy-400 mt-1">{n.createdAt ? new Date(n.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}</p>
+                    <p className="text-sm font-medium text-navy-800 dark:text-navy-200">{n.title}</p>
+                    {n.message && <p className="text-xs text-navy-500 mt-0.5 line-clamp-2 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{n.message}</p>}
+                    <p className="text-[10px] text-navy-400 mt-1 dark:text-navy-300 dark:text-navy-100">{n.createdAt ? new Date(n.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}</p>
                   </div>
                 </div>
               ))

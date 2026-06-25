@@ -41,7 +41,7 @@ export default function LoginPage() {
             La plataforma en la nube<br />
             <span className="text-gold-400">para inmobiliarias</span>
           </h1>
-          <p className="text-navy-300 text-lg max-w-md leading-relaxed">
+          <p className="text-navy-300 text-lg max-w-md leading-relaxed dark:text-navy-100">
             Importación multi-portal, generación de anuncios con tu marca, 
             pago por créditos y todo lo que necesitás para escalar 
             tu negocio inmobiliario.
@@ -49,15 +49,15 @@ export default function LoginPage() {
           <div className="flex gap-8 mt-12">
             <div>
               <p className="text-3xl font-bold text-gold-400">8+</p>
-              <p className="text-navy-400 text-sm">Portales soportados</p>
+              <p className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Portales soportados</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gold-400">6</p>
-              <p className="text-navy-400 text-sm">Plantillas de anuncios</p>
+              <p className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Plantillas de anuncios</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gold-400">24/7</p>
-              <p className="text-navy-400 text-sm">Importación automática</p>
+              <p className="text-navy-400 text-sm dark:text-navy-300 dark:text-navy-100">Importación automática</p>
             </div>
           </div>
         </div>
@@ -69,15 +69,15 @@ export default function LoginPage() {
           <div className="lg:hidden flex items-center gap-3 mb-12">
             <div className="logo-mark">Ix</div>
             <div>
-              <h1 className="text-xl font-bold text-navy-900">Inmoxil</h1>
-              <p className="text-navy-500 text-[10px] uppercase tracking-widest">Plataforma en la nube</p>
+              <h1 className="text-xl font-bold text-navy-900 dark:text-white">Inmoxil</h1>
+              <p className="text-navy-500 text-[10px] uppercase tracking-widest dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Plataforma en la nube</p>
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-navy-900 mb-2">Iniciar sesión</h2>
-          <p className="text-navy-500 mb-8">Accedé a tu panel de control</p>
+          <h2 className="text-2xl font-bold text-navy-900 mb-2 dark:text-white">Iniciar sesión</h2>
+          <p className="text-navy-500 mb-8 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Accedé a tu panel de control</p>
 
-          <Link href="/" className="inline-flex items-center gap-1 text-sm text-navy-400 hover:text-navy-600 transition-colors mb-6">
+          <Link href="/" className="inline-flex items-center gap-1 text-sm text-navy-400 hover:text-navy-600 transition-colors mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
@@ -106,7 +106,7 @@ export default function LoginPage() {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="label mb-0">Contraseña</label>
-                <span className="text-xs text-navy-400">
+                <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">
                   <a href="/forgot-password" className="hover:text-gold-600">¿Olvidaste tu contraseña?</a>
                 </span>
               </div>
@@ -141,7 +141,7 @@ export default function LoginPage() {
 
           <div className="divider my-8" />
 
-          <p className="text-center text-sm text-navy-500">
+          <p className="text-center text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             ¿No tenés cuenta?{' '}
             <Link href="/register" className="text-gold-600 hover:text-gold-700 font-semibold">
               Registrate gratis

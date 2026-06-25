@@ -18,8 +18,8 @@ function ResetPasswordForm() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-8">
         <div className="card p-8 text-center max-w-md">
-          <h2 className="text-xl font-bold text-navy-900 mb-2">Enlace inválido</h2>
-          <p className="text-navy-500 text-sm mb-6">El enlace de recuperación no es válido o ya expiró.</p>
+          <h2 className="text-xl font-bold text-navy-900 mb-2 dark:text-white">Enlace inválido</h2>
+          <p className="text-navy-500 text-sm mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">El enlace de recuperación no es válido o ya expiró.</p>
           <Link href="/forgot-password" className="btn-primary">Solicitar nuevo enlace</Link>
         </div>
       </div>
@@ -67,8 +67,8 @@ function ResetPasswordForm() {
         <div className="flex items-center gap-3 mb-8 justify-center">
           <div className="logo-mark">Ix</div>
           <div>
-            <h1 className="text-xl font-bold text-navy-900">Inmoxil</h1>
-            <p className="text-navy-500 text-[10px] uppercase tracking-widest">Plataforma SaaS</p>
+            <h1 className="text-xl font-bold text-navy-900 dark:text-white">Inmoxil</h1>
+            <p className="text-navy-500 text-[10px] uppercase tracking-widest dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Plataforma SaaS</p>
           </div>
         </div>
 
@@ -80,14 +80,14 @@ function ResetPasswordForm() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
-              <h2 className="text-xl font-bold text-navy-900 mb-2">Contraseña restablecida</h2>
-              <p className="text-navy-500 text-sm mb-6">Ya podés iniciar sesión con tu nueva contraseña.</p>
+              <h2 className="text-xl font-bold text-navy-900 mb-2 dark:text-white">Contraseña restablecida</h2>
+              <p className="text-navy-500 text-sm mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Ya podés iniciar sesión con tu nueva contraseña.</p>
               <Link href="/login" className="btn-gold">Iniciar sesión</Link>
             </div>
           ) : (
             <>
-              <h2 className="text-xl font-bold text-navy-900 mb-2 text-center">Nueva contraseña</h2>
-              <p className="text-navy-500 text-sm mb-6 text-center">Ingresá tu nueva contraseña.</p>
+              <h2 className="text-xl font-bold text-navy-900 mb-2 text-center dark:text-white">Nueva contraseña</h2>
+              <p className="text-navy-500 text-sm mb-6 text-center dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Ingresá tu nueva contraseña.</p>
 
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-5">

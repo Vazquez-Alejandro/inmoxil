@@ -105,7 +105,7 @@ export default function BrandPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-6">Colores de marca</h3>
+            <h3 className="text-lg font-bold text-navy-900 mb-6 dark:text-white">Colores de marca</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label className="label">Color principal</label>
@@ -162,7 +162,7 @@ export default function BrandPage() {
           </div>
 
           <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-6">Logo</h3>
+            <h3 className="text-lg font-bold text-navy-900 mb-6 dark:text-white">Logo</h3>
             <div className="flex items-center gap-6">
               <div
                 className="w-24 h-24 rounded-2xl flex items-center justify-center text-3xl font-black border-2 border-dashed border-gray-300 overflow-hidden"
@@ -197,7 +197,7 @@ export default function BrandPage() {
                     className="hidden"
                   />
                 </label>
-                <p className="text-xs text-navy-400">PNG, SVG o JPG. Máx 2MB.</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">PNG, SVG o JPG. Máx 2MB.</p>
               </div>
             </div>
           </div>
@@ -221,8 +221,8 @@ export default function BrandPage() {
 
         <div className="space-y-6">
           <div className="card p-6">
-            <h3 className="text-lg font-bold text-navy-900 mb-4">Vista previa</h3>
-            <p className="text-sm text-navy-500 mb-6">Así se verán tus ads con tu marca</p>
+            <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Vista previa</h3>
+            <p className="text-sm text-navy-500 mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Así se verán tus ads con tu marca</p>
 
             <div className="rounded-xl overflow-hidden shadow-corporate-lg mb-4">
               <div
@@ -290,19 +290,19 @@ export default function BrandPage() {
           </div>
 
           <div className="card p-6">
-            <h3 className="font-bold text-navy-900 mb-3">Paleta de colores</h3>
+            <h3 className="font-bold text-navy-900 mb-3 dark:text-white">Paleta de colores</h3>
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg" style={{ backgroundColor: brand.primaryColor }} />
-                <span className="text-sm text-navy-600">{brand.primaryColor}</span>
+                <span className="text-sm text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{brand.primaryColor}</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg" style={{ backgroundColor: brand.secondaryColor }} />
-                <span className="text-sm text-navy-600">{brand.secondaryColor}</span>
+                <span className="text-sm text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{brand.secondaryColor}</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg" style={{ backgroundColor: brand.accentColor }} />
-                <span className="text-sm text-navy-600">{brand.accentColor}</span>
+                <span className="text-sm text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{brand.accentColor}</span>
               </div>
             </div>
           </div>

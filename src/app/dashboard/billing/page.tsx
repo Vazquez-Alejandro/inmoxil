@@ -132,7 +132,7 @@ export default function BillingPage() {
               </div>
               <div>
                 <p className="font-semibold text-navy-900 dark:text-white">Prueba gratis activa</p>
-                <p className="text-sm text-navy-500">Te quedan <span className="font-semibold text-emerald-600">{trialDaysLeft} día{trialDaysLeft !== 1 ? 's' : ''}</span> de prueba gratis. Después elegí un plan para seguir.</p>
+                <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Te quedan <span className="font-semibold text-emerald-600">{trialDaysLeft} día{trialDaysLeft !== 1 ? 's' : ''}</span> de prueba gratis. Después elegí un plan para seguir.</p>
               </div>
             </div>
             <span className="badge-gold text-xs whitespace-nowrap">14 días gratis</span>
@@ -148,18 +148,18 @@ export default function BillingPage() {
               <h3 className="text-lg font-bold text-navy-900 dark:text-white capitalize">Plan {currentPlan}</h3>
               <span className="badge-gold">Activo</span>
             </div>
-            <p className="text-sm text-navy-500">
+            <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
               {creditsTotal} créditos incluidos • Se renuevan el 1 de cada mes
             </p>
           </div>
           <div className="text-right">
                 <p className="text-3xl font-bold text-navy-900 dark:text-white">${plans.find(p => p.id === currentPlan)?.price || 29}</p>
-            <p className="text-sm text-navy-500">/mes</p>
+            <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">/mes</p>
           </div>
         </div>
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-navy-600">Créditos utilizados</span>
+            <span className="text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Créditos utilizados</span>
             <span className="font-medium text-navy-900 dark:text-white">{creditsUsed} / {creditsTotal}</span>
           </div>
           <div className="w-full bg-navy-100 rounded-full h-2">
@@ -205,14 +205,14 @@ export default function BillingPage() {
                 <h4 className="text-xl font-bold text-navy-900 dark:text-white mb-2">{plan.name}</h4>
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="text-4xl font-bold text-navy-900 dark:text-white">${plan.price}</span>
-                  <span className="text-navy-500">/mes</span>
+                  <span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">/mes</span>
                 </div>
-                <p className="text-sm text-navy-500 mt-2">{plan.credits} créditos/mes</p>
+                <p className="text-sm text-navy-500 mt-2 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{plan.credits} créditos/mes</p>
               </div>
 
               <ul className="space-y-3 mb-6 flex-1">
                 {plan.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-sm text-navy-700">
+                  <li key={idx} className="flex items-center gap-2 text-sm text-navy-700 dark:text-navy-300 dark:text-navy-100">
                     <svg className="w-4 h-4 text-gold-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>

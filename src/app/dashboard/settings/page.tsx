@@ -66,7 +66,7 @@ export default function SettingsPage() {
       <div className="space-y-6">
         {/* General */}
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Información general</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Información general</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <label className="label">Nombre del workspace</label>
@@ -82,14 +82,14 @@ export default function SettingsPage() {
             </div>
             <div className="flex items-center gap-3">
               <input type="checkbox" id="catalogEnabled" className="w-4 h-4 rounded border-navy-300 text-gold-500 focus:ring-gold-500" checked={form.public_catalog_enabled} onChange={e => setForm({ ...form, public_catalog_enabled: e.target.checked })} />
-              <label htmlFor="catalogEnabled" className="text-sm text-navy-700">Catálogo público habilitado</label>
+              <label htmlFor="catalogEnabled" className="text-sm text-navy-700 dark:text-navy-300 dark:text-navy-100">Catálogo público habilitado</label>
             </div>
           </div>
         </div>
 
         {/* Contacto */}
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Información de contacto</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Información de contacto</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="label">Email de contacto</label>
@@ -112,7 +112,7 @@ export default function SettingsPage() {
 
         {/* Redes sociales */}
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Redes sociales</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Redes sociales</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="label">Instagram</label>
@@ -135,7 +135,7 @@ export default function SettingsPage() {
 
         {/* Branding */}
         <div className="card p-6">
-          <h3 className="text-lg font-bold text-navy-900 mb-4">Personalización visual</h3>
+          <h3 className="text-lg font-bold text-navy-900 mb-4 dark:text-white">Personalización visual</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="label">Color primario</label>

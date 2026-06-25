@@ -70,11 +70,11 @@ export default function TeamPage() {
 
   const roleBadge = (role: string) => {
     const map: Record<string, { label: string; color: string }> = {
-      owner: { label: 'Dueño', color: 'bg-purple-100 text-purple-700' },
-      admin: { label: 'Admin', color: 'bg-indigo-100 text-indigo-700' },
-      agent: { label: 'Agente', color: 'bg-emerald-100 text-emerald-700' },
+      owner: { label: 'Dueño', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400' },
+      admin: { label: 'Admin', color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400' },
+      agent: { label: 'Agente', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400' },
     }
-    const m = map[role] || { label: role, color: 'bg-gray-100 text-gray-600' }
+    const m = map[role] || { label: role, color: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' }
     return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${m.color}`}>{m.label}</span>
   }
 
@@ -84,12 +84,12 @@ export default function TeamPage() {
 
       {!isOwner ? (
         <div className="card p-12 text-center">
-          <p className="text-navy-500">Solo el dueño del workspace puede gestionar el equipo.</p>
+          <p className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Solo el dueño del workspace puede gestionar el equipo.</p>
         </div>
       ) : (
         <>
           <div className="flex items-center justify-between mb-6">
-            <p className="text-sm text-navy-500">{team.length} miembro{team.length !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{team.length} miembro{team.length !== 1 ? 's' : ''}</p>
             <button onClick={() => { setShowForm(!showForm); setTempPass(null) }} className="btn-primary text-sm">
               + Invitar miembro
             </button>
@@ -98,7 +98,7 @@ export default function TeamPage() {
           {/* Invite form */}
           {showForm && (
             <div className="card p-5 mb-6 border-2 border-indigo-200">
-              <h3 className="font-bold text-navy-900 mb-4">Invitar nuevo miembro</h3>
+              <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Invitar nuevo miembro</h3>
               <form onSubmit={invite} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="label">Nombre</label>
@@ -131,7 +131,7 @@ export default function TeamPage() {
           )}
 
           {loading ? (
-            <div className="text-center py-12 text-sm text-navy-400">Cargando...</div>
+            <div className="text-center py-12 text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Cargando...</div>
           ) : (
             <div className="space-y-2">
               {team.map(m => (
@@ -140,8 +140,8 @@ export default function TeamPage() {
                     {(m.name || m.email)?.[0]?.toUpperCase() || '?'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-navy-900">{m.name || 'Sin nombre'}</p>
-                    <p className="text-sm text-navy-500">{m.email}</p>
+                    <p className="font-medium text-navy-900 dark:text-white">{m.name || 'Sin nombre'}</p>
+                    <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{m.email}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     {roleBadge(m.role_in_workspace || 'agent')}
@@ -155,7 +155,7 @@ export default function TeamPage() {
                         <button onClick={() => remove(m.id)} className="text-xs text-red-500 hover:text-red-600 font-medium">Eliminar</button>
                       </>
                     )}
-                    {m.id === user?.id && <span className="text-xs text-navy-400">(vos)</span>}
+                    {m.id === user?.id && <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">(vos)</span>}
                   </div>
                 </div>
               ))}

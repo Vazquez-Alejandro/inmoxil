@@ -77,7 +77,7 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
     info: {
       bg: 'bg-navy-50 border-navy-200',
       icon: (
-        <svg className="w-5 h-5 text-navy-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+        <svg className="w-5 h-5 text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
         </svg>
       ),
@@ -99,9 +99,9 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
       className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl border shadow-lg ${s.bg} animate-toast-in max-w-sm w-full`}
     >
       <div className="flex-shrink-0 mt-0.5">{s.icon}</div>
-      <p className="text-sm font-medium text-navy-800 flex-1">{toast.message}</p>
+      <p className="text-sm font-medium text-navy-800 flex-1 dark:text-navy-200">{toast.message}</p>
       <button onClick={onClose} className="flex-shrink-0 p-0.5 rounded hover:bg-black/5 transition-colors">
-        <svg className="w-4 h-4 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+        <svg className="w-4 h-4 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>

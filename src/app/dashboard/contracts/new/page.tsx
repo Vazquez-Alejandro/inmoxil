@@ -153,26 +153,26 @@ export default function NewContractPage() {
   if (!workspace) return null
 
   const inputClass = "w-full px-3 py-2 border border-navy-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-  const labelClass = "block text-sm font-medium text-navy-700 mb-1"
+  const labelClass = "block text-sm font-medium text-navy-700 dark:text-navy-300 mb-1"
   const selectClass = inputClass
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center gap-3 mb-8">
-        <Link href="/dashboard/contracts" className="text-navy-400 hover:text-navy-600 transition-colors">
+        <Link href="/dashboard/contracts" className="text-navy-400 hover:text-navy-600 transition-colors dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-navy-900">Nuevo contrato</h1>
-          <p className="text-navy-500 text-sm">{steps[step].description}</p>
+          <h1 className="text-2xl font-bold text-navy-900 dark:text-white">Nuevo contrato</h1>
+          <p className="text-navy-500 text-sm dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{steps[step].description}</p>
         </div>
       </div>
 
       <div className="flex gap-2 mb-8">
         {steps.map((s, i) => (
           <button key={i} onClick={() => setStep(i)} className={`flex-1 text-left p-3 rounded-lg border transition-all ${i === step ? 'border-indigo-500 bg-indigo-50' : i < step ? 'border-emerald-300 bg-emerald-50' : 'border-navy-200 bg-white'}`}>
-            <div className={`text-xs font-medium mb-0.5 ${i === step ? 'text-indigo-600' : i < step ? 'text-emerald-600' : 'text-navy-400'}`}>Paso {i + 1}</div>
-            <div className="text-sm font-medium text-navy-800">{s.title}</div>
+            <div className={`text-xs font-medium mb-0.5 ${i === step ? 'text-indigo-600' : i < step ? 'text-emerald-600' : 'text-navy-400'} dark:text-navy-300 dark:text-navy-100`}>Paso {i + 1}</div>
+            <div className="text-sm font-medium text-navy-800 dark:text-navy-200">{s.title}</div>
           </button>
         ))}
       </div>
@@ -184,11 +184,11 @@ export default function NewContractPage() {
       {step === 0 && (
         <div className="space-y-6">
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Tipo de contrato</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Tipo de contrato</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {CONTRACT_TYPES.map(t => (
                 <button key={t.value} onClick={() => update('type', t.value)} className={`p-4 rounded-lg border text-left transition-all ${form.type === t.value ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200' : 'border-navy-200 hover:border-navy-300'}`}>
-                  <div className="font-medium text-navy-900">{t.label}</div>
+                  <div className="font-medium text-navy-900 dark:text-white">{t.label}</div>
                 </button>
               ))}
             </div>
@@ -196,7 +196,7 @@ export default function NewContractPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white border border-navy-200 rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-navy-900 mb-4">Locador (Propietario)</h2>
+              <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Locador (Propietario)</h2>
               <div className="space-y-3">
                 <div>
                   <label className={labelClass}>Nombre completo *</label>
@@ -232,7 +232,7 @@ export default function NewContractPage() {
             </div>
 
             <div className="bg-white border border-navy-200 rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-navy-900 mb-4">Locatario (Inquilino)</h2>
+              <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Locatario (Inquilino)</h2>
               <div className="space-y-3">
                 <div>
                   <label className={labelClass}>Nombre completo *</label>
@@ -269,7 +269,7 @@ export default function NewContractPage() {
           </div>
 
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Duración</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Duración</h2>
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className={labelClass}>Fecha de inicio *</label>
@@ -286,7 +286,7 @@ export default function NewContractPage() {
 
       {step === 1 && (
         <div className="bg-white border border-navy-200 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-navy-900 mb-4">Inmueble</h2>
+          <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Inmueble</h2>
           <div className="space-y-4">
             <div>
               <label className={labelClass}>Dirección *</label>
@@ -317,7 +317,7 @@ export default function NewContractPage() {
       {step === 2 && (
         <div className="space-y-6">
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Valor del contrato</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Valor del contrato</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>Monto mensual *</label>
@@ -334,7 +334,7 @@ export default function NewContractPage() {
           </div>
 
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Ajuste</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Ajuste</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>Índice de ajuste</label>
@@ -356,7 +356,7 @@ export default function NewContractPage() {
           </div>
 
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Depósito y expensas</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Depósito y expensas</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>Depósito en garantía</label>
@@ -369,7 +369,7 @@ export default function NewContractPage() {
             </div>
             <div className="mt-4 flex items-center gap-3">
               <input type="checkbox" id="expenses" className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked={form.expensesIncluded} onChange={e => update('expensesIncluded', e.target.checked)} />
-              <label htmlFor="expenses" className="text-sm text-navy-700">Expensas incluidas en el canon</label>
+              <label htmlFor="expenses" className="text-sm text-navy-700 dark:text-navy-300 dark:text-navy-100">Expensas incluidas en el canon</label>
             </div>
             {form.expensesIncluded && (
               <div className="mt-3">
@@ -380,7 +380,7 @@ export default function NewContractPage() {
           </div>
 
           <div className="bg-white border border-navy-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-navy-900 mb-4">Notas</h2>
+            <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Notas</h2>
             <textarea className={`${inputClass} min-h-[100px]`} placeholder="Observaciones, cláusulas especiales, garantías adicionales..." value={form.notes} onChange={e => update('notes', e.target.value)} />
           </div>
         </div>
@@ -388,34 +388,34 @@ export default function NewContractPage() {
 
       {step === 3 && (
         <div className="bg-white border border-navy-200 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-navy-900 mb-6">Resumen del contrato</h2>
+          <h2 className="text-lg font-semibold text-navy-900 mb-6 dark:text-white">Resumen del contrato</h2>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Tipo</h3>
-                <p className="text-sm text-navy-800">{CONTRACT_TYPES.find(t => t.value === form.type)?.label}</p>
+                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2 dark:text-navy-300 dark:text-navy-100">Tipo</h3>
+                <p className="text-sm text-navy-800 dark:text-navy-200">{CONTRACT_TYPES.find(t => t.value === form.type)?.label}</p>
               </div>
               <div>
-                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Duración</h3>
-                <p className="text-sm text-navy-800">{form.durationMonths} meses ({form.startDate || '—'} al {form.startDate ? new Date(new Date(form.startDate).setMonth(new Date(form.startDate).getMonth() + form.durationMonths)).toLocaleDateString('es-AR') : '—'})</p>
+                <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2 dark:text-navy-300 dark:text-navy-100">Duración</h3>
+                <p className="text-sm text-navy-800 dark:text-navy-200">{form.durationMonths} meses ({form.startDate || '—'} al {form.startDate ? new Date(new Date(form.startDate).setMonth(new Date(form.startDate).getMonth() + form.durationMonths)).toLocaleDateString('es-AR') : '—'})</p>
               </div>
             </div>
             <div className="border-t border-navy-100 pt-4">
-              <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Partes</h3>
+              <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2 dark:text-navy-300 dark:text-navy-100">Partes</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div><span className="text-navy-500">Locador:</span> <span className="font-medium">{form.lessorName || '—'}</span> <span className="text-navy-400">({form.lessorDocNumber})</span></div>
-                <div><span className="text-navy-500">Locatario:</span> <span className="font-medium">{form.lesseeName || '—'}</span> <span className="text-navy-400">({form.lesseeDocNumber})</span></div>
+                <div><span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Locador:</span> <span className="font-medium">{form.lessorName || '—'}</span> <span className="text-navy-400 dark:text-navy-300 dark:text-navy-100">({form.lessorDocNumber})</span></div>
+                <div><span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Locatario:</span> <span className="font-medium">{form.lesseeName || '—'}</span> <span className="text-navy-400 dark:text-navy-300 dark:text-navy-100">({form.lesseeDocNumber})</span></div>
               </div>
             </div>
             <div className="border-t border-navy-100 pt-4">
-              <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Inmueble</h3>
-              <p className="text-sm text-navy-800">{form.propertyAddress || '—'}, {form.propertyCity || '—'}, {form.propertyProvince || '—'}</p>
+              <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2 dark:text-navy-300 dark:text-navy-100">Inmueble</h3>
+              <p className="text-sm text-navy-800 dark:text-navy-200">{form.propertyAddress || '—'}, {form.propertyCity || '—'}, {form.propertyProvince || '—'}</p>
             </div>
             <div className="border-t border-navy-100 pt-4">
-              <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Económico</h3>
+              <h3 className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2 dark:text-navy-300 dark:text-navy-100">Económico</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div><span className="text-navy-500">Monto:</span> <span className="font-bold text-navy-900">${Number(form.amount).toLocaleString('es-AR')} {form.currency}/mes</span></div>
-                <div><span className="text-navy-500">Ajuste:</span> {form.adjustmentIndex !== 'NONE' ? `${form.adjustmentIndex} cada ${form.adjustmentFrequencyMonths} meses` : 'Sin ajuste'}</div>
+                <div><span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Monto:</span> <span className="font-bold text-navy-900 dark:text-white">${Number(form.amount).toLocaleString('es-AR')} {form.currency}/mes</span></div>
+                <div><span className="text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Ajuste:</span> {form.adjustmentIndex !== 'NONE' ? `${form.adjustmentIndex} cada ${form.adjustmentFrequencyMonths} meses` : 'Sin ajuste'}</div>
               </div>
             </div>
           </div>
@@ -423,7 +423,7 @@ export default function NewContractPage() {
       )}
 
       <div className="flex items-center justify-between mt-8">
-        <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step === 0} className="px-4 py-2 text-sm font-medium text-navy-600 border border-navy-200 rounded-lg hover:bg-navy-50 transition-colors disabled:opacity-40">Anterior</button>
+        <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step === 0} className="px-4 py-2 text-sm font-medium text-navy-600 border border-navy-200 rounded-lg hover:bg-navy-50 transition-colors disabled:opacity-40 dark:text-navy-300">Anterior</button>
         {step < 3 ? (
           <button onClick={() => setStep(s => s + 1)} className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">Continuar</button>
         ) : (

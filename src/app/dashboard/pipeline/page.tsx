@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useWorkspace } from '@/lib/workspace-context'
+import Header from '@/components/Header'
 import type { PipelineStage, PipelineLead, Activity, ActivityType } from '@/lib/pipeline/types'
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -10,13 +11,13 @@ const SOURCE_LABELS: Record<string, string> = {
 }
 
 const SOURCE_COLORS: Record<string, string> = {
-  whatsapp: 'bg-emerald-100 text-emerald-700',
-  portal: 'bg-blue-100 text-blue-700',
-  referido: 'bg-purple-100 text-purple-700',
-  llamada: 'bg-amber-100 text-amber-700',
-  email: 'bg-sky-100 text-sky-700',
-  web: 'bg-indigo-100 text-indigo-700',
-  manual: 'bg-gray-100 text-gray-700',
+  whatsapp: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400',
+  portal: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400',
+  referido: 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400',
+  llamada: 'bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400',
+  email: 'bg-sky-100 text-sky-700 dark:bg-sky-900/20 dark:text-sky-400',
+  web: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400',
+  manual: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
 }
 
 function formatCurrency(amount: number, currency: string): string {
@@ -229,19 +230,19 @@ export default function PipelinePage() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between p-4 border-b border-navy-100 shrink-0">
-        <div>
-          <h1 className="text-xl font-bold text-navy-900">Clientes</h1>
-          <p className="text-sm text-navy-500">{leads.length} clientes activos</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <input type="text" placeholder="Buscar cliente por nombre o teléfono..." value={search} onChange={e => setSearch(e.target.value)} className="px-3 py-1.5 text-sm border border-navy-200 rounded-lg w-64 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-          <button onClick={() => { setLeadForm({ fullName: '', phone: '', email: '', source: 'manual', budgetMin: '', budgetMax: '', currency: 'ARS', notes: '', requirements: '' }); setNewLeadStageId(stages[0]?.id || ''); setShowNewLead(true) }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-            Nuevo cliente
-          </button>
-        </div>
-      </div>
+      <Header
+        title="Clientes"
+        subtitle={`${leads.length} clientes activos`}
+        action={
+          <div className="flex items-center gap-3">
+            <input type="text" placeholder="Buscar cliente por nombre o teléfono..." value={search} onChange={e => setSearch(e.target.value)} className="px-3 py-1.5 text-sm border border-navy-200 dark:border-navy-600 rounded-lg w-48 lg:w-64 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white dark:bg-navy-800 text-navy-900 dark:text-white" />
+            <button onClick={() => { setLeadForm({ fullName: '', phone: '', email: '', source: 'manual', budgetMin: '', budgetMax: '', currency: 'ARS', notes: '', requirements: '' }); setNewLeadStageId(stages[0]?.id || ''); setShowNewLead(true) }} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              Nuevo cliente
+            </button>
+          </div>
+        }
+      />
 
       <div className="flex-1 overflow-x-auto p-4">
         {loading ? (
@@ -266,10 +267,10 @@ export default function PipelinePage() {
                   <div className="flex items-center justify-between px-4 py-3 border-b border-navy-100 shrink-0">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stage.color }} />
-                      <span className="font-semibold text-sm text-navy-800">{stage.name}</span>
-                      <span className="text-xs text-navy-400 font-medium bg-navy-100 px-1.5 py-0.5 rounded">{stageLeads.length}</span>
+                      <span className="font-semibold text-sm text-navy-800 dark:text-navy-200">{stage.name}</span>
+                      <span className="text-xs text-navy-400 font-medium bg-navy-100 px-1.5 py-0.5 rounded dark:text-navy-300 dark:text-navy-100">{stageLeads.length}</span>
                     </div>
-                    <button onClick={() => { setLeadForm({ fullName: '', phone: '', email: '', source: 'manual', budgetMin: '', budgetMax: '', currency: 'ARS', notes: '', requirements: '' }); setNewLeadStageId(stage.id!); setShowNewLead(true) }} className="text-navy-400 hover:text-navy-600 transition-colors p-0.5">
+                    <button onClick={() => { setLeadForm({ fullName: '', phone: '', email: '', source: 'manual', budgetMin: '', budgetMax: '', currency: 'ARS', notes: '', requirements: '' }); setNewLeadStageId(stage.id!); setShowNewLead(true) }} className="text-navy-400 hover:text-navy-600 transition-colors p-0.5 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                     </button>
                   </div>
@@ -285,25 +286,25 @@ export default function PipelinePage() {
                         className={`bg-white rounded-lg p-3 border cursor-pointer transition-all hover:border-indigo-300 hover:shadow-sm active:opacity-60 ${draggedLead === lead.id ? 'opacity-40 border-indigo-400' : 'border-navy-100'}`}
                       >
                         <div className="flex items-start justify-between gap-2 mb-1.5">
-                          <h3 className="font-semibold text-sm text-navy-900 truncate">{lead.fullName}</h3>
+                          <h3 className="font-semibold text-sm text-navy-900 truncate dark:text-white">{lead.fullName}</h3>
                           <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full shrink-0 ${SOURCE_COLORS[lead.source] || 'bg-gray-100 text-gray-700'}`}>{SOURCE_LABELS[lead.source] || lead.source}</span>
                         </div>
-                        <p className="text-xs text-navy-500 mb-2">{lead.phone}</p>
+                        <p className="text-xs text-navy-500 mb-2 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{lead.phone}</p>
                         {(lead.budgetMin || lead.budgetMax) && (
-                          <p className="text-xs text-navy-600 font-medium mb-1.5">
+                          <p className="text-xs text-navy-600 font-medium mb-1.5 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                             {lead.budgetMin ? `$${(lead.budgetMin / 1000).toFixed(0)}k` : ''}{lead.budgetMin && lead.budgetMax ? ' - ' : ''}{lead.budgetMax ? `$${(lead.budgetMax / 1000).toFixed(0)}k` : ''} {lead.currency}
                           </p>
                         )}
                         {lead.propertyTitle && (
-                          <p className="text-xs text-navy-400 truncate">🏠 {lead.propertyTitle}</p>
+                          <p className="text-xs text-navy-400 truncate dark:text-navy-300 dark:text-navy-100">🏠 {lead.propertyTitle}</p>
                         )}
                         {lead.notes && (
-                          <p className="text-xs text-navy-400 mt-1 line-clamp-2">{lead.notes}</p>
+                          <p className="text-xs text-navy-400 mt-1 line-clamp-2 dark:text-navy-300 dark:text-navy-100">{lead.notes}</p>
                         )}
                       </div>
                     ))}
                     {stageLeads.length === 0 && (
-                      <div className="text-center py-8 text-xs text-navy-400">Sin clientes</div>
+                      <div className="text-center py-8 text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin clientes</div>
                     )}
                   </div>
                 </div>
@@ -322,59 +323,59 @@ export default function PipelinePage() {
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-navy-900">Nuevo cliente</h2>
-                  <p className="text-xs text-navy-500">Completá los datos del cliente</p>
+                  <h2 className="text-lg font-bold text-navy-900 dark:text-white">Nuevo cliente</h2>
+                  <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Completá los datos del cliente</p>
                 </div>
               </div>
-              <button onClick={() => setShowNewLead(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-100 transition-colors"><svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+              <button onClick={() => setShowNewLead(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-100 transition-colors dark:text-navy-400 dark:text-navy-300 dark:text-navy-100"><svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
             <div className="p-6 space-y-5">
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Nombre completo <span className="text-red-400">*</span></label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" placeholder="Juan Pérez" value={leadForm.fullName} onChange={e => setLeadForm(p => ({ ...p, fullName: e.target.value }))} />
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Nombre completo <span className="text-red-400 dark:text-red-300">*</span></label>
+                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="Juan Pérez" value={leadForm.fullName} onChange={e => setLeadForm(p => ({ ...p, fullName: e.target.value }))} />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Teléfono <span className="text-red-400">*</span></label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" placeholder="11 1234 5678" value={leadForm.phone} onChange={e => setLeadForm(p => ({ ...p, phone: e.target.value }))} />
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Teléfono <span className="text-red-400 dark:text-red-300">*</span></label>
+                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="11 1234 5678" value={leadForm.phone} onChange={e => setLeadForm(p => ({ ...p, phone: e.target.value }))} />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Email</label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" type="email" placeholder="juan@email.com" value={leadForm.email} onChange={e => setLeadForm(p => ({ ...p, email: e.target.value }))} />
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Email</label>
+                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="email" placeholder="juan@email.com" value={leadForm.email} onChange={e => setLeadForm(p => ({ ...p, email: e.target.value }))} />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Origen</label>
-                  <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" value={leadForm.source} onChange={e => setLeadForm(p => ({ ...p, source: e.target.value }))}>
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Origen</label>
+                  <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={leadForm.source} onChange={e => setLeadForm(p => ({ ...p, source: e.target.value }))}>
                     {Object.entries(SOURCE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Etapa</label>
-                  <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" value={newLeadStageId} onChange={e => setNewLeadStageId(e.target.value)}>
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Etapa</label>
+                  <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={newLeadStageId} onChange={e => setNewLeadStageId(e.target.value)}>
                     {stages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Presupuesto mínimo</label>
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Presupuesto mínimo</label>
                   <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-500 text-sm font-semibold">$</span>
-                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" type="number" placeholder="50000" value={leadForm.budgetMin} onChange={e => setLeadForm(p => ({ ...p, budgetMin: e.target.value }))} />
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-500 text-sm font-semibold dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">$</span>
+                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="number" placeholder="50000" value={leadForm.budgetMin} onChange={e => setLeadForm(p => ({ ...p, budgetMin: e.target.value }))} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Presupuesto máximo</label>
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Presupuesto máximo</label>
                   <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-500 text-sm font-semibold">$</span>
-                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" type="number" placeholder="150000" value={leadForm.budgetMax} onChange={e => setLeadForm(p => ({ ...p, budgetMax: e.target.value }))} />
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-500 text-sm font-semibold dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">$</span>
+                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="number" placeholder="150000" value={leadForm.budgetMax} onChange={e => setLeadForm(p => ({ ...p, budgetMax: e.target.value }))} />
                   </div>
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Requisitos / Comentarios</label>
-                  <textarea className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[80px] resize-none" placeholder="Busca 2 ambientes en Palermo, pet friendly..." value={leadForm.notes} onChange={e => setLeadForm(p => ({ ...p, notes: e.target.value }))} />
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Requisitos / Comentarios</label>
+                  <textarea className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[80px] resize-none dark:text-white" placeholder="Busca 2 ambientes en Palermo, pet friendly..." value={leadForm.notes} onChange={e => setLeadForm(p => ({ ...p, notes: e.target.value }))} />
                 </div>
               </div>
               <div className="flex gap-3 pt-1">
-                <button onClick={() => setShowNewLead(false)} className="flex-1 py-2.5 text-sm font-semibold text-navy-800 bg-navy-100 border-2 border-navy-200 rounded-xl hover:bg-navy-200 transition-colors">Cancelar</button>
+                <button onClick={() => setShowNewLead(false)} className="flex-1 py-2.5 text-sm font-semibold text-navy-800 bg-navy-100 border-2 border-navy-200 rounded-xl hover:bg-navy-200 transition-colors dark:text-navy-200">Cancelar</button>
                 <button onClick={createLead} disabled={saving || !leadForm.fullName || !leadForm.phone} className="flex-1 py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md">
                   {saving ? 'Guardando...' : 'Crear cliente'}
                 </button>
@@ -393,18 +394,18 @@ export default function PipelinePage() {
                   {selectedLead.fullName?.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-navy-900">{selectedLead.fullName}</h2>
+                  <h2 className="text-lg font-bold text-navy-900 dark:text-white">{selectedLead.fullName}</h2>
                   <p className="flex items-center gap-1.5">
                     <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${SOURCE_COLORS[selectedLead.source] || 'bg-gray-100 text-gray-700'}`}>{SOURCE_LABELS[selectedLead.source] || selectedLead.source}</span>
-                    <span className="text-xs text-navy-400">Creado {selectedLead.createdAt ? formatDate(selectedLead.createdAt) : ''}</span>
+                    <span className="text-xs text-navy-400 dark:text-navy-300">Creado {selectedLead.createdAt ? formatDate(selectedLead.createdAt) : ''}</span>
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={() => setShowEditLead(true)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-50 transition-colors" title="Editar">
+                <button onClick={() => setShowEditLead(true)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-50 transition-colors dark:text-navy-300" title="Editar">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                 </button>
-                <button onClick={() => setSelectedLead(null)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-50 transition-colors">
+                <button onClick={() => setSelectedLead(null)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-50 transition-colors dark:text-navy-300">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
@@ -412,22 +413,22 @@ export default function PipelinePage() {
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-3 gap-5">
                 <div className="bg-navy-50 rounded-xl p-4">
-                  <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium">Teléfono</span>
-                  <p className="font-semibold text-navy-900 mt-1">{selectedLead.phone}</p>
+                  <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium dark:text-navy-300 dark:text-navy-100">Teléfono</span>
+                  <p className="font-semibold text-navy-900 mt-1 dark:text-white">{selectedLead.phone}</p>
                 </div>
                 <div className="bg-navy-50 rounded-xl p-4">
-                  <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium">Email</span>
-                  <p className="font-semibold text-navy-900 mt-1">{selectedLead.email || <span className="text-navy-400 font-normal">—</span>}</p>
+                  <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium dark:text-navy-300 dark:text-navy-100">Email</span>
+                  <p className="font-semibold text-navy-900 mt-1 dark:text-white">{selectedLead.email || <span className="text-navy-400 font-normal dark:text-navy-300 dark:text-navy-100">—</span>}</p>
                 </div>
                 {selectedLead.budgetMin ? (
                   <div className="bg-navy-50 rounded-xl p-4">
-                    <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium">Presupuesto</span>
-                    <p className="font-semibold text-navy-900 mt-1">{formatCurrency(selectedLead.budgetMin, selectedLead.currency || 'ARS')}{selectedLead.budgetMax ? ` - ${formatCurrency(selectedLead.budgetMax, selectedLead.currency || 'ARS')}` : ''}</p>
+                    <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium dark:text-navy-300 dark:text-navy-100">Presupuesto</span>
+                    <p className="font-semibold text-navy-900 mt-1 dark:text-white">{formatCurrency(selectedLead.budgetMin, selectedLead.currency || 'ARS')}{selectedLead.budgetMax ? ` - ${formatCurrency(selectedLead.budgetMax, selectedLead.currency || 'ARS')}` : ''}</p>
                   </div>
                 ) : (
                   <div className="bg-navy-50 rounded-xl p-4">
-                    <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium">Presupuesto</span>
-                    <p className="font-semibold text-navy-400 mt-1">Sin definir</p>
+                    <span className="text-navy-400 text-[10px] uppercase tracking-wider font-medium dark:text-navy-300 dark:text-navy-100">Presupuesto</span>
+                    <p className="font-semibold text-navy-400 mt-1 dark:text-navy-300 dark:text-navy-100">Sin definir</p>
                   </div>
                 )}
               </div>
@@ -458,8 +459,8 @@ export default function PipelinePage() {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-navy-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
-                    <h3 className="text-sm font-semibold text-navy-900">Actividades</h3>
+                    <svg className="w-4 h-4 text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
+                    <h3 className="text-sm font-semibold text-navy-900 dark:text-white">Actividades</h3>
                   </div>
                   <button onClick={() => { setNewActivityForm({ type: 'llamada', description: '', outcome: '', scheduledAt: '' }); setShowNewActivity(true) }} className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
@@ -468,8 +469,8 @@ export default function PipelinePage() {
                 </div>
                 {activities.length === 0 ? (
                   <div className="text-center py-8 bg-navy-50 rounded-xl">
-                    <svg className="w-8 h-8 text-navy-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <p className="text-sm text-navy-400">Sin actividades registradas</p>
+                    <svg className="w-8 h-8 text-navy-300 mx-auto mb-2 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin actividades registradas</p>
                     <button onClick={() => { setNewActivityForm({ type: 'llamada', description: '', outcome: '', scheduledAt: '' }); setShowNewActivity(true) }} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium mt-1">Registrar primera actividad</button>
                   </div>
                 ) : (
@@ -484,11 +485,11 @@ export default function PipelinePage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="text-xs font-medium text-navy-500 capitalize">{act.type}</span>
-                            <span className="text-navy-300">·</span>
-                            <span className="text-xs text-navy-400">{act.createdAt ? formatDateTime(act.createdAt) : ''}</span>
+                            <span className="text-xs font-medium text-navy-500 capitalize dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{act.type}</span>
+                            <span className="text-navy-300 dark:text-navy-100">·</span>
+                            <span className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{act.createdAt ? formatDateTime(act.createdAt) : ''}</span>
                           </div>
-                          <p className="text-sm text-navy-800">{act.description}</p>
+                          <p className="text-sm text-navy-800 dark:text-navy-200">{act.description}</p>
                           {act.outcome && <p className="text-xs text-emerald-700 mt-1 flex items-center gap-1"><svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>{act.outcome}</p>}
                         </div>
                       </div>
@@ -510,16 +511,16 @@ export default function PipelinePage() {
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-navy-900">Nueva actividad</h2>
-                  <p className="text-xs text-navy-500">Registrá una interacción con {selectedLead.fullName}</p>
+                  <h2 className="text-lg font-bold text-navy-900 dark:text-white">Nueva actividad</h2>
+                  <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Registrá una interacción con {selectedLead.fullName}</p>
                 </div>
               </div>
-              <button onClick={() => setShowNewActivity(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-100 transition-colors"><svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+              <button onClick={() => setShowNewActivity(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-navy-400 hover:text-navy-600 hover:bg-navy-100 transition-colors dark:text-navy-400 dark:text-navy-300 dark:text-navy-100"><svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
             <div className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-navy-800 mb-1.5">Tipo de actividad</label>
-                <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" value={newActivityForm.type} onChange={e => setNewActivityForm(p => ({ ...p, type: e.target.value, scheduledAt: e.target.value !== 'visita' ? '' : p.scheduledAt }))}>
+                <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Tipo de actividad</label>
+                <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={newActivityForm.type} onChange={e => setNewActivityForm(p => ({ ...p, type: e.target.value, scheduledAt: e.target.value !== 'visita' ? '' : p.scheduledAt }))}>
                   <option value="llamada">📞 Llamada</option>
                   <option value="visita">🏠 Visita</option>
                   <option value="mensaje">💬 Mensaje</option>
@@ -528,21 +529,21 @@ export default function PipelinePage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-navy-800 mb-1.5">Descripción</label>
-                <textarea className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[90px] resize-none" placeholder="¿Qué pasó en la interacción?" value={newActivityForm.description} onChange={e => setNewActivityForm(p => ({ ...p, description: e.target.value }))} />
+                <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Descripción</label>
+                <textarea className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[90px] resize-none dark:text-white" placeholder="¿Qué pasó en la interacción?" value={newActivityForm.description} onChange={e => setNewActivityForm(p => ({ ...p, description: e.target.value }))} />
               </div>
               {newActivityForm.type === 'visita' && (
                 <div>
-                  <label className="block text-sm font-semibold text-navy-800 mb-1.5">Fecha y hora de la visita</label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" type="datetime-local" value={newActivityForm.scheduledAt} onChange={e => setNewActivityForm(p => ({ ...p, scheduledAt: e.target.value }))} />
+                  <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Fecha y hora de la visita</label>
+                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="datetime-local" value={newActivityForm.scheduledAt} onChange={e => setNewActivityForm(p => ({ ...p, scheduledAt: e.target.value }))} />
                 </div>
               )}
               <div>
-                <label className="block text-sm font-semibold text-navy-800 mb-1.5">Resultado (opcional)</label>
-                <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all" placeholder="Cliente pidió más información" value={newActivityForm.outcome} onChange={e => setNewActivityForm(p => ({ ...p, outcome: e.target.value }))} />
+                <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Resultado (opcional)</label>
+                <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="Cliente pidió más información" value={newActivityForm.outcome} onChange={e => setNewActivityForm(p => ({ ...p, outcome: e.target.value }))} />
               </div>
               <div className="flex gap-3 pt-1">
-                <button onClick={() => setShowNewActivity(false)} className="flex-1 py-2.5 text-sm font-semibold text-navy-800 bg-navy-100 border-2 border-navy-200 rounded-xl hover:bg-navy-200 transition-colors">Cancelar</button>
+                <button onClick={() => setShowNewActivity(false)} className="flex-1 py-2.5 text-sm font-semibold text-navy-800 bg-navy-100 border-2 border-navy-200 rounded-xl hover:bg-navy-200 transition-colors dark:text-navy-200">Cancelar</button>
                 <button onClick={addActivity} disabled={saving || !newActivityForm.description} className="flex-1 py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md">
                   {saving ? 'Guardando...' : 'Registrar actividad'}
                 </button>

@@ -19,17 +19,17 @@ const PRIORITY_LABELS: Record<string, string> = {
 }
 
 const PRIORITY_STYLES: Record<string, string> = {
-  baja: 'bg-gray-100 text-gray-700',
-  normal: 'bg-blue-100 text-blue-700',
-  alta: 'bg-orange-100 text-orange-700',
-  urgente: 'bg-red-100 text-red-700',
+  baja: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+  normal: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400',
+  alta: 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400',
+  urgente: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400',
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  pendiente: 'bg-yellow-100 text-yellow-700',
-  en_proceso: 'bg-blue-100 text-blue-700',
-  resuelto: 'bg-emerald-100 text-emerald-700',
-  cerrado: 'bg-gray-100 text-gray-700',
+  pendiente: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400',
+  en_proceso: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400',
+  resuelto: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400',
+  cerrado: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
 }
 
 const STATUS_TABS = [
@@ -181,20 +181,20 @@ export default function MantenimientoPage() {
       {/* Summary Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="card p-4">
-          <p className="text-2xl font-bold text-navy-900">{stats.total}</p>
-          <p className="text-xs text-navy-500 mt-0.5">Total tickets</p>
+          <p className="text-2xl font-bold text-navy-900 dark:text-white">{stats.total}</p>
+          <p className="text-xs text-navy-500 mt-0.5 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Total tickets</p>
         </div>
         <div className="card p-4">
-          <p className="text-2xl font-bold text-yellow-600">{stats.pendientes}</p>
-          <p className="text-xs text-navy-500 mt-0.5">Pendientes</p>
+          <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.pendientes}</p>
+          <p className="text-xs text-navy-500 mt-0.5 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Pendientes</p>
         </div>
         <div className="card p-4">
-          <p className="text-2xl font-bold text-blue-600">{stats.enProceso}</p>
-          <p className="text-xs text-navy-500 mt-0.5">En proceso</p>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.enProceso}</p>
+          <p className="text-xs text-navy-500 mt-0.5 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">En proceso</p>
         </div>
         <div className="card p-4">
-          <p className="text-2xl font-bold text-emerald-600">{stats.resueltosEsteMes}</p>
-          <p className="text-xs text-navy-500 mt-0.5">Resueltos este mes</p>
+          <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.resueltosEsteMes}</p>
+          <p className="text-xs text-navy-500 mt-0.5 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Resueltos este mes</p>
         </div>
       </div>
 
@@ -210,7 +210,7 @@ export default function MantenimientoPage() {
                   statusFilter === tab.value
                     ? 'bg-white text-navy-900 shadow-sm'
                     : 'text-navy-500 hover:text-navy-700'
-                }`}
+                } dark:text-white`}
               >
                 {tab.label}
               </button>
@@ -254,13 +254,13 @@ export default function MantenimientoPage() {
       {!loading && tickets.length === 0 && (
         <div className="card p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-navy-50 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-navy-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <svg className="w-8 h-8 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-7.5-3.5 7.5-3.5 7.5 3.5-7.5 3.5z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l0 7.5m7.5-7.5v-7.5" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-navy-900 mb-2">Sin tickets de mantenimiento</h3>
-          <p className="text-sm text-navy-500 max-w-md mx-auto mb-6">
+          <h3 className="text-lg font-bold text-navy-900 mb-2 dark:text-white">Sin tickets de mantenimiento</h3>
+          <p className="text-sm text-navy-500 max-w-md mx-auto mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             {statusFilter ? 'No hay tickets con ese filtro.' : 'No hay tickets registrados aún. Creá el primero.'}
           </p>
           {!statusFilter && (
@@ -293,16 +293,16 @@ export default function MantenimientoPage() {
                     className="border-b border-navy-50 hover:bg-navy-50/50 cursor-pointer transition-colors last:border-0"
                   >
                     <td className="table-cell">
-                      <span className="font-medium text-navy-900">{ticket.property_title || '—'}</span>
+                      <span className="font-medium text-navy-900 dark:text-white">{ticket.property_title || '—'}</span>
                     </td>
                     <td className="table-cell">
                       <div>
-                        <p className="font-medium text-navy-900">{ticket.tenant_name}</p>
-                        {ticket.tenant_phone && <p className="text-xs text-navy-400">{ticket.tenant_phone}</p>}
+                        <p className="font-medium text-navy-900 dark:text-white">{ticket.tenant_name}</p>
+                        {ticket.tenant_phone && <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{ticket.tenant_phone}</p>}
                       </div>
                     </td>
                     <td className="table-cell max-w-[250px]">
-                      <p className="truncate text-navy-600">{ticket.description}</p>
+                      <p className="truncate text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{ticket.description}</p>
                     </td>
                     <td className="table-cell">
                       <span className={`badge ${PRIORITY_STYLES[ticket.priority] || 'bg-gray-100 text-gray-700'}`}>
@@ -314,11 +314,11 @@ export default function MantenimientoPage() {
                         {STATUS_LABELS[ticket.status] || ticket.status}
                       </span>
                     </td>
-                    <td className="table-cell text-navy-500 text-xs">
+                    <td className="table-cell text-navy-500 text-xs dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                       {formatDate(ticket.created_at)}
                     </td>
                     <td className="table-cell">
-                      <span className="text-navy-600">{ticket.assigned_to || '—'}</span>
+                      <span className="text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{ticket.assigned_to || '—'}</span>
                     </td>
                   </tr>
                 ))}
@@ -333,8 +333,8 @@ export default function MantenimientoPage() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setSelectedTicket(null)}>
           <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 sticky top-0 bg-white z-10">
-              <h2 className="text-lg font-bold text-navy-900">Detalle del ticket</h2>
-              <button onClick={() => setSelectedTicket(null)} className="text-navy-400 hover:text-navy-600 p-1">
+              <h2 className="text-lg font-bold text-navy-900 dark:text-white">Detalle del ticket</h2>
+              <button onClick={() => setSelectedTicket(null)} className="text-navy-400 hover:text-navy-600 p-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -372,9 +372,9 @@ export default function MantenimientoPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="label">Propiedad</label>
-                  <p className="text-navy-900 font-medium">{selectedTicket.property_title || '—'}</p>
+                  <p className="text-navy-900 font-medium dark:text-white">{selectedTicket.property_title || '—'}</p>
                   {selectedTicket.property_address && (
-                    <p className="text-xs text-navy-500">{selectedTicket.property_address}</p>
+                    <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{selectedTicket.property_address}</p>
                   )}
                 </div>
                 <div>
@@ -385,17 +385,17 @@ export default function MantenimientoPage() {
                 </div>
                 <div>
                   <label className="label">Inquilino</label>
-                  <p className="text-navy-900 font-medium">{selectedTicket.tenant_name}</p>
-                  {selectedTicket.tenant_phone && <p className="text-sm text-navy-500">{selectedTicket.tenant_phone}</p>}
-                  {selectedTicket.tenant_email && <p className="text-sm text-navy-500">{selectedTicket.tenant_email}</p>}
+                  <p className="text-navy-900 font-medium dark:text-white">{selectedTicket.tenant_name}</p>
+                  {selectedTicket.tenant_phone && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{selectedTicket.tenant_phone}</p>}
+                  {selectedTicket.tenant_email && <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{selectedTicket.tenant_email}</p>}
                 </div>
                 <div>
                   <label className="label">Fecha de creación</label>
-                  <p className="text-navy-900">{formatDate(selectedTicket.created_at)}</p>
+                  <p className="text-navy-900 dark:text-white">{formatDate(selectedTicket.created_at)}</p>
                   {selectedTicket.closed_at && (
                     <>
                       <label className="label mt-2">Cerrado</label>
-                      <p className="text-navy-900">{formatDate(selectedTicket.closed_at)}</p>
+                      <p className="text-navy-900 dark:text-white">{formatDate(selectedTicket.closed_at)}</p>
                     </>
                   )}
                 </div>
@@ -403,7 +403,7 @@ export default function MantenimientoPage() {
 
               <div>
                 <label className="label">Descripción</label>
-                <div className="bg-navy-50 rounded-lg p-4 text-sm text-navy-700 whitespace-pre-wrap">
+                <div className="bg-navy-50 dark:bg-navy-800 rounded-lg p-4 text-sm text-navy-700 whitespace-pre-wrap dark:text-navy-300">
                   {selectedTicket.description}
                 </div>
               </div>
@@ -459,8 +459,8 @@ export default function MantenimientoPage() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowNewForm(false)}>
           <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 sticky top-0 bg-white z-10">
-              <h2 className="text-lg font-bold text-navy-900">Nuevo ticket de mantenimiento</h2>
-              <button onClick={() => setShowNewForm(false)} className="text-navy-400 hover:text-navy-600 p-1">
+              <h2 className="text-lg font-bold text-navy-900 dark:text-white">Nuevo ticket de mantenimiento</h2>
+              <button onClick={() => setShowNewForm(false)} className="text-navy-400 hover:text-navy-600 p-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>

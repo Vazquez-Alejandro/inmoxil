@@ -63,7 +63,7 @@ export default function RegisterPage() {
             Creá tu cuenta<br />
             <span className="text-gold-400">en minutos</span>
           </h1>
-          <p className="text-navy-300 text-lg max-w-md leading-relaxed">
+          <p className="text-navy-300 text-lg max-w-md leading-relaxed dark:text-navy-100">
             Empezá gratis con 50 créditos incluidos. Sin tarjeta de crédito.
             Escalá cuando necesites más potencia.
           </p>
@@ -102,13 +102,13 @@ export default function RegisterPage() {
           <div className="lg:hidden flex items-center gap-3 mb-12">
             <div className="logo-mark">Ix</div>
             <div>
-              <h1 className="text-xl font-bold text-navy-900">Inmoxil</h1>
-              <p className="text-navy-500 text-[10px] uppercase tracking-widest">Plataforma en la nube</p>
+              <h1 className="text-xl font-bold text-navy-900 dark:text-white">Inmoxil</h1>
+              <p className="text-navy-500 text-[10px] uppercase tracking-widest dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Plataforma en la nube</p>
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-navy-900 mb-2">Crear cuenta</h2>
-          <p className="text-navy-500 mb-2">Registrate para empezar a usar Inmoxil</p>
+          <h2 className="text-2xl font-bold text-navy-900 mb-2 dark:text-white">Crear cuenta</h2>
+          <p className="text-navy-500 mb-2 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">Registrate para empezar a usar Inmoxil</p>
           <p className="text-xs text-emerald-600 font-medium mb-6 flex items-center gap-1">
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
@@ -116,7 +116,7 @@ export default function RegisterPage() {
             14 días de prueba gratis. Sin tarjeta de crédito.
           </p>
 
-          <Link href="/" className="inline-flex items-center gap-1 text-sm text-navy-400 hover:text-navy-600 transition-colors mb-6">
+          <Link href="/" className="inline-flex items-center gap-1 text-sm text-navy-400 hover:text-navy-600 transition-colors mb-6 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
@@ -177,7 +177,7 @@ export default function RegisterPage() {
                 required
                 minLength={8}
               />
-              <p className="text-xs text-navy-400 mt-1.5">Mínimo 8 caracteres, 1 mayúscula y 1 número</p>
+              <p className="text-xs text-navy-400 mt-1.5 dark:text-navy-300 dark:text-navy-100">Mínimo 8 caracteres, 1 mayúscula y 1 número</p>
             </div>
 
             <div>
@@ -218,7 +218,7 @@ export default function RegisterPage() {
                 onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
                 required
               />
-              <span className="text-xs text-navy-500 leading-relaxed">
+              <span className="text-xs text-navy-500 leading-relaxed dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 Acepto los{' '}
                 <Link href="/terminos" target="_blank" className="text-gold-600 hover:text-gold-700 underline">Términos de Servicio</Link>
                 {' '}y la{' '}
@@ -230,7 +230,7 @@ export default function RegisterPage() {
 
           <div className="divider my-8" />
 
-          <p className="text-center text-sm text-navy-500">
+          <p className="text-center text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
             ¿Ya tenés cuenta?{' '}
             <Link href="/login" className="text-gold-600 hover:text-gold-700 font-semibold">
               Iniciá sesión

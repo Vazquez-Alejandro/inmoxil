@@ -45,8 +45,8 @@ export default function ReportsPage() {
                 </svg>
               </div>
               <div>
-                <p className="text-xs text-navy-400">{card.label}</p>
-                <p className="text-xl font-bold text-navy-900">{card.value || 0}</p>
+                <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{card.label}</p>
+                <p className="text-xl font-bold text-navy-900 dark:text-white">{card.value || 0}</p>
               </div>
             </div>
           </div>
@@ -56,81 +56,81 @@ export default function ReportsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Properties by type */}
         <div className="card p-6">
-          <h3 className="font-bold text-navy-900 mb-4">Propiedades por tipo</h3>
+          <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Propiedades por tipo</h3>
           {data?.propertiesByType?.length > 0 ? (
             <div className="space-y-2">
               {data.propertiesByType.map((item: any) => (
                 <div key={item.property_type} className="flex items-center gap-3">
-                  <span className="text-sm text-navy-700 capitalize w-24">{item.property_type || 'Sin tipo'}</span>
+                  <span className="text-sm text-navy-700 capitalize w-24 dark:text-navy-300 dark:text-navy-100">{item.property_type || 'Sin tipo'}</span>
                   <div className="flex-1 h-4 bg-navy-100 rounded-full overflow-hidden">
                     <div className="h-full bg-gold-500 rounded-full" style={{ width: `${(item.count / s.totalProperties) * 100}%` }} />
                   </div>
-                  <span className="text-sm font-semibold text-navy-900 w-8 text-right">{item.count}</span>
+                  <span className="text-sm font-semibold text-navy-900 w-8 text-right dark:text-white">{item.count}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-navy-400">Sin datos</p>
+            <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin datos</p>
           )}
         </div>
 
         {/* Leads by source */}
         <div className="card p-6">
-          <h3 className="font-bold text-navy-900 mb-4">Leads por origen</h3>
+          <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Leads por origen</h3>
           {data?.leadsBySource?.length > 0 ? (
             <div className="space-y-2">
               {data.leadsBySource.map((item: any) => (
                 <div key={item.source} className="flex items-center gap-3">
-                  <span className="text-sm text-navy-700 capitalize w-24">{item.source || 'Otro'}</span>
+                  <span className="text-sm text-navy-700 capitalize w-24 dark:text-navy-300 dark:text-navy-100">{item.source || 'Otro'}</span>
                   <div className="flex-1 h-4 bg-navy-100 rounded-full overflow-hidden">
                     <div className="h-full bg-blue-500 rounded-full" style={{ width: `${(item.count / Math.max(1, s.activeLeads)) * 100}%` }} />
                   </div>
-                  <span className="text-sm font-semibold text-navy-900 w-8 text-right">{item.count}</span>
+                  <span className="text-sm font-semibold text-navy-900 w-8 text-right dark:text-white">{item.count}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-navy-400">Sin datos</p>
+            <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin datos</p>
           )}
         </div>
 
         {/* Monthly leads chart */}
         <div className="card p-6">
-          <h3 className="font-bold text-navy-900 mb-4">Leads mensuales (12 meses)</h3>
+          <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Leads mensuales (12 meses)</h3>
           {data?.monthlyLeads?.length > 0 ? (
             <div className="space-y-1">
               {data.monthlyLeads.map((item: any) => (
                 <div key={item.month} className="flex items-center gap-3">
-                  <span className="text-xs text-navy-500 w-16">{item.month}</span>
+                  <span className="text-xs text-navy-500 w-16 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{item.month}</span>
                   <div className="flex-1 h-5 bg-navy-100 rounded-full overflow-hidden">
                     <div className="h-full bg-purple-500 rounded-full" style={{ width: `${Math.min(100, (item.count / Math.max(...data.monthlyLeads.map((m: any) => m.count))) * 100)}%` }} />
                   </div>
-                  <span className="text-xs font-semibold text-navy-700 w-6 text-right">{item.count}</span>
+                  <span className="text-xs font-semibold text-navy-700 w-6 text-right dark:text-navy-300 dark:text-navy-100">{item.count}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-navy-400">Sin datos</p>
+            <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin datos</p>
           )}
         </div>
 
         {/* Recent payments */}
         <div className="card p-6">
-          <h3 className="font-bold text-navy-900 mb-4">Últimos cobros</h3>
+          <h3 className="font-bold text-navy-900 mb-4 dark:text-white">Últimos cobros</h3>
           {data?.recentPayments?.length > 0 ? (
             <div className="space-y-2">
               {data.recentPayments.slice(0, 10).map((p: any) => (
                 <div key={p.id} className="flex items-center justify-between p-2 bg-navy-50 rounded-lg">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-navy-900 truncate">{p.contract_title || 'Pago'}</p>
-                    <p className="text-xs text-navy-400">{p.concept} · {p.paid_at ? new Date(p.paid_at).toLocaleDateString('es-AR') : '-'}</p>
+                    <p className="text-sm font-medium text-navy-900 truncate dark:text-white">{p.contract_title || 'Pago'}</p>
+                    <p className="text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">{p.concept} · {p.paid_at ? new Date(p.paid_at).toLocaleDateString('es-AR') : '-'}</p>
                   </div>
                   <span className="text-sm font-bold text-emerald-600">{formatPrice(p.amount, p.currency)}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-navy-400">Sin cobros registrados</p>
+            <p className="text-sm text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin cobros registrados</p>
           )}
         </div>
       </div>
