@@ -79,7 +79,7 @@ const plans = [
     price: 199,
     description: 'Para grandes inmobiliarias y grupos',
     features: ['Créditos ilimitados', 'Importación personalizada', 'Plantillas personalizadas', 'Acceso para desarrolladores', 'Account manager dedicado', 'Disponibilidad 99.9%'],
-    cta: 'Contactar ventas',
+    cta: 'Comenzar',
     popular: false,
   },
 ]
