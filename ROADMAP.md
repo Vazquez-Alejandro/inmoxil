@@ -1,0 +1,72 @@
+# Inmoxil — Roadmap
+
+## 🟢 Completado
+
+- [x] Landing page (hero, features, pricing, FAQ)
+- [x] Autenticación (NextAuth + credentials + bcrypt)
+- [x] Middleware (rutas públicas vs protegidas)
+- [x] Dashboard layout (sidebar, header, dark mode)
+- [x] Propiedades (CRUD, filtros, vista grid/detalle)
+- [x] Scraping ZonaProp, Argenprop, MercadoLibre
+- [x] Pipeline CRM (kanban, leads, actividades, matching)
+- [x] Contratos (5 tipos, PDF, ajuste IPC/ICL)
+- [x] Firma digital
+- [x] Pagos / Cobranza + Stripe Checkout
+- [x] Publicaciones multi-canal
+- [x] MercadoLibre OAuth + publish
+- [x] Monitoreo de propiedades (suscripción)
+- [x] Portal del propietario
+- [x] Portal del inquilino (token-based)
+- [x] Catálogo público de propiedades
+- [x] Página de pago online
+- [x] WhatsApp Center (templates, mensajes)
+- [x] Comisiones
+- [x] Mantenimiento (tickets públicos + internos)
+- [x] Notificaciones in-app
+- [x] Reportes y estadísticas
+- [x] Brand Kit (color, logo)
+- [x] Facturación / plan billing
+- [x] Guía interactiva / tour
+- [x] PWA (manifest, service worker) + dark mode
+- [x] Multi-tenant (workspaces, roles)
+- [x] Migraciones de base de datos consolidadas
+- [x] Tipos de DB completos (30 tablas)
+- [x] Paleta de colores corregida (gold/coral)
+- [x] Sidebar (íconos sin duplicados)
+
+## 🟡 Pendiente — requiere acción del usuario
+
+### Base de datos (Neon)
+- [ ] Ejecutar migrations en Neon: `supabase/migrations/001_initial_schema.sql`, `002_trial_ends_at.sql`, `003_complete_schema.sql`
+- [ ] Configurar `DATABASE_URL` en Vercel
+
+### Stripe (pagos)
+- [ ] Configurar webhook en Stripe Dashboard → `https://inmoxil.vercel.app/api/webhooks/stripe`
+- [ ] Agregar `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, price IDs a Vercel
+
+### Env vars en Vercel
+- [ ] `NEXTAUTH_SECRET`
+- [ ] `NEXTAUTH_URL`
+- [ ] `APIFY_TOKEN`
+- [ ] `SCRAPINGBEE_API_KEY`
+- [ ] `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
+- [ ] `CHROME_PATH`
+- [ ] `CRON_SECRET`
+- [ ] `RESEND_API_KEY`
+- [ ] `NEXT_PUBLIC_APP_URL`
+
+### Scraping
+- [ ] Verificar scraping de Argenprop (reportado con issues en TEST_PLAN)
+- [ ] Configurar Apify / ScrapingBee con API keys reales
+
+## 🔵 A futuro
+
+### Testing manual
+- [ ] Ejecutar TEST_PLAN.txt (~297 puntos visuales pendientes)
+
+### Mejoras
+- [ ] Dashboard de analytics con gráficos reales
+- [ ] Importación CSV/JSON de propiedades
+- [ ] Webhooks de salida (integración con sistemas externos)
+- [ ] App mobile (React Native)
+- [ ] Marketplace de plantillas de anuncios
