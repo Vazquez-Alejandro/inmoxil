@@ -1,20 +1,20 @@
-import { neon } from '@neondatabase/serverless'
+import { Pool } from 'pg'
 
-let _sql: any = null
+let _pool: any = null
 
 export function getDb() {
-  if (!_sql) {
+  if (!_pool) {
     const url = process.env.DATABASE_URL
     if (!url) throw new Error('Missing DATABASE_URL')
-    _sql = neon(url)
+    _pool = new Pool({ connectionString: url })
   }
-  return _sql
+  return _pool
 }
 
 export async function query(text: string, params?: any[]) {
-  const sql = getDb()
-  const result = await sql.query(text, params || [])
-  return Array.isArray(result) ? result : result.rows || []
+  const pool = getDb()
+  const result = await pool.query(text, params || [])
+  return result.rows || []
 }
 
 export async function queryOne(text: string, params?: any[]) {

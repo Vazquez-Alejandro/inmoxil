@@ -1,2 +1,0 @@
--- 009: Calendar visits view, uploads (no new tables needed)
--- Everything used already exists in the schema.
