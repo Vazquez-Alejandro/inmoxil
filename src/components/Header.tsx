@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { useTheme } from '@/lib/theme-context'
 import NotificationBell from './NotificationBell'
+import LocaleSelector from './LocaleSelector'
 
 export default function Header({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   const { user, signOut } = useAuth()
@@ -26,6 +27,7 @@ export default function Header({ title, subtitle, action }: { title: string; sub
       </div>
 
       <div className="flex items-center gap-2">
+        <LocaleSelector />
         <NotificationBell />
         <button
           onClick={toggle}
