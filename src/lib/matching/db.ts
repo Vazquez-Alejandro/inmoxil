@@ -141,7 +141,7 @@ export async function matchLeadToProperties(workspaceId: string, leadId: string)
     if (lead.preferredNeighborhoods.length > 0 && p.city) {
       const pCity = p.city.toLowerCase()
       const pAddr = (p.address || '').toLowerCase()
-      const neighborhoodMatch = lead.preferredNeighborhoods.some(n => 
+      const neighborhoodMatch = lead.preferredNeighborhoods.some((n: string) => 
         n && (pCity.includes(n) || pAddr.includes(n))
       )
       if (neighborhoodMatch) {
@@ -156,7 +156,7 @@ export async function matchLeadToProperties(workspaceId: string, leadId: string)
         if (Array.isArray(amenities)) {
           const reqWords = req.split(/[\s,]+/).filter(Boolean)
           const amenityMatches = amenities.filter((a: string) => 
-            reqWords.some(w => w.length >= 3 && a.toLowerCase().includes(w))
+            reqWords.some((w: string) => w.length >= 3 && a.toLowerCase().includes(w))
           )
           if (amenityMatches.length > 0) {
             score.push(Math.min(amenityMatches.length * 5, 15))

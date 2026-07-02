@@ -134,7 +134,7 @@ export default function ReportsPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 12 }} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
-                <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [formatPrice(v), 'Monto']} />
+                <Tooltip contentStyle={tooltipStyle} formatter={(v) => [formatPrice(Number(v)), 'Monto']} />
                 <Line type="monotone" dataKey="monto" stroke="#10b981" strokeWidth={2} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
