@@ -6,11 +6,11 @@
 
 @layer base {
   body {
-    @apply font-sans antialiased text-navy-900 bg-gray-50 dark:text-navy-100 dark:bg-navy-950;
+    @apply font-sans antialiased text-navy-900 bg-white dark:text-gray-100 dark:bg-gray-950;
   }
 
   ::selection {
-    @apply bg-gold-500/20 text-white;
+    @apply bg-gold-500/20 text-navy-900 dark:text-white;
   }
 }
 
@@ -18,42 +18,42 @@
 .card.dark,
 .dark .card-hover,
 .card-hover.dark {
-  @apply bg-navy-900 border-navy-700;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .input,
 .input.dark {
-  @apply bg-navy-800 border-navy-600 text-white placeholder:text-navy-500;
+  @apply bg-gray-800 border-gray-600 text-white placeholder:text-gray-500;
 }
 
 .dark .label,
 .label.dark {
-  @apply text-navy-300;
+  @apply text-gray-300;
 }
 
 .dark .btn-outline,
 .btn-outline.dark {
-  @apply border-navy-600 text-navy-300 hover:border-navy-400 hover:text-white;
+  @apply border-gray-600 text-gray-300 hover:border-gray-400 hover:text-white;
 }
 
 .dark .btn-ghost,
 .btn-ghost.dark {
-  @apply text-navy-400 hover:text-white hover:bg-white/10;
+  @apply text-gray-400 hover:text-white hover:bg-white/10;
 }
 
 .dark .badge-navy,
 .badge-navy.dark {
-  @apply bg-navy-800 text-navy-300;
+  @apply bg-gray-800 text-gray-300;
 }
 
 .dark .divider,
 .divider.dark {
-  @apply border-navy-700;
+  @apply border-gray-700;
 }
 
 .dark .stat-card,
 .stat-card.dark {
-  @apply bg-navy-900 border-navy-700;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .price-tag,
@@ -68,17 +68,17 @@
 
 .dark .page-subtitle,
 .page-subtitle.dark {
-  @apply text-navy-400;
+  @apply text-gray-400;
 }
 
 .dark .table-header,
 .table-header.dark {
-  @apply text-navy-400;
+  @apply text-gray-400;
 }
 
 .dark .table-cell,
 .table-cell.dark {
-  @apply text-navy-300;
+  @apply text-gray-300;
 }
 
 .dark .logo-mark,
@@ -105,7 +105,7 @@
 
   .btn-outline {
     @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm
-           border-2 border-navy-200 text-navy-800 hover:border-navy-900 hover:text-navy-900
+           border-2 border-navy-200 text-navy-700 hover:border-navy-900 hover:text-navy-900
            transition-all duration-200 ease-out
            active:scale-[0.98];
   }
@@ -124,8 +124,8 @@
   }
 
   .card {
-    @apply bg-white rounded-xl border border-gray-200/80 shadow-corporate
-           transition-all duration-200 hover:shadow-corporate-md;
+    @apply bg-white rounded-xl border border-gray-200 shadow-sm
+           transition-all duration-200 hover:shadow-md;
   }
 
   .card-hover {

@@ -170,6 +170,28 @@ export const guideSections: GuideSection[] = [
     ],
   },
   {
+    id: 'expensas',
+    title: 'Expensas',
+    description: 'Cálculo y distribución de expensas para consorcios',
+    details: [
+      'Cargá datos de consorcios: unidades funcionales, coeficientes y gastos comunes.',
+      'Calculá automáticamente la parte proporcional de cada unidad.',
+      'Generá liquidaciones mensuales con desglose por unidad.',
+      'Plantillas reutilizables para ahorrar tiempo en cargas repetitivas.',
+    ],
+  },
+  {
+    id: 'matching',
+    title: 'Matching IA',
+    description: 'Inteligencia artificial para emparejar propiedades con clientes',
+    details: [
+      'El sistema analiza las preferencias de cada lead automáticamente.',
+      'Matching por precio, zona, tipo de propiedad y amenities.',
+      'Score de confianza: alta, media o baja según el nivel de coincidencia.',
+      'Fuzzy matching para encontrar propiedades similares aunque no sean idénticas.',
+    ],
+  },
+  {
     id: 'ml',
     title: 'MercadoLibre',
     description: 'Integración con MercadoLibre para importación',
@@ -278,6 +300,7 @@ export const faqData: FAQCategory[] = [
       { q: '¿Cómo empiezo a usar la plataforma?', r: 'Completá el onboarding inicial donde configurás tu inmobiliaria, colores de marca y plan. Luego podés empezar importando propiedades desde la sección Importar.' },
       { q: '¿Qué plan me recomiendan?', r: 'El plan Inicial es ideal para empezar con hasta 50 créditos. Si necesitás más capacidad, el plan Profesional (200 créditos) o Empresarial (1000 créditos) se ajustan mejor.' },
       { q: '¿Cómo invito a mi equipo?', r: 'Andá a la sección Equipo y usá el formulario para invitar agentes. Cada uno recibe un email con sus credenciales de acceso.' },
+      { q: '¿Puedo cambiar de plan después?', r: 'Sí, podés cambiar tu plan en cualquier momento desde Facturación. El cambio se prorratea según el tiempo restante del ciclo.' },
     ],
   },
   {
@@ -287,6 +310,25 @@ export const faqData: FAQCategory[] = [
       { q: '¿Cómo importo propiedades?', r: 'Usá la sección Importar: pegá enlaces de portales como MercadoLibre o ZonaProp, o subí un archivo CSV/Excel con los datos.' },
       { q: '¿Puedo publicar en MercadoLibre desde acá?', r: 'Sí, la sección Publicaciones te permite conectar con MercadoLibre, ZonaProp y otros portales para publicar directamente.' },
       { q: '¿Cómo edito una propiedad existente?', r: 'Andá a Propiedades, encontrá la propiedad que querés editar y hacé clic en el botón de edición (lápiz).' },
+      { q: '¿Qué tipos de propiedades puedo cargar?', r: 'Departamentos, casas, locales, oficinas, terrenos y ph. Cada tipo tiene campos específicos como metraje, ambientes y antigüedad.' },
+    ],
+  },
+  {
+    category: 'Matching IA',
+    icon: '🤖',
+    items: [
+      { q: '¿Cómo funciona el matching automático?', r: 'La IA analiza las preferencias del cliente (precio, zona, tipo) y encuentra propiedades que coincidan. Recibirás un ranking con score de confianza.' },
+      { q: '¿Qué significa el score de confianza?', r: 'Alta = coincidencia casi perfecta. Media = buena opción pero con diferencias. Baja = puede interesarle aunque no es ideal. Se actualiza según la información del lead.' },
+      { q: '¿Puedo configurar las reglas de matching?', r: 'Sí, podés definir zonas preferidas, amenities deseados y rangos de precio. El sistema aprende de tus ajustes.' },
+    ],
+  },
+  {
+    category: 'Expensas',
+    icon: '🏢',
+    items: [
+      { q: '¿Cómo calculo las expensas?', r: 'Creá un consorcio, cargá las unidades con sus coeficientes, agregá gastos comunes y generá la liquidación. El sistema calcula automáticamente la parte de cada unidad.' },
+      { q: '¿Puedo usar plantillas?', r: 'Sí, creá plantillas de expensas con gastos recurrentes y reutilizalas cada mes para ahorrar tiempo.' },
+      { q: '¿Cómo comparto la liquidación con los propietarios?', r: 'Exportá la liquidación como PDF y compartila por WhatsApp o email directamente desde la plataforma.' },
     ],
   },
   {
@@ -296,6 +338,7 @@ export const faqData: FAQCategory[] = [
       { q: '¿Cómo agrego un nuevo cliente?', r: 'En la sección Clientes (Pipeline), hacé clic en "Nuevo lead" y completá los datos del contacto. Se asignará automáticamente a la etapa "Nuevo".' },
       { q: '¿Cómo programo una visita?', r: 'Desde la ficha del lead, seleccioná la actividad "Visita" y elegí fecha y hora. Se creará automáticamente en el Calendario.' },
       { q: '¿Qué pasa cuando cierro una venta?', r: 'Mové el lead a la etapa "Cerrado" en el pipeline. A partir de ahí podés crear un contrato desde la sección Contratos.' },
+      { q: '¿Puedo agregar notas a un lead?', r: 'Sí, desde la ficha del lead podés agregar notas internas, historial de llamadas y actividad reciente.' },
     ],
   },
   {
@@ -305,6 +348,7 @@ export const faqData: FAQCategory[] = [
       { q: '¿Cómo creo un contrato de alquiler?', r: 'En Contratos, hacé clic en "Nuevo contrato". Seleccioná tipo "Alquiler", completá los datos de propiedad, inquilino y propietario.' },
       { q: '¿Cómo funciona la firma digital?', r: 'Una vez creado el contrato, enviáselo al inquilino. Recibirá un enlace para firmar digitalmente desde cualquier dispositivo.' },
       { q: '¿El contrato tiene validez legal?', r: 'La firma electrónica tiene validez legal en Argentina según la Ley 25.506. Recomendamos consultar con un asesor legal.' },
+      { q: '¿Qué tipos de contrato puedo crear?', r: 'Alquiler, compraventa y cesión. Cada tipo tiene campos específicos y plantillas predefinidas.' },
     ],
   },
   {
@@ -314,6 +358,7 @@ export const faqData: FAQCategory[] = [
       { q: '¿Cómo compro más créditos?', r: 'Los créditos se renuevan cada mes según tu plan. Si necesitás más, podés cambiar a un plan superior desde Facturación.' },
       { q: '¿Qué consume créditos?', r: 'Cada ad generado en la sección Ads consume 1 crédito. Las importaciones y publicaciones no consumen créditos.' },
       { q: '¿Cómo cambio mi plan?', r: 'Andá a Facturación, seleccioná el plan que querés y confirmá el cambio. Se prorratea según el tiempo restante del ciclo actual.' },
+      { q: '¿Cómo veo mi historial de pagos?', r: 'En la sección Facturación encontrás el historial completo de facturas y pagos realizados.' },
     ],
   },
   {
@@ -323,6 +368,7 @@ export const faqData: FAQCategory[] = [
       { q: '¿Cómo reporto un error?', r: 'Si encontrás algún problema, escribinos a soporte@inmoxil.com.ar o usá el botón de ayuda en la plataforma.' },
       { q: '¿La plataforma tiene app móvil?', r: 'Por ahora la plataforma es web responsive. Funciona perfectamente en el navegador de tu celular.' },
       { q: '¿Cómo exporto mis datos?', r: 'Las secciones de Reportes y Comisiones permiten exportar datos. Si necesitás una exportación completa, contactanos.' },
+      { q: '¿Mis datos están seguros?', r: 'Sí, utilizamos Supabase con encriptación SSL, autenticación JWT y políticas RLS para proteger toda tu información.' },
     ],
   },
 ]

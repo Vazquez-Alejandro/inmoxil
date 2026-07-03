@@ -20,13 +20,13 @@ export default function Header({ title, subtitle, action }: { title: string; sub
   }
 
   return (
-    <header className="flex items-center justify-between mb-8">
-      <div>
-        <h1 className="page-title">{title}</h1>
-        {subtitle && <p className="page-subtitle">{subtitle}</p>}
+    <header className="flex items-center justify-between mb-8 gap-4">
+      <div className="min-w-0 flex-shrink-0">
+        <h1 className="page-title truncate">{title}</h1>
+        {subtitle && <p className="page-subtitle truncate">{subtitle}</p>}
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-shrink-0">
         <LocaleSelector />
         <NotificationBell />
         <button

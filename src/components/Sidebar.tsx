@@ -12,30 +12,39 @@ const PLAN_LABELS: Record<string, { name: string; credits: number }> = {
 }
 
 const navigation = [
-  { name: 'Panel', href: '/dashboard', icon: DashboardIcon },
-  { name: 'Clientes', href: '/dashboard/pipeline', icon: PipelineIcon },
-  { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
-  { name: 'Contratos', href: '/dashboard/contracts', icon: ContractIcon },
-  { name: 'Comisiones', href: '/dashboard/commissions', icon: CashIcon },
-  { name: 'Equipo', href: '/dashboard/team', icon: UsersIcon },
-  { name: 'Configuración', href: '/dashboard/settings', icon: SettingsIcon },
-  { name: 'Importar', href: '/dashboard/scrape', icon: ScrapingIcon },
-  { name: 'Propiedades', href: '/dashboard/properties', icon: PropertiesIcon },
-  { name: 'WhatsApp', href: '/dashboard/whatsapp', icon: ChatIcon },
-  { name: 'Publicaciones', href: '/dashboard/publish', icon: SendIcon },
-  { name: 'Importación Auto.', href: '/dashboard/schedule', icon: ClockIcon },
-  { name: 'Notificaciones', href: '/dashboard/notifications', icon: NotifIcon },
-  { name: 'Mantenimiento', href: '/dashboard/mantenimiento', icon: WrenchIcon },
-  { name: 'MercadoLibre', href: '/dashboard/ml', icon: MLIcon },
-  { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon },
-  { name: 'Estadísticas', href: '/dashboard/analytics', icon: AnalyticsIcon },
-  { name: 'Reportes', href: '/dashboard/reports', icon: ChartIcon },
-  { name: 'Expensas', href: '/dashboard/expensas', icon: ExpensasIcon },
-  { name: 'Cobranza', href: '/dashboard/pagos', icon: PaymentIcon },
-  { name: 'Facturación', href: '/dashboard/billing', icon: BillingIcon },
-  { name: 'Mi Marca', href: '/dashboard/brand', icon: BrandIcon },
-  { name: 'API Docs', href: '/dashboard/api-docs', icon: CodeIcon, ownerOnly: true },
-  { name: 'Guía', href: '/dashboard/guide', icon: GuideIcon },
+  // Principal
+  { name: 'Panel', href: '/dashboard', icon: DashboardIcon, group: 'principal' },
+  { name: 'Clientes', href: '/dashboard/pipeline', icon: PipelineIcon, group: 'principal' },
+  { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon, group: 'principal' },
+
+  // Propiedades
+  { name: 'Propiedades', href: '/dashboard/properties', icon: PropertiesIcon, group: 'propiedades' },
+  { name: 'Publicaciones', href: '/dashboard/publish', icon: SendIcon, group: 'propiedades' },
+  { name: 'MercadoLibre', href: '/dashboard/ml', icon: MLIcon, group: 'propiedades' },
+  { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon, group: 'propiedades' },
+
+  // Contratos y Cobranza
+  { name: 'Contratos', href: '/dashboard/contracts', icon: ContractIcon, group: 'contratos' },
+  { name: 'Comisiones', href: '/dashboard/commissions', icon: CashIcon, group: 'contratos' },
+  { name: 'Expensas', href: '/dashboard/expensas', icon: ExpensasIcon, group: 'contratos' },
+  { name: 'Cobranza', href: '/dashboard/pagos', icon: PaymentIcon, group: 'contratos' },
+  { name: 'Facturación', href: '/dashboard/billing', icon: BillingIcon, group: 'contratos' },
+
+  // Herramientas
+  { name: 'Importar', href: '/dashboard/scrape', icon: ScrapingIcon, group: 'herramientas' },
+  { name: 'Importación Auto.', href: '/dashboard/schedule', icon: ClockIcon, group: 'herramientas' },
+  { name: 'Mantenimiento', href: '/dashboard/mantenimiento', icon: WrenchIcon, group: 'herramientas' },
+  { name: 'WhatsApp', href: '/dashboard/whatsapp', icon: ChatIcon, group: 'herramientas' },
+  { name: 'Notificaciones', href: '/dashboard/notifications', icon: NotifIcon, group: 'herramientas' },
+
+  // Configuración
+  { name: 'Estadísticas', href: '/dashboard/analytics', icon: AnalyticsIcon, group: 'config' },
+  { name: 'Reportes', href: '/dashboard/reports', icon: ChartIcon, group: 'config' },
+  { name: 'Equipo', href: '/dashboard/team', icon: UsersIcon, group: 'config' },
+  { name: 'Mi Marca', href: '/dashboard/brand', icon: BrandIcon, group: 'config' },
+  { name: 'Guía', href: '/dashboard/guide', icon: GuideIcon, group: 'config' },
+  { name: 'API Docs', href: '/dashboard/api-docs', icon: CodeIcon, group: 'config', ownerOnly: true },
+  { name: 'Configuración', href: '/dashboard/settings', icon: SettingsIcon, group: 'config' },
 ]
 
 export default function Sidebar({ onClose }: { onClose?: () => void }) {
@@ -69,21 +78,42 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         </button>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navigation.map((item) => {
-          if ('ownerOnly' in item && item.ownerOnly && !isOwner) return null
-          const isActive = pathname === item.href || 
-            (item.href !== '/dashboard' && pathname.startsWith(item.href))
+      <nav className="flex-1 px-3 py-4 space-y-4 overflow-y-auto">
+        {[
+          { key: 'principal', label: null },
+          { key: 'propiedades', label: 'Propiedades' },
+          { key: 'contratos', label: 'Contratos y Cobranza' },
+          { key: 'herramientas', label: 'Herramientas' },
+          { key: 'config', label: 'Configuración' },
+        ].map((section) => {
+          const items = navigation.filter(i => i.group === section.key)
+          if (items.length === 0) return null
           return (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={onClose}
-              className={isActive ? 'sidebar-link-active' : 'sidebar-link'}
-            >
-              <item.icon className="w-5 h-5" />
-              {item.name}
-            </Link>
+            <div key={section.key}>
+              {section.label && (
+                <p className="text-[10px] uppercase tracking-widest text-white/40 font-semibold px-3 mb-2">
+                  {section.label}
+                </p>
+              )}
+              <div className="space-y-1">
+                {items.map((item) => {
+                  if ('ownerOnly' in item && item.ownerOnly && !isOwner) return null
+                  const isActive = pathname === item.href || 
+                    (item.href !== '/dashboard' && pathname.startsWith(item.href))
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={onClose}
+                      className={isActive ? 'sidebar-link-active' : 'sidebar-link'}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      {item.name}
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
           )
         })}
         {isOwner && (
