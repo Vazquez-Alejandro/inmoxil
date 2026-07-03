@@ -2,13 +2,10 @@ import { query, queryOne } from '@/lib/db'
 import type { MLToken } from './api'
 
 export async function saveMLToken(workspaceId: string, token: MLToken): Promise<void> {
+  await query('DELETE FROM ml_tokens WHERE workspace_id=$1', [workspaceId])
   await query(
     `INSERT INTO ml_tokens (workspace_id, access_token, refresh_token, user_id, seller_id, expires_at)
-     VALUES ($1,$2,$3,$4,$5,$6)
-     ON CONFLICT (workspace_id) DO UPDATE SET
-       access_token=EXCLUDED.access_token, refresh_token=EXCLUDED.refresh_token,
-       user_id=EXCLUDED.user_id, seller_id=EXCLUDED.seller_id,
-       expires_at=EXCLUDED.expires_at, updated_at=NOW()`,
+     VALUES ($1,$2,$3,$4,$5,$6)`,
     [workspaceId, token.accessToken, token.refreshToken, token.userId, token.sellerId, token.expiresAt]
   )
 }
