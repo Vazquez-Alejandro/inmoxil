@@ -104,25 +104,33 @@ export async function getMyItems(accessToken: string, userId: string): Promise<M
 }
 
 export async function createItem(accessToken: string, item: any): Promise<any> {
-  const { description, ...itemWithoutDesc } = item
+  const payload = {
+    title: item.title,
+    category_id: item.category_id,
+    listing_type_id: item.listing_type_id,
+    price: item.price,
+    currency_id: item.currency_id || 'ARS',
+    condition: item.condition || 'new',
+    buying_mode: 'instant',
+    ...(item.pictures?.length ? { pictures: item.pictures } : {}),
+  }
   const res = await fetch(`${API_BASE}/items`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
     },
-    body: JSON.stringify(itemWithoutDesc),
+    body: JSON.stringify(payload),
   })
-  const text = await res.text()
+  const rawBody = Buffer.from(await res.arrayBuffer()).toString('utf-8')
   let data: any
-  try { data = JSON.parse(text) } catch { data = { raw: text } }
-  if (!res.ok) throw new Error(`ML create error: ${res.status} ${JSON.stringify(data)}`)
-  if (description && data.id) {
+  try { data = JSON.parse(rawBody) } catch { data = { raw: rawBody.substring(0, 500) } }
+  if (!res.ok) throw new Error(`ML ${res.status}: ${JSON.stringify(data)}`)
+  if (item.description && data.id) {
     await fetch(`${API_BASE}/items/${data.id}/description`, {
       method: 'PUT',
       headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plain_text: description }),
+      body: JSON.stringify({ plain_text: item.description }),
     })
   }
   return data
