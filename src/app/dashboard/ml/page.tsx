@@ -106,21 +106,14 @@ export default function MLPage() {
 
     const item: any = {
       title: form.title,
-      description: form.description,
       price: parseInt(form.price),
       currency_id: form.currency_id,
       category_id: form.category_id,
       listing_type_id: form.listing_type_id,
       condition: form.condition,
-      pictures,
-      attributes: [
-        { id: 'PROPERTY_TYPE', value_name: ML_CATEGORIES.find((c) => c.id === form.category_id)?.name || 'Departamento' },
-        { id: 'OPERATION', value_name: 'Venta' },
-        ...(form.bedrooms ? [{ id: 'BEDROOMS', value_name: form.bedrooms }] : []),
-        ...(form.bathrooms ? [{ id: 'FULL_BATHROOMS', value_name: form.bathrooms }] : []),
-        ...(form.area ? [{ id: 'TOTAL_AREA', value_name: form.area, value_struct: { number: parseInt(form.area), unit: 'm²' } }] : []),
-      ],
     }
+    if (pictures.length > 0) item.pictures = pictures
+    if (form.description) item.description = form.description
 
     try {
       const res = await fetch('/api/ml', {

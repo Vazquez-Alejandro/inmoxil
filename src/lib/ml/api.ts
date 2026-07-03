@@ -103,14 +103,29 @@ export async function getMyItems(accessToken: string, userId: string): Promise<M
   return items
 }
 
-export async function createItem(accessToken: string, item: MLItem): Promise<MLItem> {
+export async function createItem(accessToken: string, item: any): Promise<any> {
+  const { description, ...itemWithoutDesc } = item
   const res = await fetch(`${API_BASE}/items`, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(item),
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify(itemWithoutDesc),
   })
-  if (!res.ok) throw new Error(`ML create error: ${res.status} ${await res.text()}`)
-  return res.json()
+  const text = await res.text()
+  let data: any
+  try { data = JSON.parse(text) } catch { data = { raw: text } }
+  if (!res.ok) throw new Error(`ML create error: ${res.status} ${JSON.stringify(data)}`)
+  if (description && data.id) {
+    await fetch(`${API_BASE}/items/${data.id}/description`, {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plain_text: description }),
+    })
+  }
+  return data
 }
 
 export async function updateItem(accessToken: string, itemId: string, updates: Partial<MLItem>): Promise<MLItem> {
