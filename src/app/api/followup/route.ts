@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
          WHERE pl.workspace_id=$1 
          AND pl.status NOT IN ('convertido', 'perdido')
          AND pl.phone IS NOT NULL
-         HAVING EXTRACT(DAY FROM NOW() - COALESCE(
+         AND EXTRACT(DAY FROM NOW() - COALESCE(
            (SELECT MAX(created_at) FROM pipeline_activities WHERE lead_id=pl.id),
            pl.created_at
          )) >= 3`,
@@ -105,13 +105,12 @@ export async function POST(request: NextRequest) {
 
       if (!matchedRule) continue
 
-      // Check if already sent this rule
+      // Check if already sent this rule (simplified - check by content)
       const alreadySent = await queryOne(
         `SELECT id FROM whatsapp_messages
          WHERE workspace_id=$1 AND lead_id=$2 AND direction='followup'
-         AND metadata->>'ruleIndex'=$3
-         AND created_at > NOW() - INTERVAL '7 days'`,
-        [workspaceId, lead.id, ruleIdx.toString()]
+         AND sent_at > NOW() - INTERVAL '7 days'`,
+        [workspaceId, lead.id]
       )
 
       if (alreadySent) continue
@@ -132,9 +131,9 @@ export async function POST(request: NextRequest) {
 
       // Save follow-up message
       await query(
-        `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, phone, metadata)
-         VALUES ($1, $2, 'followup', $3, $4, $5)`,
-        [workspaceId, lead.id, message, lead.phone, JSON.stringify({ ruleIndex: ruleIdx, daysInactive })]
+        `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, status)
+         VALUES ($1, $2, 'followup', $3, 'sent')`,
+        [workspaceId, lead.id, message]
       )
 
       // Create activity
@@ -178,9 +177,7 @@ export async function GET(request: NextRequest) {
     const stats = await queryOne(
       `SELECT
         COUNT(*) FILTER (WHERE direction='followup')::int as total_followups,
-        COUNT(*) FILTER (WHERE direction='followup' AND metadata->>'ruleIndex'='0')::int as day3_followups,
-        COUNT(*) FILTER (WHERE direction='followup' AND metadata->>'ruleIndex'='1')::int as day7_followups,
-        COUNT(*) FILTER (WHERE direction='followup' AND metadata->>'ruleIndex'='2')::int as day14_followups
+        COUNT(*) FILTER (WHERE direction='followup')::int as sent_followups
        FROM whatsapp_messages
        WHERE workspace_id=$1`,
       [workspaceId]
@@ -188,20 +185,15 @@ export async function GET(request: NextRequest) {
 
     // Get leads needing follow-up
     const needsFollowUp = await query(
-      `SELECT pl.id, pl.full_name, pl.phone, pl.created_at,
-        EXTRACT(DAY FROM NOW() - COALESCE(
-          (SELECT MAX(created_at) FROM pipeline_activities WHERE lead_id=pl.id),
-          pl.created_at
-        ))::int as days_inactive
+      `SELECT pl.id, pl.full_name, pl.phone, pl.created_at
        FROM pipeline_leads pl
        WHERE pl.workspace_id=$1
        AND pl.status NOT IN ('convertido', 'perdido')
        AND pl.phone IS NOT NULL
-       HAVING EXTRACT(DAY FROM NOW() - COALESCE(
-         (SELECT MAX(created_at) FROM pipeline_activities WHERE lead_id=pl.id),
-         pl.created_at
-       )) >= 3
-       ORDER BY days_inactive DESC
+       AND NOT EXISTS (
+         SELECT 1 FROM pipeline_activities pa WHERE pa.lead_id = pl.id AND pa.created_at > NOW() - INTERVAL '3 days'
+       )
+       ORDER BY pl.created_at ASC
        LIMIT 20`,
       [workspaceId]
     )

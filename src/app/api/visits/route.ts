@@ -39,14 +39,12 @@ export async function POST(request: NextRequest) {
     // Send confirmation via WhatsApp
     if (lead?.phone) {
       await query(
-        `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, phone, metadata)
-         VALUES ($1, $2, 'outgoing', $3, $4, $5)`,
+        `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, status)
+         VALUES ($1, $2, 'outgoing', $3, 'sent')`,
         [
           workspaceId,
           leadId,
           `Visit confirmada: ${propertyName} - ${visitDate} ${visitTime}`,
-          lead.phone,
-          JSON.stringify({ visitId: visit?.id, type: 'confirmation_request' }),
         ]
       )
     }
@@ -121,16 +119,15 @@ export async function GET(request: NextRequest) {
       [workspaceId]
     )
 
-    // Get confirmation status
+    // Get confirmation status (simplified)
     const confirmations = await query(
-      `SELECT metadata->>'visitId' as visit_id,
+      `SELECT lead_id,
               COUNT(*) as responses,
               COUNT(*) FILTER (WHERE content ILIKE '%si%' OR content ILIKE '%confirmo%') as confirmed,
               COUNT(*) FILTER (WHERE content ILIKE '%no%' OR content ILIKE '%cancelo%') as cancelled
        FROM whatsapp_messages
        WHERE workspace_id=$1 AND direction='incoming'
-       AND metadata->>'type'='confirmation_response'
-       GROUP BY metadata->>'visitId'`,
+       GROUP BY lead_id`,
       [workspaceId]
     )
 

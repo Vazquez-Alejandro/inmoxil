@@ -24,8 +24,8 @@ export async function POST(request: NextRequest) {
        AND NOT EXISTS (
          SELECT 1 FROM whatsapp_messages wm
          WHERE wm.lead_id = pa.lead_id
-         AND wm.metadata->>'type' = 'reminder'
-         AND wm.metadata->>'visitDate' = DATE(pa.scheduled_at)::text
+         AND wm.direction = 'reminder'
+         AND wm.sent_at::date = DATE(pa.scheduled_at)
        )`,
       [workspaceId]
     )
@@ -58,18 +58,12 @@ export async function POST(request: NextRequest) {
 
       // Save reminder
       await query(
-        `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, phone, metadata)
-         VALUES ($1, $2, 'reminder', $3, $4, $5)`,
+        `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, status)
+         VALUES ($1, $2, 'reminder', $3, 'sent')`,
         [
           workspaceId,
           visit.lead_id,
           `Recordatorio de visita: ${visit.property_title} - ${visitDate} ${visitTime}`,
-          visit.lead_phone,
-          JSON.stringify({
-            type: 'reminder',
-            visitDate: new Date(visit.scheduled_at).toISOString().split('T')[0],
-            visitTime,
-          }),
         ]
       )
 

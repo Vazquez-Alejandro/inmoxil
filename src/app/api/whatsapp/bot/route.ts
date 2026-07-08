@@ -155,16 +155,16 @@ export async function POST(request: NextRequest) {
 
     // Save conversation log
     await query(
-      `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, phone, metadata)
-       VALUES ($1, $2, 'bot_incoming', $3, $4, $5)`,
-      [workspaceId, lead?.id || null, message, phone, JSON.stringify({ intent, confidence })]
+      `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, status)
+       VALUES ($1, $2, 'bot_incoming', $3, 'sent')`,
+      [workspaceId, lead?.id || null, message]
     )
 
     // Save bot response
     await query(
-      `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, phone, metadata)
-       VALUES ($1, $2, 'bot_outgoing', $3, $4, $5)`,
-      [workspaceId, lead?.id || null, response.message, phone, JSON.stringify({ action: response.action })]
+      `INSERT INTO whatsapp_messages (workspace_id, lead_id, direction, content, status)
+       VALUES ($1, $2, 'bot_outgoing', $3, 'sent')`,
+      [workspaceId, lead?.id || null, response.message]
     )
 
     // If schedule_visit intent, create activity
@@ -224,9 +224,7 @@ export async function GET(request: NextRequest) {
     const stats = await queryOne(
       `SELECT
         COUNT(*) FILTER (WHERE direction='bot_incoming')::int as total_messages,
-        COUNT(*) FILTER (WHERE direction='bot_outgoing')::int as bot_responses,
-        COUNT(*) FILTER (WHERE metadata->>'action'='schedule_visit')::int as visits_scheduled,
-        COUNT(*) FILTER (WHERE metadata->>'action'='transfer_agent')::int as transfers
+        COUNT(*) FILTER (WHERE direction='bot_outgoing')::int as bot_responses
        FROM whatsapp_messages
        WHERE workspace_id=$1 AND direction LIKE 'bot_%'`,
       [workspaceId]
