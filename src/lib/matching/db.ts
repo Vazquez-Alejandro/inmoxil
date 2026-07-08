@@ -12,7 +12,25 @@ export interface MatchingResult {
     currency: string
     operationType: string
     propertyType: string
-    bedrooms: number
+    beds: number
+    score: number
+    matchReasons: string[]
+    confidence: 'alta' | 'media' | 'baja'
+  }[]
+}
+
+export interface PropertyMatchResult {
+  propertyId: string
+  propertyTitle: string
+  leads: {
+    id: string
+    name: string
+    phone: string
+    email: string
+    budgetMin: number
+    budgetMax: number
+    currency: string
+    requirements: string
     score: number
     matchReasons: string[]
     confidence: 'alta' | 'media' | 'baja'
@@ -57,131 +75,197 @@ function fuzzyMatch(query: string, text: string, threshold = 0.8): boolean {
   return false
 }
 
+function getConfidence(score: number): 'alta' | 'media' | 'baja' {
+  if (score >= 60) return 'alta'
+  if (score >= 30) return 'media'
+  return 'baja'
+}
+
+function calculatePropertyLeadScore(property: any, lead: any): { score: number; reasons: string[] } {
+  const score: number[] = []
+  const reasons: string[] = []
+
+  const pPrice = parseFloat(property.price) || 0
+  const pCurrency = property.currency || 'ARS'
+  const lCurrency = lead.currency || 'ARS'
+  const lBudgetMin = parseFloat(lead.budget_min) || 0
+  const lBudgetMax = parseFloat(lead.budget_max) || 0
+
+  // Budget match
+  if (lBudgetMin && lBudgetMax && pPrice > 0) {
+    const converted = pCurrency === lCurrency ? pPrice : pCurrency === 'USD' ? pPrice * 1200 : pPrice / 1200
+    if (converted >= lBudgetMin && converted <= lBudgetMax) {
+      score.push(30)
+      reasons.push('Dentro del presupuesto')
+    } else if (converted >= lBudgetMin * 0.8 && converted <= lBudgetMax * 1.2) {
+      score.push(15)
+      reasons.push('Cerca del presupuesto')
+    }
+  }
+
+  // Keyword matching
+  const req = (lead.requirements || '').toLowerCase()
+  const desc = ((property.description || '') + ' ' + (property.title || '')).toLowerCase()
+  if (req && desc) {
+    const keywords = req.split(/[\s,]+/).filter(Boolean)
+    const matchedKeywords = keywords.filter((k: string) => fuzzyMatch(k, desc))
+    if (matchedKeywords.length > 0) {
+      score.push(Math.min(matchedKeywords.length * 10, 40))
+      reasons.push(`Coincide: ${matchedKeywords.slice(0, 3).join(', ')}`)
+    }
+  }
+
+  // Bedrooms match
+  if (property.beds && req) {
+    const beds = parseInt(property.beds) || 0
+    const bedMatch = req.match(/(\d+)\s*ambientes?|(\d+)\s*dormitorios?/)
+    if (bedMatch) {
+      const wanted = parseInt(bedMatch[1] || bedMatch[2]) || 0
+      if (wanted > 0 && beds >= wanted) {
+        score.push(20)
+        reasons.push(`${beds} ambientes`)
+      }
+    }
+  }
+
+  // Operation type match
+  const opType = (property.operation_type || '').toLowerCase()
+  if (req && opType === 'alquiler' && req.includes('alquiler')) {
+    score.push(20)
+    reasons.push('Coincide tipo: alquiler')
+  } else if (req && ((opType === 'venta' && req.includes('venta')) || req.includes('compr'))) {
+    score.push(20)
+    reasons.push('Coincide tipo: venta')
+  }
+
+  // Property type match
+  const pType = (property.property_type || '').toLowerCase()
+  if (req && pType && req.includes(pType)) {
+    score.push(15)
+    reasons.push(`Coincide tipo: ${pType}`)
+  }
+
+  // Neighborhood match
+  if (req && property.city) {
+    const pCity = property.city.toLowerCase()
+    const pAddr = (property.address || '').toLowerCase()
+    const pNeighborhood = (property.neighborhood || '').toLowerCase()
+    const neighborhoods = req.match(/barrio\s+(\w+)|zona\s+(\w+)/g) || []
+    const neighborhoodMatch = neighborhoods.some((n: string) => {
+      const cleaned = n.replace(/barrio\s+|zona\s+/gi, '').trim()
+      return cleaned && (pCity.includes(cleaned) || pAddr.includes(cleaned) || pNeighborhood.includes(cleaned))
+    }) || pAddr.split(/\s+/).some((word: string) => word.length > 3 && req.includes(word))
+    if (neighborhoodMatch) {
+      score.push(15)
+      reasons.push('Barrio preferido')
+    }
+  }
+
+  // Features/amenities match
+  if (property.features && req) {
+    try {
+      const features = typeof property.features === 'string' ? JSON.parse(property.features) : property.features
+      if (Array.isArray(features)) {
+        const reqWords = req.split(/[\s,]+/).filter(Boolean)
+        const featureMatches = features.filter((f: string) =>
+          reqWords.some((w: string) => w.length >= 3 && f.toLowerCase().includes(w))
+        )
+        if (featureMatches.length > 0) {
+          score.push(Math.min(featureMatches.length * 5, 15))
+          reasons.push(`Características: ${featureMatches.slice(0, 2).join(', ')}`)
+        }
+      }
+    } catch {}
+  }
+
+  return { score: score.reduce((a, b) => a + b, 0), reasons }
+}
+
 export async function matchLeadToProperties(workspaceId: string, leadId: string): Promise<MatchingResult | null> {
   const leadResult = await queryOne(
-    `SELECT pl.*, p.title as property_title FROM pipeline_leads pl
-     LEFT JOIN properties p ON p.id = pl.property_id WHERE pl.id=$1`,
+    `SELECT pl.* FROM pipeline_leads pl WHERE pl.id=$1`,
     [leadId]
   )
   if (!leadResult) return null
 
   const properties = await query(
-    `SELECT id, title, address, city, price, currency, operation_type, property_type, bedrooms, description, amenities
+    `SELECT id, title, address, city, neighborhood, price, currency, operation_type, property_type, beds, description, features
      FROM properties WHERE workspace_id=$1 AND status='active'`,
     [workspaceId]
   )
 
-  const lead = {
-    name: leadResult.full_name,
-    budgetMin: leadResult.budget_min,
-    budgetMax: leadResult.budget_max,
-    currency: leadResult.currency || 'ARS',
-    requirements: (leadResult.requirements || '').toLowerCase(),
-    source: (leadResult.source || '').toLowerCase(),
-    preferredNeighborhoods: (leadResult.preferred_neighborhoods || '').toLowerCase().split(',').map((s: string) => s.trim()),
-  }
-
   const matches: MatchingResult['properties'] = []
   for (const p of (properties || [])) {
-    const score: number[] = []
-    const reasons: string[] = []
-
-    const pPrice = parseFloat(p.price) || 0
-    const pCurrency = p.currency || 'ARS'
-
-    if (lead.budgetMin && lead.budgetMax && pPrice > 0) {
-      const converted = pCurrency === lead.currency ? pPrice : pCurrency === 'USD' ? pPrice * 1200 : pPrice / 1200
-      if (converted >= lead.budgetMin && converted <= lead.budgetMax) {
-        score.push(30)
-        reasons.push('Dentro del presupuesto')
-      } else if (converted >= lead.budgetMin * 0.8 && converted <= lead.budgetMax * 1.2) {
-        score.push(15)
-        reasons.push('Cerca del presupuesto')
-      }
-    }
-
-    const req = lead.requirements
-    const desc = ((p.description || '') + ' ' + (p.title || '')).toLowerCase()
-    if (req && desc) {
-      const keywords = req.split(/[\s,]+/).filter(Boolean)
-      const matchedKeywords = keywords.filter((k: string) => fuzzyMatch(k, desc))
-      if (matchedKeywords.length > 0) {
-        score.push(Math.min(matchedKeywords.length * 10, 40))
-        reasons.push(`Coincide: ${matchedKeywords.slice(0, 3).join(', ')}`)
-      }
-    }
-
-    if (p.bedrooms && req) {
-      const beds = parseInt(p.bedrooms) || 0
-      const bedMatch = req.match(/(\d+)\s*ambientes?|(\d+)\s*dormitorios?/)
-      if (bedMatch) {
-        const wanted = parseInt(bedMatch[1] || bedMatch[2]) || 0
-        if (wanted > 0 && beds >= wanted) {
-          score.push(20)
-          reasons.push(`${beds} ambientes`)
-        }
-      }
-    }
-
-    const opType = (p.operation_type || '').toLowerCase()
-    if (req && opType === 'alquiler' && req.includes('alquiler')) {
-      score.push(20)
-      reasons.push('Coincide tipo: alquiler')
-    } else if (req && (opType === 'venta' && req.includes('venta') || req.includes('compr'))) {
-      score.push(20)
-      reasons.push('Coincide tipo: venta')
-    }
-
-    const pType = (p.property_type || '').toLowerCase()
-    if (req && pType && req.includes(pType)) {
-      score.push(15)
-      reasons.push(`Coincide tipo: ${pType}`)
-    }
-
-    if (lead.preferredNeighborhoods.length > 0 && p.city) {
-      const pCity = p.city.toLowerCase()
-      const pAddr = (p.address || '').toLowerCase()
-      const neighborhoodMatch = lead.preferredNeighborhoods.some((n: string) => 
-        n && (pCity.includes(n) || pAddr.includes(n))
-      )
-      if (neighborhoodMatch) {
-        score.push(15)
-        reasons.push('Barrio preferido')
-      }
-    }
-
-    if (p.amenities && req) {
-      try {
-        const amenities = typeof p.amenities === 'string' ? JSON.parse(p.amenities) : p.amenities
-        if (Array.isArray(amenities)) {
-          const reqWords = req.split(/[\s,]+/).filter(Boolean)
-          const amenityMatches = amenities.filter((a: string) => 
-            reqWords.some((w: string) => w.length >= 3 && a.toLowerCase().includes(w))
-          )
-          if (amenityMatches.length > 0) {
-            score.push(Math.min(amenityMatches.length * 5, 15))
-            reasons.push(`Amenities: ${amenityMatches.slice(0, 2).join(', ')}`)
-          }
-        }
-      } catch {}
-    }
-
-    const totalScore = score.reduce((a, b) => a + b, 0)
-    if (totalScore > 0) {
-      let confidence: 'alta' | 'media' | 'baja' = 'baja'
-      if (totalScore >= 60) confidence = 'alta'
-      else if (totalScore >= 30) confidence = 'media'
-
+    const { score, reasons } = calculatePropertyLeadScore(p, leadResult)
+    if (score > 0) {
       matches.push({
         id: p.id, title: p.title || 'Sin titulo', address: p.address || '', city: p.city || '',
-        price: pPrice, currency: pCurrency, operationType: p.operation_type,
-        propertyType: p.property_type, bedrooms: parseInt(p.bedrooms) || 0,
-        score: totalScore, matchReasons: reasons, confidence,
+        price: parseFloat(p.price) || 0, currency: p.currency || 'ARS',
+        operationType: p.operation_type, propertyType: p.property_type,
+        beds: parseInt(p.beds) || 0,
+        score, matchReasons: reasons, confidence: getConfidence(score),
       })
     }
   }
 
   matches.sort((a, b) => b.score - a.score)
+  return { leadId, leadName: leadResult.full_name, properties: matches.slice(0, 10) }
+}
 
-  return { leadId, leadName: lead.name, properties: matches.slice(0, 10) }
+export async function matchPropertyToLeads(workspaceId: string, propertyId: string): Promise<PropertyMatchResult | null> {
+  const property = await queryOne(
+    `SELECT id, title, address, city, neighborhood, price, currency, operation_type, property_type, beds, description, features
+     FROM properties WHERE id=$1 AND workspace_id=$2`,
+    [propertyId, workspaceId]
+  )
+  if (!property) return null
+
+  const leads = await query(
+    `SELECT id, full_name, phone, email, budget_min, budget_max, currency, requirements
+     FROM pipeline_leads WHERE workspace_id=$1 AND status='activo'`,
+    [workspaceId]
+  )
+
+  const matches: PropertyMatchResult['leads'] = []
+  for (const lead of (leads || [])) {
+    const { score, reasons } = calculatePropertyLeadScore(property, lead)
+    if (score > 0) {
+      matches.push({
+        id: lead.id, name: lead.full_name, phone: lead.phone || '', email: lead.email || '',
+        budgetMin: parseFloat(lead.budget_min) || 0, budgetMax: parseFloat(lead.budget_max) || 0,
+        currency: lead.currency || 'ARS', requirements: lead.requirements || '',
+        score, matchReasons: reasons, confidence: getConfidence(score),
+      })
+    }
+  }
+
+  matches.sort((a, b) => b.score - a.score)
+  return { propertyId, propertyTitle: property.title || 'Sin titulo', leads: matches.slice(0, 10) }
+}
+
+export async function runAutoMatching(workspaceId: string, propertyId: string): Promise<{ matchesFound: number; highConfidence: number }> {
+  const result = await matchPropertyToLeads(workspaceId, propertyId)
+  if (!result || result.leads.length === 0) {
+    return { matchesFound: 0, highConfidence: 0 }
+  }
+
+  const highConfidence = result.leads.filter(l => l.confidence === 'alta').length
+  const mediumConfidence = result.leads.filter(l => l.confidence === 'media').length
+
+  if (highConfidence > 0 || mediumConfidence > 0) {
+    const { createNotification } = await import('@/lib/notifications/db')
+    const topMatches = result.leads.slice(0, 5)
+    const matchList = topMatches.map(l => `${l.name} (${l.confidence})`).join(', ')
+
+    await createNotification({
+      workspaceId,
+      type: 'matching_encontrado',
+      title: `Matches encontrados para: ${result.propertyTitle}`,
+      message: `${result.leads.length} clientes compatibles. Alta confianza: ${highConfidence}. Principales: ${matchList}`,
+      link: `/dashboard/properties?highlight=${propertyId}`,
+      icon: 'matching',
+    })
+  }
+
+  return { matchesFound: result.leads.length, highConfidence }
 }

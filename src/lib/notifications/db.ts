@@ -3,7 +3,7 @@ import { query, queryOne } from '@/lib/db'
 export interface Notification {
   id?: string
   workspaceId: string
-  type: 'ajuste_proximo' | 'contrato_vencimiento' | 'lead_nuevo' | 'scraping_completado' | 'scraping_error' | 'creditos_bajos' | 'ajuste_completado' | 'pago_exitoso'
+  type: 'ajuste_proximo' | 'contrato_vencimiento' | 'lead_nuevo' | 'scraping_completado' | 'scraping_error' | 'creditos_bajos' | 'ajuste_completado' | 'pago_exitoso' | 'matching_encontrado' | 'pago_recibido'
   title: string
   message?: string
   link?: string
@@ -21,6 +21,8 @@ const ICONS: Record<string, string> = {
   creditos_bajos: 'credit',
   ajuste_completado: 'check',
   pago_exitoso: 'credit',
+  matching_encontrado: 'matching',
+  pago_recibido: 'credit',
 }
 
 export async function createNotification(data: Notification): Promise<Notification> {

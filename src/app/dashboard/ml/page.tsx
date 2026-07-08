@@ -56,15 +56,19 @@ export default function MLPage() {
   const loadStatus = async () => {
     if (!workspace?.id) return
     setLoading(true)
-    const res = await fetch(`/api/ml?workspaceId=${workspace.id}&action=status`)
-    const data = await res.json()
-    setConnected(data.connected)
-    setSellerId(data.sellerId)
-    if (data.connected) {
-      const itemsRes = await fetch(`/api/ml?workspaceId=${workspace.id}&action=items`)
-      const itemsData = await itemsRes.json()
-      setItems(itemsData.items || [])
-    }
+    try {
+      const res = await fetch(`/api/ml?workspaceId=${workspace.id}&action=status`)
+      const data = await res.json()
+      setConnected(data.connected)
+      setSellerId(data.sellerId)
+      if (data.connected) {
+        try {
+          const itemsRes = await fetch(`/api/ml?workspaceId=${workspace.id}&action=items`)
+          const itemsData = await itemsRes.json()
+          setItems(itemsData.items || [])
+        } catch { setItems([]) }
+      }
+    } catch { setConnected(false) }
     setLoading(false)
   }
 

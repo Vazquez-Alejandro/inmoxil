@@ -3,6 +3,7 @@ import { requireWorkspaceAuth, requireAuth } from '@/lib/api-auth'
 import { getLeads, createLead } from '@/lib/pipeline/db'
 import { createActivity } from '@/lib/pipeline/db'
 import { getStages } from '@/lib/pipeline/db'
+import { matchLeadToProperties } from '@/lib/matching/db'
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,6 +47,27 @@ export async function POST(request: NextRequest) {
       message: `Cliente ${lead.source === 'whatsapp' ? 'de WhatsApp' : lead.source === 'portal' ? 'de portal' : 'manual'} registrado en ${firstStage.name}`,
       link: '/dashboard/pipeline',
     }) } catch {}
+
+    // Auto-match new lead against existing properties
+    try {
+      const matchResult = await matchLeadToProperties(workspaceId, lead.id!)
+      if (matchResult && matchResult.properties.length > 0) {
+        const altaCount = matchResult.properties.filter(p => p.confidence === 'alta').length
+        if (altaCount > 0) {
+          const { createNotification } = await import('@/lib/notifications/db')
+          const topMatches = matchResult.properties.slice(0, 3)
+          const matchList = topMatches.map(p => `${p.title} (${p.confidence})`).join(', ')
+          await createNotification({
+            workspaceId, type: 'matching_encontrado',
+            title: `Matches para: ${lead.fullName}`,
+            message: `${matchResult.properties.length} propiedades compatibles. Alta confianza: ${altaCount}. Principales: ${matchList}`,
+            link: '/dashboard/pipeline',
+          })
+        }
+      }
+    } catch (matchError) {
+      console.error('Auto-matching failed for new lead:', matchError)
+    }
 
     return NextResponse.json({ success: true, lead })
   } catch (err: any) {
