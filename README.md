@@ -10,7 +10,7 @@
 
 ---
 
-## 📋 Funcionalidades (29 módulos)
+## 📋 Funcionalidades (32 módulos)
 
 ### 1. 🏠 Gestión de Propiedades
 CRUD completo de propiedades con fotos, precios y estados.
@@ -87,13 +87,7 @@ Analytics detallados del negocio inmobiliario.
 - **Rendimiento del equipo** — leads, conversiones, tasa, ingresos por agente
 - **Filtros por período** — mes, trimestre, año
 
-### 10. 📊 Analytics y Dashboard
-Vista completa del negocio en un solo vistazo.
-- **Stats en dashboard** — propiedades, leads activos, contratos, ajustes, notificaciones, créditos
-- **Accesos directos** — scraping, pipeline, contratos, propiedades
-- **Historial de scraping** — log de ejecuciones automáticas
-
-### 11. 🔍 Scraping Multi-Portal
+### 10. 🔍 Scraping Multi-Portal
 Importá propiedades automáticamente desde los principales portales inmobiliarios.
 - **ZonaProp** — scraping completo con extracción de precio, dirección, ambientes, fotos
 - **Argenprop** — scraping completo con normalización de datos
@@ -102,14 +96,14 @@ Importá propiedades automáticamente desde los principales portales inmobiliari
 - **Scraping Automático** — programá scraping recurrente por cron (cada 1h a 7 días)
 - **Historial de scraping** — log de cada ejecución con resultados
 
-### 12. 📤 Publicación Multicanal
+### 11. 📤 Publicación Multicanal
 Publicá tus propiedades desde un solo lugar.
 - **MercadoLibre** — OAuth, publicación con fotos, descripción, atributos
 - **Arquitectura extensible** — agregá nuevos canales creando solo un archivo
 - **Historial de publicaciones** — log con estado, ID externo, URL
 - **Canales configurables** — activá/desactivá cada canal desde la UI
 
-### 13. 🌐 Catálogo Público de Propiedades
+### 12. 🌐 Catálogo Público de Propiedades
 Vidriera online para que los clientes naveguen tus propiedades sin llamar al agente.
 - **Página pública** — `/propiedades` con buscador, filtros por tipo/precio/ambientes
 - **Ficha individual** — cada propiedad tiene su URL: `/p/[id]` con galería, mapa y datos
@@ -118,61 +112,87 @@ Vidriera online para que los clientes naveguen tus propiedades sin llamar al age
 - **WhatsApp directo** — botón "Consultar por WhatsApp" pre-armado en cada propiedad
 - **Open Graph** — preview en redes sociales y WhatsApp
 
-### 14. 💰 Comisiones y Cobranzas
+### 13. 💰 Comisiones y Cobranzas
 Controlá tus ingresos por operaciones cerradas.
 - **Dashboard financiero** — total pendiente, cobrado, cobrado este mes
 - **Creación automática** — cuando un lead pasa a "Ganado" se crea una comisión pendiente
 - **Seguimiento** — marcá como cobrada, anulada, con fecha de vencimiento
 - **Multi-moneda** — soporte ARS y USD
 
-### 15. 💬 WhatsApp Center
+### 14. 💬 WhatsApp Center
 Mensajería integrada para comunicación con leads y clientes.
 - **Enviar mensajes** — redactá y abrí WhatsApp directo con leads y números manuales
 - **Plantillas** — creá plantillas reutilizables con variables (nombre, propiedad, etc.)
 - **Historial** — registro de todos los mensajes enviados y recibidos
 - **Integración con leads** — seleccioná un lead y su teléfono se completa automáticamente
 
-### 16. 📅 Calendario de Visitas
-Todas las visitas agendadas del pipeline en un solo lugar.
-- **Vista agrupada por fecha** — todas las actividades tipo "visita" del pipeline
-- **Lead asociado** — nombre, teléfono, etapa actual
-- **Detalles** — descripción, resultado, horario
-- **Link en sidebar** — acceso directo desde el menú principal
+### 15. 🤖 WhatsApp Bot con IA
+Bot inteligente que responde automáticamente preguntas frecuentes.
+- **Detección de intención** — identifica preguntas sobre precio, visita, features, contacto
+- **Respuestas contextuales** — responde con información de la propiedad consultada
+- **Agendado de visitas** — el cliente puede agendar visitas directamente por WhatsApp
+- **Calificación de leads** — detecta leads calientes según conversación
+- **Transferencia a agente** — cuando el bot no puede resolver, notifica al equipo
+- **Log de conversaciones** — historial completo de interacciones del bot
 
-### 17. 📝 Firma Digital
+### 16. 📅 Calendario Inteligente de Visitas
+Gestión completa de visitas con confirmación por WhatsApp.
+- **Agendado de visitas** — crear visitas con fecha, hora y propiedad
+- **Confirmación por WhatsApp** — el cliente confirma/cancela respondiendo SI/NO
+- **Recordatorios 24h** — envío automático de recordatorios la víspera
+- **Vista de próximas** — visitas de los próximos 7 días
+- **Estadísticas** — visitas confirmadas, canceladas, pendientes
+
+### 17. 📲 Follow-up Automático
+Mensajes de seguimiento programados para no perder leads.
+- **Reglas automáticas** — día 3: primer follow-up, día 7: segunda oportunidad, día 14: último mensaje
+- **Personalización** — variables {nombre}, {propiedad}, {inmobiliaria} en cada mensaje
+- **Detección de inactividad** — identifica leads sin actividad reciente
+- **Prevención de duplicados** — no envía el mismo follow-up dos veces
+- **Estadísticas** — cuántos follow-ups enviados, por regla, por prioridad
+
+### 18. 📅 Calendario Inteligente de Visitas
+Gestión completa de visitas con confirmación por WhatsApp.
+- **Agendado de visitas** — crear visitas con fecha, hora y propiedad
+- **Confirmación por WhatsApp** — el cliente confirma/cancela respondiendo SI/NO
+- **Recordatorios 24h** — envío automático de recordatorios la víspera
+- **Vista de próximas** — visitas de los próximos 7 días
+- **Estadísticas** — visitas confirmadas, canceladas, pendientes
+
+### 19. 📝 Firma Digital
 Solicitá y gestioná firmas de contratos online.
 - **Solicitud de firma** — enviá link de firma al locador o locatario desde el detalle del contrato
 - **Página pública** — el firmante accede a `/firmar/[token]` con resumen del contrato
 - **Estados** — Pendiente → Enviado → Firmado → Rechazado
 - **Validez legal** — la firma tiene validez digital según legislación vigente
 
-### 18. 💲 Expensas
+### 20. 💲 Expensas
 Liquidación y gestión de expensas para consorcios.
 - **Cálculo automático** — generación de expensas por período
 - **Detalle por unidad** — monto por propietario/inquilino
 - **Estados** — Pendiente, Pagado, Vencido
 - **Reportes** — resumen de recaudación
 
-### 19. 🏷 Brand Kit
+### 21. 🏷 Brand Kit
 Personalizá la marca de tu inmobiliaria.
 - **Colores** — primario, secundario, acento
 - **Logo** — upload y preview
 - **Ads** — 6 templates de diseño con colores de tu marca
 
-### 20. 👥 Multi-Agente
+### 22. 👥 Multi-Agente
 Trabajá en equipo dentro de la misma inmobiliaria.
 - **Roles** — Dueño, Admin, Agente
 - **Leads por agente** — cada agente ve solo sus clientes asignados
 - **Invitación por email** — enviá acceso temporal por email
 - **Gestión de equipo** — panel para administrar miembros y roles
 
-### 21. 🔐 Roles y Permisos
+### 23. 🔐 Roles y Permisos
 Control granular de acceso para cada miembro del equipo.
 - **3 roles** — Owner (acceso total), Admin (gestión), Agent (operativo)
 - **Permisos granular** — cada rol tiene permisos específicos sobre propiedades, leads, contratos, pagos, etc.
 - **Seed automático** — los permisos se crean automáticamente al migrar
 
-### 22. 🔔 Notificaciones Inteligentes
+### 24. 🔔 Notificaciones Inteligentes
 Alertas automáticas en toda la app.
 - **Nuevo lead** — cuando se registra un cliente
 - **Ajuste próximo** — 30 días antes del ajuste de contrato
@@ -182,7 +202,7 @@ Alertas automáticas en toda la app.
 - **Errores** — fallos en scraping, créditos bajos
 - **Bell en header** — dropdown con últimas 5, acceso a página completa
 
-### 23. 📱 Portal del Propietario
+### 25. 📱 Portal del Propietario
 Acceso exclusivo para dueños de propiedades con toda la información de sus inmuebles.
 - **Dashboard del dueño** — resumen con cantidad de propiedades, contratos activos, tickets abiertos
 - **Login propio** — ingreso con email y contraseña, completamente separado del panel del agente
@@ -190,42 +210,42 @@ Acceso exclusivo para dueños de propiedades con toda la información de sus inm
 - **Contratos** — contratos activos con inquilino, precio, fechas y estado
 - **Mantenimiento** — tickets de reparación de sus propiedades con estado actual
 
-### 24. 🎨 Modo Oscuro
+### 26. 🎨 Modo Oscuro
 Interfaz adaptable a la preferencia del usuario.
 - **Toggle sol/luna** — en el header de la aplicación
 - **Persistencia** — la preferencia se guarda en localStorage
 - **Auto-detección** — sigue la preferencia del sistema operativo
 - **Diseño completo** — todas las pantallas y componentes con variante oscura
 
-### 25. 📱 PWA (Progressive Web App)
+### 27. 📱 PWA (Progressive Web App)
 Instalable como aplicación nativa en cualquier dispositivo.
 - **Manifest** — icono SVG, nombre, descripción, colores de marca
 - **Service Worker** — caché de recursos para funcionamiento offline parcial
 - **Instalable** — los usuarios pueden agregar Inmoxil a su pantalla de inicio
 - **Meta tags** — theme-color, apple-mobile-web-app
 
-### 26. 💲 Billing con Stripe
+### 28. 💲 Billing con Stripe
 Facturación y gestión de planes.
 - **3 planes** — Starter ($0), Pro ($29), Enterprise ($99)
 - **Stripe Checkout** — pago seguro con tarjeta
 - **Portal de clientes** — gestión de facturas y métodos de pago
 - **Webhooks** — sincronización automática de estados
 
-### 27. ⚙️ Configuración del Workspace
+### 29. ⚙️ Configuración del Workspace
 Personalizá toda la configuración de tu inmobiliaria.
 - **Información general** — nombre, slug, catálogo público
 - **Contacto** — email, teléfono, dirección, WhatsApp
 - **Redes sociales** — Instagram, Facebook, Twitter/X, LinkedIn
 - **Branding** — colores primario, secundario y de acento
 
-### 28. 🔗 API Documentada
+### 30. 🔗 API Documentada
 API REST completa para integraciones externas.
 - **Swagger/OpenAPI** — documentación interactiva en `/api-docs`
 - **Endpoints** — propiedades, leads, contratos, pagos, matching
 - **Autenticación** — tokens por workspace
 - **Rate limiting** — protección contra abusos
 
-### 29. 🛡 Infraestructura
+### 31. 🛡 Infraestructura
 Base sólida para escalar sin problemas.
 - **Auth** — registro, login, recuperación de contraseña (NextAuth.js)
 - **Onboarding** — wizard de 5 pasos al registrarse
@@ -233,6 +253,12 @@ Base sólida para escalar sin problemas.
 - **Workspace multi-tenant** — aislamiento completo entre inmobiliarias
 - **Email transaccionales** — bienvenida, pagos, créditos bajos, recuperación (Resend)
 - **Cron jobs** — scraping automático, ajustes, recordatorios
+
+### 32. 📊 Analytics y Dashboard
+Vista completa del negocio en un solo vistazo.
+- **Stats en dashboard** — propiedades, leads activos, contratos, ajustes, notificaciones, créditos
+- **Accesos directos** — scraping, pipeline, contratos, propiedades
+- **Historial de scraping** — log de ejecuciones automáticas
 
 ---
 
