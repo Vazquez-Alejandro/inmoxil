@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 
 export default function RegisterPage() {
@@ -44,8 +43,6 @@ export default function RegisterPage() {
     if (result.error) {
       setError(result.error)
       setLoading(false)
-    } else {
-      window.location.href = '/onboarding'
     }
   }
 
