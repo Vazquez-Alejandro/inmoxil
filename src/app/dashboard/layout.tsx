@@ -10,6 +10,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import Sidebar from '@/components/Sidebar'
 import TourOverlay from '@/components/TourOverlay'
 import FAQPanel from '@/components/FAQPanel'
+import TrialBanner from '@/components/TrialBanner'
 
 function TermsModal({ onAccept }: { onAccept: () => void }) {
   const [loading, setLoading] = useState(false)
@@ -186,6 +187,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
               </div>
 
+              <TrialBanner />
               <main className="p-4 sm:p-6 lg:p-8 flex-1">
                 {children}
               </main>
