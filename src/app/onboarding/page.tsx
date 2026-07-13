@@ -145,7 +145,7 @@ export default function OnboardingPage() {
                     i + 1
                   )}
                 </div>
-                <span className={`text-xs font-medium hidden sm:block ${i === step ? 'text-navy-900' : 'text-navy-400'} dark:text-white dark:text-navy-300 dark:text-navy-100`}>
+                <span className={`text-xs font-medium hidden sm:block ${i === step ? 'text-navy-900' : 'text-navy-500'} dark:text-navy-100`}>
                   {label}
                 </span>
               </div>
@@ -210,7 +210,7 @@ function StepWelcome({ onNext }: { onNext: () => void }) {
       <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4 tracking-tight dark:text-white">
         Bienvenido/a a <span className="text-gold-400">Inmoxil</span>
       </h1>
-      <p className="text-navy-500 text-lg max-w-md mx-auto mb-10 leading-relaxed dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
+      <p className="text-navy-600 text-lg max-w-md mx-auto mb-10 leading-relaxed dark:text-navy-300">
         Configurá tu inmobiliaria en menos de 2 minutos. Personalizá tu marca,
         elegí tu plan y empezá a generar propiedades profesionales.
       </p>
@@ -241,7 +241,7 @@ function StepCompany({
         <h2 className="text-3xl font-bold text-navy-900 mb-3 tracking-tight dark:text-white">
           ¿Cómo se llama tu <span className="text-gold-500">inmobiliaria</span>?
         </h2>
-        <p className="text-navy-400 text-base leading-relaxed dark:text-navy-300 dark:text-navy-100">
+        <p className="text-navy-600 text-base leading-relaxed dark:text-navy-300">
           Este nombre lo van a ver tus clientes en propiedades, publicaciones y más.
         </p>
       </div>
@@ -255,7 +255,7 @@ function StepCompany({
           </div>
           <input
             type="text"
-            className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-navy-200 bg-white text-navy-900 font-medium placeholder:text-navy-300 focus:outline-none focus:border-gold-500 focus:ring-4 focus:ring-gold-500/10 transition-all duration-200 dark:text-white dark:text-navy-100"
+            className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-navy-200 bg-white text-navy-900 font-medium placeholder:text-navy-300 focus:outline-none focus:border-gold-500 focus:ring-4 focus:ring-gold-500/10 transition-all duration-200 dark:bg-navy-800 dark:text-white"
             placeholder="Ej: Inmobiliaria del Sol"
             value={name}
             onChange={(e) => onChange(e.target.value)}
@@ -265,7 +265,7 @@ function StepCompany({
           <div className="bg-gradient-to-br from-navy-50 to-white rounded-2xl border border-navy-100 p-6 transition-all duration-300">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider dark:text-navy-300 dark:text-navy-100">
+              <p className="text-xs font-semibold text-navy-500 uppercase tracking-wider dark:text-navy-400">
                 Vista previa en el dashboard
               </p>
             </div>
@@ -276,14 +276,14 @@ function StepCompany({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-navy-900 text-sm truncate dark:text-white">{name.trim() || 'Tu inmobiliaria'}</p>
-                  <p className="text-[10px] text-navy-400 dark:text-navy-300 dark:text-navy-100">Plataforma Inmoxil</p>
+                  <p className="text-[10px] text-navy-500 dark:text-navy-400">Plataforma Inmoxil</p>
                 </div>
               </div>
             </div>
           </div>
 
         <div className="flex gap-3 pt-2">
-          <button onClick={onBack} className="flex-1 px-6 py-3 rounded-xl border-2 border-navy-300 text-navy-900 font-semibold text-sm hover:border-navy-400 hover:bg-navy-50 dark:hover:bg-navy-800 transition-all duration-200 active:scale-[0.98] dark:text-white">
+          <button onClick={onBack} className="flex-1 px-6 py-3 rounded-xl border-2 border-navy-300 text-navy-800 font-semibold text-sm hover:border-navy-400 hover:bg-navy-50 dark:hover:bg-navy-800 transition-all duration-200 active:scale-[0.98] dark:text-navy-100">
             <svg className="w-4 h-4 mr-1.5 inline" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
@@ -319,7 +319,7 @@ function StepBrand({
       <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center dark:text-white">
         Elegí tu marca
       </h2>
-      <p className="text-navy-500 text-center mb-8 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
+      <p className="text-navy-600 text-center mb-8 dark:text-navy-300">
         Personalizá los colores de tu inmobiliaria.
       </p>
       <div className="grid sm:grid-cols-2 gap-8 items-start">
@@ -435,7 +435,7 @@ function StepPlan({
       <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center dark:text-white">
         Elegí tu plan
       </h2>
-      <p className="text-navy-500 text-center mb-8 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
+      <p className="text-navy-600 text-center mb-8 dark:text-navy-300">
         Empezá gratis con el plan Inicial. Cambiá cuando necesites más.
       </p>
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
@@ -454,16 +454,16 @@ function StepPlan({
                 Popular
               </span>
             )}
-            <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">
+            <p className="text-xs font-semibold text-navy-500 uppercase tracking-wider mb-1 dark:text-navy-400">
               {plan.name}
             </p>
             <p className="price-tag mb-4">
               {plan.price}
-              <span className="text-sm font-normal text-navy-400 dark:text-navy-300 dark:text-navy-100">/mes</span>
+              <span className="text-sm font-normal text-navy-500 dark:text-navy-400">/mes</span>
             </p>
             <ul className="space-y-2">
               {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-navy-600 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
+                <li key={f} className="flex items-center gap-2 text-sm text-navy-700 dark:text-navy-300">
                   <svg className="w-4 h-4 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
@@ -546,7 +546,7 @@ function StepDone() {
       <h2 className="text-3xl font-bold text-navy-900 mb-3 relative z-10 dark:text-white">
         ¡Todo listo!
       </h2>
-      <p className="text-navy-500 mb-8 relative z-10 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
+      <p className="text-navy-600 mb-8 relative z-10 dark:text-navy-300">
         Tu inmobiliaria está configurada. ¡Empezá a crear propiedades profesionales!
       </p>
       <button

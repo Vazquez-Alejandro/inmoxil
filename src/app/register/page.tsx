@@ -63,10 +63,10 @@ export default function RegisterPage() {
             Creá tu cuenta<br />
             <span className="text-gold-400">en minutos</span>
           </h1>
-          <p className="text-navy-300 text-lg max-w-md leading-relaxed dark:text-navy-100">
-            Empezá gratis con 50 créditos incluidos. Sin tarjeta de crédito.
-            Escalá cuando necesites más potencia.
-          </p>
+           <p className="text-navy-300 text-lg max-w-md leading-relaxed dark:text-navy-100">
+             Empezá gratis con 14 días de prueba. Sin tarjeta de crédito.
+             Escalá cuando necesites más potencia.
+           </p>
           <div className="mt-12 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gold-500/20 flex items-center justify-center">
@@ -74,7 +74,7 @@ export default function RegisterPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
-              <span className="text-navy-200 text-sm">50 créditos gratis al registrarte</span>
+              <span className="text-navy-200 text-sm">14 días de prueba gratis al registrarte</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gold-500/20 flex items-center justify-center">
