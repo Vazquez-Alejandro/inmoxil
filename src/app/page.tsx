@@ -87,7 +87,7 @@ const plans = [
 const faqs = [
   {
     question: '¿Qué portales soporta la importación?',
-    answer: 'Actualmente soportamos ZonaProp, Argenprop, MercadoLibre, Zillow, Realtor.com, Redfin, Idealista y Housing.com. Estamos agregando nuevos portales continuamente.',
+    answer: 'Actualmente soportamos ZonaProp, Argenprop y MercadoLibre. Estamos agregando nuevos portales continuamente.',
   },
   {
     question: '¿Qué pasa si supero los límites de mi plan?',
@@ -98,8 +98,8 @@ const faqs = [
     answer: 'Sí, podés cancelar tu suscripción en cualquier momento desde tu panel. No hay permanencia ni penalidades. Tu acceso se mantiene hasta el final del período facturado.',
   },
   {
-    question: '¿Mis datos están seguros?',
-    answer: 'Absolutamente. Usamos encriptación AES-256, servidores en AWS con certificación SOC 2, y nunca compartimos tus datos con terceros. Cumplimos con la Ley de Protección de Datos personales de Argentina.',
+    question: '¿Cómo se protege mi información?',
+    answer: 'Tus datos se almacenan en servidores seguros con encriptación en tránsito (TLS). Nunca compartimos tu información con terceros sin tu consentimiento.',
   },
   {
     question: '¿Ofrecen prueba gratuita?',

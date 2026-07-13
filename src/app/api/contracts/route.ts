@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { queryOne } from '@/lib/db'
 import { requireWorkspaceAuth } from '@/lib/api-auth'
+import { getPlan, checkLimit } from '@/lib/plans'
 import { createContract, getContracts } from '@/lib/contracts/db'
 import { generateContractNumber } from '@/lib/contracts/utils'
 
@@ -33,6 +35,11 @@ export async function POST(request: NextRequest) {
 
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
+
+    const plan = getPlan(workspace.plan)
+    const contractCount = (await queryOne('SELECT COUNT(*)::int as c FROM contracts WHERE workspace_id=$1', [workspaceId]))?.c ?? 0
+    const { allowed } = checkLimit(contractCount, plan.limits.contracts)
+    if (!allowed) return NextResponse.json({ error: `Límite de ${plan.limits.contracts} contratos alcanzado. Actualizá tu plan para agregar más.` }, { status: 402 })
 
     const contract = await createContract({
       ...contractData,

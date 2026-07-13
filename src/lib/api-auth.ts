@@ -21,6 +21,14 @@ export async function requireWorkspaceAuth(workspaceId: string) {
   const membership = await queryOne('SELECT workspace_id FROM users WHERE id = $1 AND workspace_id = $2', [user.id, workspaceId])
   if (!membership) return { user, workspace: null, error: NextResponse.json({ error: 'No tenés acceso a este workspace' }, { status: 403 }) }
 
+  // Trial enforcement: block if trial expired and no active subscription
+  if (workspace.trial_ends_at && !workspace.stripe_subscription_id) {
+    const trialEnd = new Date(workspace.trial_ends_at)
+    if (trialEnd < new Date()) {
+      return { user, workspace, error: NextResponse.json({ error: 'Período de prueba finalizado. Elegí un plan para continuar.' }, { status: 402 }) }
+    }
+  }
+
   return { user, workspace, error: null }
 }
 

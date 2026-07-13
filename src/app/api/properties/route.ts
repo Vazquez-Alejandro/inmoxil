@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query, queryOne } from '@/lib/db'
 import { requireWorkspaceAuth } from '@/lib/api-auth'
+import { getPlan, checkLimit } from '@/lib/plans'
 import { runAutoMatching } from '@/lib/matching/db'
 
 export async function GET(request: NextRequest) {
@@ -27,6 +28,12 @@ export async function POST(request: NextRequest) {
 
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
+
+    // Check plan limit
+    const plan = getPlan(workspace.plan)
+    const propCount = (await queryOne('SELECT COUNT(*)::int as c FROM properties WHERE workspace_id=$1', [workspaceId]))?.c ?? 0
+    const { allowed } = checkLimit(propCount, plan.limits.properties)
+    if (!allowed) return NextResponse.json({ error: `Límite de ${plan.limits.properties} propiedades alcanzado. Actualizá tu plan para agregar más.` }, { status: 402 })
 
     let count = 0
     let totalMatches = 0

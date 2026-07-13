@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { queryOne } from '@/lib/db'
 import { requireWorkspaceAuth, requireAuth } from '@/lib/api-auth'
+import { getPlan, checkLimit } from '@/lib/plans'
 import { getLeads, createLead } from '@/lib/pipeline/db'
 import { createActivity } from '@/lib/pipeline/db'
 import { getStages } from '@/lib/pipeline/db'
@@ -13,6 +15,11 @@ export async function POST(request: NextRequest) {
 
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
+
+    const plan = getPlan(workspace.plan)
+    const leadCount = (await queryOne('SELECT COUNT(*)::int as c FROM pipeline_leads WHERE workspace_id=$1', [workspaceId]))?.c ?? 0
+    const { allowed } = checkLimit(leadCount, plan.limits.pipelineLeads)
+    if (!allowed) return NextResponse.json({ error: `Límite de ${plan.limits.pipelineLeads} clientes alcanzado. Actualizá tu plan para agregar más.` }, { status: 402 })
 
     const user = await requireAuth()
     const userRole = user?.role_in_workspace || 'owner'
