@@ -6,7 +6,6 @@ import { useAuth } from '@/lib/auth'
 
 export default function RegisterPage() {
   const { signUp } = useAuth()
-  const router = useRouter()
   const [formData, setFormData] = useState({
     companyName: '',
     name: '',
