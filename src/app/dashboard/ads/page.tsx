@@ -168,7 +168,7 @@ export default function AdsPage() {
                     className={`flex items-center gap-3 p-3 rounded-lg border-2 text-left transition-all ${
                       selectedProperty === property.id
                         ? 'border-gold-400 bg-gold-50 shadow-sm'
-                        : 'border-gray-200 hover:border-navy-200 bg-white'
+                        : 'border-gray-200 dark:border-navy-600 hover:border-navy-200 bg-white dark:bg-navy-800'
                     }`}
                   >
                     <img

@@ -62,7 +62,7 @@ export default function ReportsPage() {
             key={p}
             onClick={() => setPeriod(p)}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-              period === p ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+              period === p ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-navy-800 text-gray-600 dark:text-navy-300 hover:bg-gray-50 dark:hover:bg-navy-700'
             }`}
           >
             {p === 'month' ? 'Mes' : p === 'quarter' ? 'Trimestre' : 'Año'}

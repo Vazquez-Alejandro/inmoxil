@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply font-sans antialiased text-navy-900 bg-white dark:text-gray-100 dark:bg-gray-950;
+    @apply font-sans antialiased text-navy-900 bg-white dark:text-navy-100 dark:bg-navy-950;
   }
 
   ::selection {
@@ -15,75 +15,58 @@
 }
 
 .dark .card,
-.card.dark,
-.dark .card-hover,
-.card-hover.dark {
-  @apply bg-gray-800 border-gray-700;
+.card.dark {
+  @apply bg-navy-800 border-navy-700;
 }
 
 .dark .input,
 .input.dark {
-  @apply bg-gray-800 border-gray-600 text-white placeholder:text-gray-500;
+  @apply bg-navy-800 border-navy-600 text-white placeholder:text-navy-400;
 }
 
 .dark .label,
 .label.dark {
-  @apply text-gray-300;
+  @apply text-navy-300;
 }
 
 .dark .btn-outline,
 .btn-outline.dark {
-  @apply border-gray-600 text-gray-300 hover:border-gray-400 hover:text-white;
+  @apply border-navy-600 text-navy-300 hover:border-navy-400 hover:text-white;
 }
 
 .dark .btn-ghost,
 .btn-ghost.dark {
-  @apply text-gray-400 hover:text-white hover:bg-white/10;
+  @apply text-navy-400 hover:text-white hover:bg-white/10;
 }
 
 .dark .badge-navy,
 .badge-navy.dark {
-  @apply bg-gray-800 text-gray-300;
+  @apply bg-navy-800 text-navy-300;
 }
 
 .dark .divider,
 .divider.dark {
-  @apply border-gray-700;
+  @apply border-navy-700;
 }
 
 .dark .stat-card,
 .stat-card.dark {
-  @apply bg-gray-800 border-gray-700;
-}
-
-.dark .price-tag,
-.price-tag.dark {
-  @apply text-white;
-}
-
-.dark .page-title,
-.page-title.dark {
-  @apply text-white;
+  @apply bg-navy-800 border-navy-700;
 }
 
 .dark .page-subtitle,
 .page-subtitle.dark {
-  @apply text-gray-400;
+  @apply text-navy-400;
 }
 
 .dark .table-header,
 .table-header.dark {
-  @apply text-gray-400;
+  @apply text-navy-400;
 }
 
 .dark .table-cell,
 .table-cell.dark {
-  @apply text-gray-300;
-}
-
-.dark .logo-mark,
-.logo-mark.dark {
-  @apply bg-gold-600;
+  @apply text-navy-300;
 }
 
 @layer components {

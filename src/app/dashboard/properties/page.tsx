@@ -541,7 +541,7 @@ export default function PropertiesPage() {
                       {publishDrop === property.id && (
                         <>
                           <div className="fixed inset-0 z-40" onClick={() => setPublishDrop(null)} />
-                          <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-navy-200 rounded-lg shadow-lg z-50 py-1">
+                          <div className="absolute right-0 top-full mt-1 w-44 bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-lg shadow-lg z-50 py-1">
                             {channels.length === 0 ? (
                               <p className="px-3 py-2 text-xs text-navy-400 dark:text-navy-300 dark:text-navy-100">Sin canales activos</p>
                             ) : (
@@ -573,8 +573,8 @@ export default function PropertiesPage() {
       {/* Edit Modal */}
       {editProperty && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setEditProperty(null)}>
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 sticky top-0 bg-white z-10">
+          <div className="bg-white dark:bg-navy-900 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 dark:border-navy-700 sticky top-0 bg-white dark:bg-navy-900 z-10">
               <h2 className="text-lg font-bold text-navy-900 dark:text-white">Editar propiedad</h2>
               <button onClick={() => setEditProperty(null)} className="text-navy-400 hover:text-navy-600 p-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>

@@ -4,12 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { useWorkspace } from '@/lib/workspace-context'
-
-const PLAN_LABELS: Record<string, { name: string; credits: number }> = {
-  starter: { name: 'Inicial', credits: 50 },
-  pro: { name: 'Profesional', credits: 200 },
-  enterprise: { name: 'Empresarial', credits: 1000 },
-}
+import { getPlan } from '@/lib/plans'
 
 const navigation = [
   // Principal
@@ -53,10 +48,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const { workspace } = useWorkspace()
   const isOwner = user?.role === 'owner'
 
-  const plan = PLAN_LABELS[workspace?.plan || 'starter'] || PLAN_LABELS.starter
-  const creditsUsed = workspace?.credits_used ?? 0
-  const creditsTotal = workspace?.credits_remaining ?? plan.credits
-  const creditsPercent = creditsTotal > 0 ? Math.min((creditsUsed / (plan.credits)) * 100, 100) : 0
+  const plan = getPlan(workspace?.plan || 'starter')
 
   return (
     <aside className="w-64 h-full bg-gradient-dark flex flex-col overflow-hidden">
@@ -128,22 +120,24 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         )}
       </nav>
 
-      <div className="px-3 py-4 border-t border-white/10 shrink-0">
-        <div className="card bg-white/5 border-white/10 p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-full bg-gold-500 flex items-center justify-center text-white font-bold text-xs">
-              {workspace?.name?.[0] || 'Ix'}
+        <div className="px-3 py-4 border-t border-white/10 shrink-0">
+          <div className="card bg-white/5 border-white/10 p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xs">
+                {workspace?.name?.[0] || 'Ix'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white text-sm font-medium truncate">Plan {plan.nameEs}</p>
+                <p className="text-navy-400 text-xs">${plan.price}/mes</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-medium truncate">Plan {plan.name}</p>
-              <p className="text-navy-400 text-xs dark:text-navy-300">{workspace?.credits_remaining ?? plan.credits} créditos</p>
-            </div>
+            <Link
+              href="/dashboard/billing"
+              className="block w-full mt-2 text-center text-[10px] text-emerald-400 hover:text-emerald-300 font-medium py-1 rounded border border-emerald-500/30 hover:bg-emerald-500/10 transition-colors"
+            >
+              Ver límites
+            </Link>
           </div>
-          <div className="w-full bg-white/10 rounded-full h-1.5">
-            <div className="bg-gold-500 h-1.5 rounded-full transition-all" style={{ width: `${100 - creditsPercent}%` }} />
-          </div>
-          <p className="text-navy-400 text-[10px] mt-2 dark:text-navy-300">{workspace?.credits_remaining ?? plan.credits} de {plan.credits} disponibles</p>
-        </div>
         <div className="flex items-center gap-3 mt-3 px-1">
           <Link href="/terminos" target="_blank" className="text-gold-400 hover:text-gold-300 text-xs underline transition-colors">Términos</Link>
           <span className="text-gold-600">·</span>

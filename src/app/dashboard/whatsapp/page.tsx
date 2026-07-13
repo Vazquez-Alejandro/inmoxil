@@ -123,8 +123,8 @@ export default function WhatsAppPage() {
         {(['enviar', 'plantillas', 'historial'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-              tab === t ? 'bg-white text-navy-900 shadow-sm' : 'text-navy-500 hover:text-navy-700'
-            } dark:text-white dark:text-navy-300 dark:text-navy-400 dark:text-navy-100`}>
+              tab === t ? 'bg-white dark:bg-navy-800 text-navy-900 dark:text-white shadow-sm' : 'text-navy-500 hover:text-navy-700 dark:text-navy-300'
+            }`}>
             {t === 'enviar' ? 'Enviar mensaje' : t === 'plantillas' ? 'Plantillas' : 'Historial'}
           </button>
         ))}

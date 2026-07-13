@@ -198,7 +198,7 @@ export default function ContractDetailPage() {
             {adjusting ? 'Calculando...' : 'Calcular ajuste'}
           </button>
         )}
-        <select value={contract.status} onChange={e => handleStatusChange(e.target.value)} disabled={statusLoading} className="px-3 py-1.5 text-sm border border-navy-200 rounded-lg bg-white disabled:opacity-50">
+        <select value={contract.status} onChange={e => handleStatusChange(e.target.value)} disabled={statusLoading} className="px-3 py-1.5 text-sm border border-navy-200 dark:border-navy-600 rounded-lg bg-white dark:bg-navy-800 disabled:opacity-50">
           <option value="borrador">→ Borrador</option>
           <option value="activo">→ Activo</option>
           <option value="vigente">→ Vigente</option>
@@ -280,7 +280,7 @@ export default function ContractDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Partes</h2>
             <div className="grid grid-cols-2 gap-6">
               <div>
@@ -302,14 +302,14 @@ export default function ContractDetailPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Inmueble</h2>
             <p className="font-medium text-navy-900 dark:text-white">{contract.property.address}</p>
             <p className="text-sm text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.property.city}, {contract.property.province}{contract.property.cpa ? ` - CPA: ${contract.property.cpa}` : ''}</p>
             {contract.property.description && <p className="text-sm text-navy-500 mt-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.property.description}</p>}
           </div>
 
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Términos</h2>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
@@ -333,7 +333,7 @@ export default function ContractDetailPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Económico</h2>
             <div className="text-center mb-4">
               <p className="text-xs text-navy-400 uppercase tracking-wider mb-1 dark:text-navy-300 dark:text-navy-100">Canon mensual</p>
@@ -369,7 +369,7 @@ export default function ContractDetailPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Próximo ajuste</h2>
             {contract.nextAdjustmentDate ? (
               <div>
@@ -387,7 +387,7 @@ export default function ContractDetailPage() {
       </div>
 
       {adjustments.length > 0 && (
-        <div className="bg-white border border-navy-200 rounded-xl p-6 mb-8">
+        <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6 mb-8">
           <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Historial de ajustes</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -419,7 +419,7 @@ export default function ContractDetailPage() {
       )}
 
       {contract.notes && (
-        <div className="bg-white border border-navy-200 rounded-xl p-6">
+        <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
           <h2 className="text-lg font-semibold text-navy-900 mb-2 dark:text-white">Notas</h2>
           <p className="text-sm text-navy-600 whitespace-pre-wrap dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{contract.notes}</p>
         </div>

@@ -2,7 +2,7 @@
 
 export function SkeletonCard({ className = '' }: { className?: string }) {
   return (
-    <div className={`rounded-xl border border-gray-200/80 bg-white p-6 ${className}`}>
+    <div className={`rounded-xl border border-gray-200/80 bg-white dark:bg-navy-800 p-6 ${className}`}>
       <div className="animate-pulse flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="w-10 h-10 rounded-xl bg-navy-100" />
@@ -17,7 +17,7 @@ export function SkeletonCard({ className = '' }: { className?: string }) {
 
 export function SkeletonTable({ rows = 5, cols = 4 }: { rows?: number; cols?: number }) {
   return (
-    <div className="rounded-xl border border-gray-200/80 bg-white overflow-hidden">
+    <div className="rounded-xl border border-gray-200/80 bg-white dark:bg-navy-800 overflow-hidden">
       <div className="p-6 border-b border-gray-100">
         <div className="w-48 h-5 rounded bg-navy-200 animate-pulse" />
       </div>

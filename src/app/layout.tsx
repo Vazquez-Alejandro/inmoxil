@@ -56,7 +56,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="Inmoxil" />
       </head>
-      <body className="min-h-screen bg-gray-50 dark:bg-navy-950 dark:text-navy-100">
+      <body className="min-h-screen bg-white dark:bg-navy-950 dark:text-navy-100">
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>

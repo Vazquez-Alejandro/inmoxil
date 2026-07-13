@@ -57,7 +57,7 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
   if (!owner) return null
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}

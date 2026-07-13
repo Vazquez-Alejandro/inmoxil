@@ -98,26 +98,6 @@ const ENDPOINTS: Endpoint[] = [
         property_id: 'uuid-property',
         created_at: '2025-01-15T10:00:00Z',
       },
-      creditsRemaining: 49,
-    }, null, 2),
-  },
-  {
-    method: 'GET',
-    path: '/api/credits',
-    description: 'Consulta el saldo de créditos y el historial de transacciones.',
-    requestExample: 'GET /api/credits?workspaceId=uuid-workspace',
-    responseExample: JSON.stringify({
-      success: true,
-      credits: 49,
-      history: [
-        {
-          id: 'uuid-tx',
-          type: 'consumption',
-          amount: 1,
-          description: 'Ad generado',
-          created_at: '2025-01-15T10:00:00Z',
-        },
-      ],
     }, null, 2),
   },
   {

@@ -164,7 +164,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <ToastProvider>
       <WorkspaceProvider>
         <ErrorBoundary>
-          <div className="min-h-screen bg-gray-50 dark:bg-navy-950">
+          <div className="min-h-screen bg-white dark:bg-navy-950">
             {sidebarOpen && (
               <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
             )}

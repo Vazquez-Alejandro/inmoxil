@@ -41,48 +41,6 @@ export async function updateWorkspaceBrand(workspaceId: string, brand: Record<st
   return rows[0]
 }
 
-export async function checkCredits(workspaceId: string): Promise<number> {
-  const row = await queryOne('SELECT credits_remaining FROM workspaces WHERE id=$1', [workspaceId])
-  return row?.credits_remaining ?? 0
-}
-
-export async function deductCredit(workspaceId: string, adId: string): Promise<boolean> {
-  const result = await query(
-    `UPDATE workspaces SET credits_remaining = credits_remaining - 1, credits_used = credits_used + 1 WHERE id=$1 AND credits_remaining > 0 RETURNING id`,
-    [workspaceId]
-  )
-  if (result.length === 0) return false
-
-  await insertOne('credit_transactions', {
-    workspace_id: workspaceId,
-    amount: -1,
-    type: 'usage',
-    description: `Ad ${adId} generated`,
-  })
-  return true
-}
-
-export async function addCredits(workspaceId: string, amount: number, description: string): Promise<boolean> {
-  await query(
-    'UPDATE workspaces SET credits_remaining = credits_remaining + $1 WHERE id=$2',
-    [amount, workspaceId]
-  )
-  await insertOne('credit_transactions', {
-    workspace_id: workspaceId,
-    amount,
-    type: 'purchase',
-    description,
-  })
-  return true
-}
-
-export async function getCreditHistory(workspaceId: string, limit = 50) {
-  return await query(
-    'SELECT * FROM credit_transactions WHERE workspace_id=$1 ORDER BY created_at DESC LIMIT $2',
-    [workspaceId, limit]
-  )
-}
-
 export async function setStripeIds(workspaceId: string, customerId: string, subscriptionId: string) {
   await query(
     'UPDATE workspaces SET stripe_customer_id=$1, stripe_subscription_id=$2 WHERE id=$3',

@@ -8,13 +8,12 @@ export async function GET() {
     if (error) return error
 
     const [workspaces, users] = await Promise.all([
-      query('SELECT id, name, slug, plan, credits_remaining, credits_used, created_at FROM workspaces ORDER BY created_at DESC'),
+      query('SELECT id, name, slug, plan, created_at FROM workspaces ORDER BY created_at DESC'),
       query('SELECT id, email, full_name, role, workspace_id, created_at FROM users ORDER BY created_at DESC'),
     ])
 
     const workspaceCount = (workspaces as any[]).length
     const userCount = (users as any[]).length
-    const totalCreditsUsed = (workspaces || []).reduce((sum: number, ws: any) => sum + (ws.credits_used ?? 0), 0)
     const planPrices: Record<string, number> = { starter: 29, pro: 79, enterprise: 199 }
     const revenueEstimate = (workspaces || []).reduce((sum: number, ws: any) => sum + (planPrices[ws.plan || 'starter'] || 29), 0)
     const workspacesWithUsers = (workspaces || []).map((ws: any) => ({
@@ -25,7 +24,7 @@ export async function GET() {
     return NextResponse.json({
       workspaces: workspacesWithUsers,
       users: users || [],
-      stats: { totalWorkspaces: workspaceCount, totalUsers: userCount, totalCreditsUsed, revenueEstimate },
+      stats: { totalWorkspaces: workspaceCount, totalUsers: userCount, revenueEstimate },
     })
   } catch (err: any) {
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })

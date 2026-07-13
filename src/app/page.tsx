@@ -34,8 +34,8 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
       </svg>
     ),
-    title: 'Pago por Créditos',
-    description: 'Pagá solo lo que uses. Planes desde $29/mes con 50 créditos. Integración con sistema de pagos seguros.',
+    title: 'Planes por Suscripción',
+    description: 'Planes mensuales sin sorpresas. Desde $29/mes con límites claros: propiedades, clientes, contratos y más.',
   },
   {
     icon: (
@@ -59,10 +59,10 @@ const features = [
 
 const plans = [
   {
-    name: 'Inicial',
+    name: 'Básico',
     price: 29,
     description: 'Para inmobiliarias que están empezando',
-    features: ['50 créditos/mes', 'Importación de 2 portales', '3 plantillas de anuncios', 'Marca básica', 'Soporte por email'],
+    features: ['50 propiedades', '50 clientes en pipeline', '10 contratos activos', 'Importación desde 2 portales', '3 plantillas de anuncios', '1 usuario', 'Soporte por email'],
     cta: 'Comenzar ahora',
     popular: false,
   },
@@ -70,7 +70,7 @@ const plans = [
     name: 'Profesional',
     price: 79,
     description: 'Para inmobiliarias en crecimiento',
-    features: ['200 créditos/mes', 'Importación de todos los portales', '6 plantillas de anuncios', 'Marca completa', 'Estadísticas avanzadas', 'Soporte prioritario'],
+    features: ['250 propiedades', '250 clientes en pipeline', '50 contratos activos', 'Importación de todos los portales', '6 plantillas de anuncios', 'Hasta 5 usuarios', 'Scraping automático diario', 'Marca personalizada', 'Reportes avanzados', 'Soporte prioritario'],
     cta: 'Elegir plan',
     popular: true,
   },
@@ -78,7 +78,7 @@ const plans = [
     name: 'Empresarial',
     price: 199,
     description: 'Para grandes inmobiliarias y grupos',
-    features: ['Créditos ilimitados', 'Importación personalizada', 'Plantillas personalizadas', 'Acceso para desarrolladores', 'Account manager dedicado', 'Disponibilidad 99.9%'],
+    features: ['Propiedades ilimitadas', 'Clientes ilimitados', 'Contratos ilimitados', 'Importación personalizada', 'Plantillas personalizadas', 'Usuarios ilimitados', 'Scraping en tiempo real', 'Marca completa + dominio', 'API y firma digital', 'Account manager dedicado', 'Disponibilidad 99.9%'],
     cta: 'Comenzar',
     popular: false,
   },
@@ -90,8 +90,8 @@ const faqs = [
     answer: 'Actualmente soportamos ZonaProp, Argenprop, MercadoLibre, Zillow, Realtor.com, Redfin, Idealista y Housing.com. Estamos agregando nuevos portales continuamente.',
   },
   {
-    question: '¿Cómo funcionan los créditos?',
-    answer: 'Cada crédito equivale a una acción en la plataforma: importar una propiedad, generar un anuncio, o hacer una publicación. Los créditos se renuevan mensualmente según tu plan.',
+    question: '¿Qué pasa si supero los límites de mi plan?',
+    answer: 'Si necesitás más propiedades, clientes o cualquier otro recurso, podés migrar al siguiente plan en cualquier momento. La migración es inmediata y conservás todos tus datos.',
   },
   {
     question: '¿Puedo cancelar en cualquier momento?',
@@ -141,7 +141,7 @@ export default function HomePage() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-300">propiedades para tu inmobiliaria</span>
           </h1>
           <p className="text-lg md:text-xl text-navy-300 max-w-2xl mx-auto leading-relaxed mb-10 dark:text-navy-100">
-            Importación multi-portal, generación de anuncios con tu marca y pago por créditos.
+            Importación multi-portal, gestión de clientes, contratos inteligentes y más.
             Probá gratis 14 días sin tarjeta de crédito.
           </p>
           <div className="flex flex-col sm:flex-row items-stretch justify-center gap-4 sm:max-w-md mx-auto">
@@ -149,13 +149,10 @@ export default function HomePage() {
               href="/register"
               className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-lg px-10 py-4 rounded-xl shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 transition-all duration-200 hover:-translate-y-0.5 w-full"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
               </svg>
               14 días de prueba
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
             </Link>
             <a
               href="#precios"
@@ -210,12 +207,12 @@ export default function HomePage() {
               key={plan.name}
               className={`relative rounded-2xl p-8 transition-all duration-300 flex flex-col ${
                 plan.popular
-                  ? 'bg-white ring-2 ring-gold-500 shadow-xl shadow-gold-500/10 scale-105 md:scale-110 z-10'
+                  ? 'bg-white dark:bg-navy-800 ring-2 ring-emerald-400 shadow-xl shadow-emerald-500/20 scale-105 md:scale-110 z-10'
                   : 'bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 hover:shadow-lg'
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 text-xs font-bold px-5 py-1.5 rounded-full shadow-lg">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-emerald-400 text-white text-xs font-bold px-5 py-1.5 rounded-full shadow-lg">
                   Más popular
                 </div>
               )}
@@ -228,7 +225,7 @@ export default function HomePage() {
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
-                    <svg className={`w-5 h-5 flex-shrink-0 mt-0.5 ${plan.popular ? 'text-gold-500' : 'text-gold-400'}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <svg className={`w-5 h-5 flex-shrink-0 mt-0.5 ${plan.popular ? 'text-emerald-500' : 'text-emerald-400'}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     <span className={`text-sm ${plan.popular ? 'text-navy-700' : 'text-navy-300'} dark:text-navy-300 dark:text-navy-100`}>{feature}</span>
@@ -239,7 +236,7 @@ export default function HomePage() {
                 href="/register"
                 className={`w-full text-center py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
                   plan.popular
-                    ? 'bg-gold-500 hover:bg-gold-400 text-navy-950 shadow-lg shadow-gold-500/25 hover:shadow-gold-500/40 hover:-translate-y-0.5'
+                    ? 'bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5'
                     : 'border border-white/20 text-white hover:bg-white/10 hover:border-white/30'
                 }`}
               >
@@ -249,8 +246,7 @@ export default function HomePage() {
           ))}
         </div>
         <p className="text-center text-sm text-navy-500 mt-8 max-w-xl mx-auto dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
-          Cada crédito equivale a importar una propiedad, generar un anuncio o publicar en un portal.
-          Los créditos no usados se acumulan mes a mes y nunca vencen.
+          Todos los planes incluyen 14 días de prueba gratuita. Podés cancelar en cualquier momento sin penalidad.
         </p>
       </section>
 

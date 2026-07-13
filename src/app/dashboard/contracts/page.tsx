@@ -124,7 +124,7 @@ export default function ContractsPage() {
         <>
           <div className="space-y-3">
             {contracts.map(contract => (
-              <Link key={contract.id} href={`/dashboard/contracts/${contract.id}`} className="block bg-white border border-navy-200 rounded-lg p-5 hover:border-indigo-300 hover:shadow-sm transition-all">
+              <Link key={contract.id} href={`/dashboard/contracts/${contract.id}`} className="block bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-lg p-5 hover:border-indigo-300 hover:shadow-sm transition-all">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-3 mb-2">

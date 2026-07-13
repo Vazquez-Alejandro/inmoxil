@@ -273,7 +273,7 @@ export const guideSections: GuideSection[] = [
     title: 'API Docs',
     description: 'Documentación técnica para desarrolladores',
     details: [
-      'Endpoints disponibles: scrape, properties, ads, credits, billing.',
+      'Endpoints disponibles: scrape, properties, ads, billing.',
       'Autenticación mediante API key.',
       'Ejemplos de requests y responses en JSON.',
       'Límites de tasa (rate limits) para cada endpoint.',

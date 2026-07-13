@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateAd, getTemplateList, type AdType, type TemplateId } from '@/lib/ad-generator'
-import { checkCredits, deductCredit } from '@/lib/workspace'
 import { queryOne, insertOne, query } from '@/lib/db'
 import { requireWorkspaceAuth } from '@/lib/api-auth'
 
@@ -17,9 +16,6 @@ export async function POST(request: NextRequest) {
     const validTypes: AdType[] = ['feed', 'story', 'reel', 'meta_ad']
     if (!validTypes.includes(adType as AdType)) return NextResponse.json({ error: 'Tipo de ad inválido' }, { status: 400 })
 
-    const credits = await checkCredits(workspaceId)
-    if (credits <= 0) return NextResponse.json({ error: 'Sin créditos disponibles.', credits: 0 }, { status: 402 })
-
     const property = await queryOne('SELECT * FROM properties WHERE id=$1 AND workspace_id=$2', [propertyId, workspaceId])
     if (!property) return NextResponse.json({ error: 'Propiedad no encontrada' }, { status: 404 })
 
@@ -33,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     const adRecord = await insertOne('generated_ads', {
       workspace_id: workspaceId, property_id: propertyId, type: adType,
-      image_url: '', template_id: templateId, credits_used: 1,
+      image_url: '', template_id: templateId,
     })
     if (!adRecord) return NextResponse.json({ error: 'Error creando registro del ad' }, { status: 500 })
 
@@ -53,10 +49,8 @@ export async function POST(request: NextRequest) {
 
     const imageUrl = `/api/ads/image?path=${encodeURIComponent(imagePath)}`
     await query('UPDATE generated_ads SET image_url=$1 WHERE id=$2', [imageUrl, adRecord.id])
-    await deductCredit(workspaceId, adRecord.id)
-    const newCredits = await checkCredits(workspaceId)
 
-    return NextResponse.json({ success: true, ad: { id: adRecord.id, image_url: imageUrl, template_id: templateId, type: adType, property_id: propertyId, created_at: adRecord.created_at }, creditsRemaining: newCredits })
+    return NextResponse.json({ success: true, ad: { id: adRecord.id, image_url: imageUrl, template_id: templateId, type: adType, property_id: propertyId, created_at: adRecord.created_at } })
   } catch {
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })
   }

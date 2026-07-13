@@ -24,22 +24,16 @@ export const PLANS = {
     name: 'Starter',
     priceId: process.env.STRIPE_PRICE_STARTER!,
     price: 29,
-    credits: 50,
-    features: ['50 créditos/mes', 'Scraping multi-portal', 'Brand kit básico', 'Soporte email'],
   },
   pro: {
     name: 'Pro',
     priceId: process.env.STRIPE_PRICE_PRO!,
     price: 79,
-    credits: 200,
-    features: ['200 créditos/mes', 'Todo del Starter', 'API acceso', 'Soporte prioritario', 'Analytics'],
   },
   enterprise: {
     name: 'Enterprise',
     priceId: process.env.STRIPE_PRICE_ENTERPRISE!,
     price: 199,
-    credits: 1000,
-    features: ['1000 créditos/mes', 'Todo del Pro', 'Multi-usuario', 'Custom branding', 'SLA 99.9%', 'Account manager'],
   },
 } as const
 

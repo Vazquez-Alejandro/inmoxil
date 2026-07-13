@@ -170,7 +170,7 @@ export default function NewContractPage() {
 
       <div className="flex gap-2 mb-8">
         {steps.map((s, i) => (
-          <button key={i} onClick={() => setStep(i)} className={`flex-1 text-left p-3 rounded-lg border transition-all ${i === step ? 'border-indigo-500 bg-indigo-50' : i < step ? 'border-emerald-300 bg-emerald-50' : 'border-navy-200 bg-white'}`}>
+          <button key={i} onClick={() => setStep(i)} className={`flex-1 text-left p-3 rounded-lg border transition-all ${i === step ? 'border-indigo-500 bg-indigo-50' : i < step ? 'border-emerald-300 bg-emerald-50' : 'border-navy-200 bg-white dark:bg-navy-800 dark:border-navy-600'}`}>
             <div className={`text-xs font-medium mb-0.5 ${i === step ? 'text-indigo-600' : i < step ? 'text-emerald-600' : 'text-navy-400'} dark:text-navy-300 dark:text-navy-100`}>Paso {i + 1}</div>
             <div className="text-sm font-medium text-navy-800 dark:text-navy-200">{s.title}</div>
           </button>
@@ -183,7 +183,7 @@ export default function NewContractPage() {
 
       {step === 0 && (
         <div className="space-y-6">
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Tipo de contrato</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {CONTRACT_TYPES.map(t => (
@@ -195,7 +195,7 @@ export default function NewContractPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-navy-200 rounded-xl p-6">
+            <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Locador (Propietario)</h2>
               <div className="space-y-3">
                 <div>
@@ -231,7 +231,7 @@ export default function NewContractPage() {
               </div>
             </div>
 
-            <div className="bg-white border border-navy-200 rounded-xl p-6">
+            <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Locatario (Inquilino)</h2>
               <div className="space-y-3">
                 <div>
@@ -268,7 +268,7 @@ export default function NewContractPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Duración</h2>
             <div className="grid grid-cols-2 gap-6">
               <div>
@@ -285,7 +285,7 @@ export default function NewContractPage() {
       )}
 
       {step === 1 && (
-        <div className="bg-white border border-navy-200 rounded-xl p-6">
+        <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
           <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Inmueble</h2>
           <div className="space-y-4">
             <div>
@@ -316,7 +316,7 @@ export default function NewContractPage() {
 
       {step === 2 && (
         <div className="space-y-6">
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Valor del contrato</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -333,7 +333,7 @@ export default function NewContractPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Ajuste</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -355,7 +355,7 @@ export default function NewContractPage() {
             )}
           </div>
 
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Depósito y expensas</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -379,7 +379,7 @@ export default function NewContractPage() {
             )}
           </div>
 
-          <div className="bg-white border border-navy-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-navy-900 mb-4 dark:text-white">Notas</h2>
             <textarea className={`${inputClass} min-h-[100px]`} placeholder="Observaciones, cláusulas especiales, garantías adicionales..." value={form.notes} onChange={e => update('notes', e.target.value)} />
           </div>
@@ -387,7 +387,7 @@ export default function NewContractPage() {
       )}
 
       {step === 3 && (
-        <div className="bg-white border border-navy-200 rounded-xl p-6">
+        <div className="bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-600 rounded-xl p-6">
           <h2 className="text-lg font-semibold text-navy-900 mb-6 dark:text-white">Resumen del contrato</h2>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">

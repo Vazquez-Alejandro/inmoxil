@@ -208,9 +208,9 @@ export default function MantenimientoPage() {
                 onClick={() => setStatusFilter(tab.value)}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                   statusFilter === tab.value
-                    ? 'bg-white text-navy-900 shadow-sm'
+                    ? 'bg-white dark:bg-navy-800 text-navy-900 dark:text-white shadow-sm'
                     : 'text-navy-500 hover:text-navy-700'
-                } dark:text-white`}
+                }`}
               >
                 {tab.label}
               </button>
@@ -331,8 +331,8 @@ export default function MantenimientoPage() {
       {/* Detail Modal */}
       {selectedTicket && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setSelectedTicket(null)}>
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 sticky top-0 bg-white z-10">
+          <div className="bg-white dark:bg-navy-900 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 dark:border-navy-700 sticky top-0 bg-white dark:bg-navy-900 z-10">
               <h2 className="text-lg font-bold text-navy-900 dark:text-white">Detalle del ticket</h2>
               <button onClick={() => setSelectedTicket(null)} className="text-navy-400 hover:text-navy-600 p-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -457,8 +457,8 @@ export default function MantenimientoPage() {
       {/* New Ticket Modal */}
       {showNewForm && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowNewForm(false)}>
-          <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 sticky top-0 bg-white z-10">
+          <div className="bg-white dark:bg-navy-900 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-navy-100 dark:border-navy-700 sticky top-0 bg-white dark:bg-navy-900 z-10">
               <h2 className="text-lg font-bold text-navy-900 dark:text-white">Nuevo ticket de mantenimiento</h2>
               <button onClick={() => setShowNewForm(false)} className="text-navy-400 hover:text-navy-600 p-1 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>

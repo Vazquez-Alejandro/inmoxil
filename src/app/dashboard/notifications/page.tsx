@@ -62,8 +62,8 @@ export default function NotificationsPage() {
 
       <div className="flex items-center gap-3 mb-6">
         <div className="flex bg-navy-100 rounded-lg p-0.5">
-          <button onClick={() => setFilter('all')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${filter === 'all' ? 'bg-white text-navy-900 shadow-sm' : 'text-navy-500 hover:text-navy-700'} dark:text-white dark:text-navy-300 dark:text-navy-400 dark:text-navy-100`}>Todas</button>
-          <button onClick={() => setFilter('unread')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${filter === 'unread' ? 'bg-white text-navy-900 shadow-sm' : 'text-navy-500 hover:text-navy-700'} dark:text-white dark:text-navy-300 dark:text-navy-400 dark:text-navy-100`}>No leídas</button>
+          <button onClick={() => setFilter('all')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${filter === 'all' ? 'bg-white dark:bg-navy-800 text-navy-900 dark:text-white shadow-sm' : 'text-navy-500 hover:text-navy-700 dark:text-navy-300'}`}>Todas</button>
+          <button onClick={() => setFilter('unread')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${filter === 'unread' ? 'bg-white dark:bg-navy-800 text-navy-900 dark:text-white shadow-sm' : 'text-navy-500 hover:text-navy-700 dark:text-navy-300'}`}>No leídas</button>
         </div>
         {notifications.length > 0 && filter === 'unread' && (
           <button onClick={markAllRead} className="text-sm text-indigo-600 hover:text-indigo-700 font-medium ml-auto">Marcar todas leídas</button>

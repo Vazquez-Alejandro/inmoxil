@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { constructWebhookEvent, PLANS } from '@/lib/stripe'
-import { query, queryOne, insertOne } from '@/lib/db'
+import { query, queryOne } from '@/lib/db'
 import { sendPaymentConfirmation } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
@@ -38,17 +38,7 @@ export async function POST(request: NextRequest) {
 
           if (planEntry) {
             const [planName, planConfig] = planEntry
-            await query(
-              'UPDATE workspaces SET plan=$1, credits_remaining=$2, credits_used=0 WHERE id=$3',
-              [planName, planConfig.credits, workspaceId]
-            )
-
-            await insertOne('credit_transactions', {
-              workspace_id: workspaceId,
-              amount: planConfig.credits,
-              type: 'purchase',
-              description: `Membresía ${planConfig.name} activada`,
-            })
+            await query('UPDATE workspaces SET plan=$1 WHERE id=$2', [planName, workspaceId])
 
             const ws = await queryOne('SELECT name FROM workspaces WHERE id=$1', [workspaceId])
             try {
@@ -57,7 +47,7 @@ export async function POST(request: NextRequest) {
                 ws?.name || '',
                 planConfig.name,
                 planConfig.price
-              )
+              ).catch(() => {})
             } catch (e) {
               console.error('[Webhook] Failed to send payment email:', e)
             }
@@ -85,15 +75,8 @@ export async function POST(request: NextRequest) {
             const planEntry = Object.entries(PLANS).find(([, p]) => p.priceId === priceId)
 
             if (planEntry) {
-              const [planName, planConfig] = planEntry
+              const [planName] = planEntry
               await query('UPDATE workspaces SET plan=$1 WHERE id=$2', [planName, workspace.id])
-
-              await insertOne('credit_transactions', {
-                workspace_id: workspace.id,
-                amount: planConfig.credits,
-                type: 'purchase',
-                description: `Créditos mensuales ${planConfig.name}`,
-              })
             }
           }
         }
@@ -103,7 +86,7 @@ export async function POST(request: NextRequest) {
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as any
         await query(
-          `UPDATE workspaces SET plan='starter', credits_remaining=0, stripe_subscription_id=NULL WHERE stripe_subscription_id=$1`,
+          `UPDATE workspaces SET plan='starter', stripe_subscription_id=NULL WHERE stripe_subscription_id=$1`,
           [subscription.id]
         )
         break

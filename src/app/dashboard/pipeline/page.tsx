@@ -283,7 +283,7 @@ export default function PipelinePage() {
                         onDragStart={() => handleDragStart(lead.id!)}
                         onDragEnd={handleDragEnd}
                         onClick={() => openLead(lead)}
-                        className={`bg-white rounded-lg p-3 border cursor-pointer transition-all hover:border-indigo-300 hover:shadow-sm active:opacity-60 ${draggedLead === lead.id ? 'opacity-40 border-indigo-400' : 'border-navy-100'}`}
+                        className={`bg-white dark:bg-navy-800 rounded-lg p-3 border cursor-pointer transition-all hover:border-indigo-300 hover:shadow-sm active:opacity-60 ${draggedLead === lead.id ? 'opacity-40 border-indigo-400' : 'border-navy-100 dark:border-navy-600'}`}
                       >
                         <div className="flex items-start justify-between gap-2 mb-1.5">
                           <h3 className="font-semibold text-sm text-navy-900 truncate dark:text-white">{lead.fullName}</h3>
@@ -316,8 +316,8 @@ export default function PipelinePage() {
 
       {showNewLead && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowNewLead(false)}>
-          <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-5 border-b border-navy-200">
+          <div className="bg-white dark:bg-navy-900 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-5 border-b border-navy-200 dark:border-navy-700">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
@@ -333,25 +333,25 @@ export default function PipelinePage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Nombre completo <span className="text-red-400 dark:text-red-300">*</span></label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="Juan Pérez" value={leadForm.fullName} onChange={e => setLeadForm(p => ({ ...p, fullName: e.target.value }))} />
+                  <input className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="Juan Pérez" value={leadForm.fullName} onChange={e => setLeadForm(p => ({ ...p, fullName: e.target.value }))} />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Teléfono <span className="text-red-400 dark:text-red-300">*</span></label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="11 1234 5678" value={leadForm.phone} onChange={e => setLeadForm(p => ({ ...p, phone: e.target.value }))} />
+                  <input className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="11 1234 5678" value={leadForm.phone} onChange={e => setLeadForm(p => ({ ...p, phone: e.target.value }))} />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Email</label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="email" placeholder="juan@email.com" value={leadForm.email} onChange={e => setLeadForm(p => ({ ...p, email: e.target.value }))} />
+                  <input className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="email" placeholder="juan@email.com" value={leadForm.email} onChange={e => setLeadForm(p => ({ ...p, email: e.target.value }))} />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Origen</label>
-                  <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={leadForm.source} onChange={e => setLeadForm(p => ({ ...p, source: e.target.value }))}>
+                  <select className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={leadForm.source} onChange={e => setLeadForm(p => ({ ...p, source: e.target.value }))}>
                     {Object.entries(SOURCE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Etapa</label>
-                  <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={newLeadStageId} onChange={e => setNewLeadStageId(e.target.value)}>
+                  <select className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={newLeadStageId} onChange={e => setNewLeadStageId(e.target.value)}>
                     {stages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                   </select>
                 </div>
@@ -359,19 +359,19 @@ export default function PipelinePage() {
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Presupuesto mínimo</label>
                   <div className="relative">
                     <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-500 text-sm font-semibold dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">$</span>
-                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="number" placeholder="50000" value={leadForm.budgetMin} onChange={e => setLeadForm(p => ({ ...p, budgetMin: e.target.value }))} />
+                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="number" placeholder="50000" value={leadForm.budgetMin} onChange={e => setLeadForm(p => ({ ...p, budgetMin: e.target.value }))} />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Presupuesto máximo</label>
                   <div className="relative">
                     <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-500 text-sm font-semibold dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">$</span>
-                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="number" placeholder="150000" value={leadForm.budgetMax} onChange={e => setLeadForm(p => ({ ...p, budgetMax: e.target.value }))} />
+                    <input className="w-full pl-8 pr-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="number" placeholder="150000" value={leadForm.budgetMax} onChange={e => setLeadForm(p => ({ ...p, budgetMax: e.target.value }))} />
                   </div>
                 </div>
                 <div className="col-span-2">
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Requisitos / Comentarios</label>
-                  <textarea className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[80px] resize-none dark:text-white" placeholder="Busca 2 ambientes en Palermo, pet friendly..." value={leadForm.notes} onChange={e => setLeadForm(p => ({ ...p, notes: e.target.value }))} />
+                  <textarea className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[80px] resize-none dark:text-white" placeholder="Busca 2 ambientes en Palermo, pet friendly..." value={leadForm.notes} onChange={e => setLeadForm(p => ({ ...p, notes: e.target.value }))} />
                 </div>
               </div>
               <div className="flex gap-3 pt-1">
@@ -387,8 +387,8 @@ export default function PipelinePage() {
 
       {selectedLead && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedLead(null)}>
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-5 border-b border-navy-100 sticky top-0 bg-white z-10 rounded-t-2xl">
+          <div className="bg-white dark:bg-navy-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-5 border-b border-navy-100 dark:border-navy-700 sticky top-0 bg-white dark:bg-navy-900 z-10 rounded-t-2xl">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold">
                   {selectedLead.fullName?.charAt(0).toUpperCase()}
@@ -504,8 +504,8 @@ export default function PipelinePage() {
 
       {showNewActivity && selectedLead && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowNewActivity(false)}>
-          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-5 border-b border-navy-200">
+          <div className="bg-white dark:bg-navy-900 rounded-2xl w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-5 border-b border-navy-200 dark:border-navy-700">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -520,7 +520,7 @@ export default function PipelinePage() {
             <div className="p-6 space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Tipo de actividad</label>
-                <select className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={newActivityForm.type} onChange={e => setNewActivityForm(p => ({ ...p, type: e.target.value, scheduledAt: e.target.value !== 'visita' ? '' : p.scheduledAt }))}>
+                <select className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" value={newActivityForm.type} onChange={e => setNewActivityForm(p => ({ ...p, type: e.target.value, scheduledAt: e.target.value !== 'visita' ? '' : p.scheduledAt }))}>
                   <option value="llamada">📞 Llamada</option>
                   <option value="visita">🏠 Visita</option>
                   <option value="mensaje">💬 Mensaje</option>
@@ -530,17 +530,17 @@ export default function PipelinePage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Descripción</label>
-                <textarea className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[90px] resize-none dark:text-white" placeholder="¿Qué pasó en la interacción?" value={newActivityForm.description} onChange={e => setNewActivityForm(p => ({ ...p, description: e.target.value }))} />
+                <textarea className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all min-h-[90px] resize-none dark:text-white" placeholder="¿Qué pasó en la interacción?" value={newActivityForm.description} onChange={e => setNewActivityForm(p => ({ ...p, description: e.target.value }))} />
               </div>
               {newActivityForm.type === 'visita' && (
                 <div>
                   <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Fecha y hora de la visita</label>
-                  <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="datetime-local" value={newActivityForm.scheduledAt} onChange={e => setNewActivityForm(p => ({ ...p, scheduledAt: e.target.value }))} />
+                  <input className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" type="datetime-local" value={newActivityForm.scheduledAt} onChange={e => setNewActivityForm(p => ({ ...p, scheduledAt: e.target.value }))} />
                 </div>
               )}
               <div>
                 <label className="block text-sm font-semibold text-navy-800 mb-1.5 dark:text-navy-200">Resultado (opcional)</label>
-                <input className="w-full px-3.5 py-2.5 bg-white border-2 border-navy-300 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="Cliente pidió más información" value={newActivityForm.outcome} onChange={e => setNewActivityForm(p => ({ ...p, outcome: e.target.value }))} />
+                <input className="w-full px-3.5 py-2.5 bg-white dark:bg-navy-800 border-2 border-navy-300 dark:border-navy-600 rounded-xl text-sm text-navy-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all dark:text-white" placeholder="Cliente pidió más información" value={newActivityForm.outcome} onChange={e => setNewActivityForm(p => ({ ...p, outcome: e.target.value }))} />
               </div>
               <div className="flex gap-3 pt-1">
                 <button onClick={() => setShowNewActivity(false)} className="flex-1 py-2.5 text-sm font-semibold text-navy-800 bg-navy-100 border-2 border-navy-200 rounded-xl hover:bg-navy-200 transition-colors dark:text-navy-200">Cancelar</button>
