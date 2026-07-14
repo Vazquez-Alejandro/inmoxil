@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 import { useAuth } from '@/lib/auth'
 
 export default function RegisterPage() {
@@ -42,7 +43,21 @@ export default function RegisterPage() {
     if (result.error) {
       setError(result.error)
       setLoading(false)
+      return
     }
+
+    const loginRes = await signIn('credentials', {
+      email: formData.email,
+      password: formData.password,
+      redirect: false,
+    })
+    if (loginRes?.error) {
+      setError(loginRes.error)
+      setLoading(false)
+      return
+    }
+
+    window.location.href = '/onboarding'
   }
 
   return (

@@ -81,11 +81,6 @@ function AuthInner({ children }: { children: ReactNode }) {
       if (!res.ok) {
         return { error: data.error || 'Registration failed' }
       }
-      await nextAuthSignIn('credentials', {
-        email,
-        password,
-        callbackUrl: '/onboarding',
-      })
       return {}
     } catch (err: any) {
       return { error: err.message || 'Registration failed' }
