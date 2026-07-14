@@ -99,7 +99,7 @@ export default function OnboardingPage() {
       await fetch('/api/workspace', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ workspaceId, name: companyName }),
+        body: JSON.stringify({ workspaceId, name: companyName, plan: selectedPlan }),
       })
       goTo(4)
     } catch (e) {
@@ -486,7 +486,7 @@ function StepPlan({
               Guardando...
             </span>
           ) : (
-            'Empezar con Inicial'
+            'Empezar con ' + (PLANS.find(p => p.id === selected)?.name || 'Inicial')
           )}
         </button>
       </div>

@@ -29,13 +29,30 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { workspaceId, name } = await request.json()
-    if (!workspaceId || !name) return NextResponse.json({ error: 'workspaceId y name requeridos' }, { status: 400 })
+    const { workspaceId, name, plan } = await request.json()
+    if (!workspaceId) return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
 
     const { error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
 
-    await query('UPDATE workspaces SET name = $1 WHERE id = $2', [name, workspaceId])
+    const updates: string[] = []
+    const values: any[] = []
+    let idx = 1
+
+    if (name) {
+      updates.push(`name = $${idx++}`)
+      values.push(name)
+    }
+    if (plan) {
+      updates.push(`plan = $${idx++}`)
+      values.push(plan)
+    }
+
+    if (updates.length > 0) {
+      values.push(workspaceId)
+      await query(`UPDATE workspaces SET ${updates.join(', ')} WHERE id = $${idx}`, values)
+    }
+
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Error' }, { status: 500 })
