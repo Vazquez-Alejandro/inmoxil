@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
 import { useAuth } from '@/lib/auth'
 
 export default function RegisterPage() {
@@ -46,18 +45,25 @@ export default function RegisterPage() {
       return
     }
 
-    const loginRes = await signIn('credentials', {
-      email: formData.email,
-      password: formData.password,
-      redirect: false,
-    })
-    if (loginRes?.error) {
-      setError(loginRes.error)
-      setLoading(false)
-      return
+    // Form POST directo a NextAuth — el browser maneja cookie + redirect
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = `/api/auth/callback/credentials?callbackUrl=${window.location.origin}/onboarding`
+
+    const csrfRes = await fetch('/api/auth/csrf')
+    const { csrfToken } = await csrfRes.json()
+
+    const fields = { csrfToken, email: formData.email, password: formData.password, json: 'false' }
+    for (const [name, value] of Object.entries(fields)) {
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = name
+      input.value = value
+      form.appendChild(input)
     }
 
-    window.location.href = '/onboarding'
+    document.body.appendChild(form)
+    form.submit()
   }
 
   return (
