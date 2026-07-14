@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
 
 export default function RegisterPage() {
   const { signUp } = useAuth()
+  const formRef = useRef<HTMLFormElement>(null)
   const [formData, setFormData] = useState({
     companyName: '',
     name: '',
@@ -37,33 +38,7 @@ export default function RegisterPage() {
     }
 
     setLoading(true)
-
-    const result = await signUp(formData.email, formData.password, formData.companyName, formData.name)
-    if (result.error) {
-      setError(result.error)
-      setLoading(false)
-      return
-    }
-
-    // Form POST directo a NextAuth — el browser maneja cookie + redirect
-    const form = document.createElement('form')
-    form.method = 'POST'
-    form.action = `/api/auth/callback/credentials?callbackUrl=${window.location.origin}/onboarding`
-
-    const csrfRes = await fetch('/api/auth/csrf')
-    const { csrfToken } = await csrfRes.json()
-
-    const fields = { csrfToken, email: formData.email, password: formData.password, json: 'false' }
-    for (const [name, value] of Object.entries(fields)) {
-      const input = document.createElement('input')
-      input.type = 'hidden'
-      input.name = name
-      input.value = value
-      form.appendChild(input)
-    }
-
-    document.body.appendChild(form)
-    form.submit()
+    formRef.current?.submit()
   }
 
   return (
@@ -146,10 +121,11 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form ref={formRef} method="POST" action="/api/auth/register" onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="label">Nombre de la inmobiliaria</label>
               <input
+                name="companyName"
                 type="text"
                 className="input"
                 placeholder="Mi Inmobiliaria SRL"
@@ -162,6 +138,7 @@ export default function RegisterPage() {
             <div>
               <label className="label">Tu nombre</label>
               <input
+                name="name"
                 type="text"
                 className="input"
                 placeholder="Juan Pérez"
@@ -174,6 +151,7 @@ export default function RegisterPage() {
             <div>
               <label className="label">Email</label>
               <input
+                name="email"
                 type="email"
                 className="input"
                 placeholder="tu@inmobiliaria.com"
@@ -186,6 +164,7 @@ export default function RegisterPage() {
             <div>
               <label className="label">Contraseña</label>
               <input
+                name="password"
                 type="password"
                 className="input"
                 placeholder="Mínimo 8 caracteres"
