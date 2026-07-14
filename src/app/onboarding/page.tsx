@@ -122,7 +122,6 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Progress bar */}
       <div className="w-full bg-white border-b border-gray-200">
         <div className="max-w-3xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-3">
@@ -160,7 +159,6 @@ export default function OnboardingPage() {
         </div>
       </div>
 
-      {/* Step content */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div
           className={`w-full max-w-2xl transition-all duration-200 ${
@@ -203,7 +201,7 @@ export default function OnboardingPage() {
 
 function StepWelcome({ onNext }: { onNext: () => void }) {
   return (
-    <div className="text-center">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12 text-center">
       <div className="w-20 h-20 rounded-2xl bg-gold-500 flex items-center justify-center text-white font-black text-3xl tracking-tighter mx-auto mb-8 shadow-gold-glow">
         Ix
       </div>
@@ -233,34 +231,35 @@ function StepCompany({
   onBack: () => void
 }) {
   return (
-    <div className="max-w-md mx-auto">
-      <div className="text-center mb-10">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-white font-black text-2xl mx-auto mb-6 shadow-lg shadow-gold-500/20">
-          Ix
-        </div>
-        <h2 className="text-3xl font-bold text-navy-900 mb-3 tracking-tight dark:text-white">
-          ¿Cómo se llama tu <span className="text-gold-500">inmobiliaria</span>?
-        </h2>
-        <p className="text-navy-700 text-base leading-relaxed dark:text-navy-300">
-          Este nombre lo van a ver tus clientes en propiedades, publicaciones y más.
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <svg className="w-5 h-5 text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-            </svg>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12">
+      <div className="max-w-md mx-auto">
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-white font-black text-2xl mx-auto mb-6 shadow-lg shadow-gold-500/20">
+            Ix
           </div>
-          <input
-            type="text"
-            className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-navy-200 bg-white text-navy-900 font-medium placeholder:text-navy-300 focus:outline-none focus:border-gold-500 focus:ring-4 focus:ring-gold-500/10 transition-all duration-200 dark:bg-navy-800 dark:text-white"
-            placeholder="Ej: Inmobiliaria del Sol"
-            value={name}
-            onChange={(e) => onChange(e.target.value)}
-          />
+          <h2 className="text-3xl font-bold text-navy-900 mb-3 tracking-tight dark:text-white">
+            ¿Cómo se llama tu <span className="text-gold-600">inmobiliaria</span>?
+          </h2>
+          <p className="text-navy-700 text-base leading-relaxed dark:text-navy-300">
+            Este nombre lo van a ver tus clientes en propiedades, publicaciones y más.
+          </p>
         </div>
+
+        <div className="space-y-6">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg className="w-5 h-5 text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-navy-200 bg-white text-navy-900 font-medium placeholder:text-navy-300 focus:outline-none focus:border-gold-500 focus:ring-4 focus:ring-gold-500/10 transition-all duration-200 dark:bg-navy-800 dark:text-white"
+              placeholder="Ej: Inmobiliaria del Sol"
+              value={name}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          </div>
 
           <div className="bg-gradient-to-br from-navy-50 to-white rounded-2xl border border-navy-100 p-6 transition-all duration-300">
             <div className="flex items-center gap-2 mb-4">
@@ -282,19 +281,20 @@ function StepCompany({
             </div>
           </div>
 
-        <div className="flex gap-3 pt-2">
-          <button onClick={onBack} className="flex-1 px-6 py-3 rounded-xl border-2 border-navy-300 text-navy-800 font-semibold text-sm hover:border-navy-400 hover:bg-navy-50 dark:hover:bg-navy-800 transition-all duration-200 active:scale-[0.98] dark:text-navy-100">
-            <svg className="w-4 h-4 mr-1.5 inline" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-            Atrás
-          </button>
-          <button onClick={onNext} className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-white font-semibold text-sm hover:from-gold-600 hover:to-gold-700 shadow-lg shadow-gold-500/20 transition-all duration-200 active:scale-[0.98]">
-            Continuar
-            <svg className="w-4 h-4 ml-1.5 inline" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
+          <div className="flex gap-3 pt-2">
+            <button onClick={onBack} className="flex-1 px-6 py-3 rounded-xl border-2 border-navy-300 text-navy-800 font-semibold text-sm hover:border-navy-400 hover:bg-navy-50 dark:hover:bg-navy-800 transition-all duration-200 active:scale-[0.98] dark:text-navy-100">
+              <svg className="w-4 h-4 mr-1.5 inline" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+              Atrás
+            </button>
+            <button onClick={onNext} className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-white font-semibold text-sm hover:from-gold-600 hover:to-gold-700 shadow-lg shadow-gold-500/20 transition-all duration-200 active:scale-[0.98]">
+              Continuar
+              <svg className="w-4 h-4 ml-1.5 inline" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -315,7 +315,7 @@ function StepBrand({
   onBack: () => void
 }) {
   return (
-    <div>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12">
       <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center dark:text-white">
         Elegí tu marca
       </h2>
@@ -323,7 +323,6 @@ function StepBrand({
         Personalizá los colores de tu inmobiliaria.
       </p>
       <div className="grid sm:grid-cols-2 gap-8 items-start">
-        {/* Color pickers */}
         <div className="space-y-6">
           {(['primary', 'secondary', 'accent'] as const).map((role) => (
             <div key={role}>
@@ -357,7 +356,6 @@ function StepBrand({
             </div>
           ))}
         </div>
-        {/* Live preview */}
         <div className="card overflow-hidden shadow-corporate-lg">
           <div className="p-1" style={{ backgroundColor: colors.primary }}>
             <div className="bg-white rounded-t-lg p-4">
@@ -431,7 +429,7 @@ function StepPlan({
   saving: boolean
 }) {
   return (
-    <div>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12">
       <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center dark:text-white">
         Elegí tu plan
       </h2>
@@ -513,8 +511,7 @@ function StepDone() {
   }, [])
 
   return (
-    <div className="text-center relative overflow-hidden py-8">
-      {/* Confetti particles */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12 text-center relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         {particles.map((p, i) => (
           <div
