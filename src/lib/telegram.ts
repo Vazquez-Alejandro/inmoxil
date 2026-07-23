@@ -2,7 +2,7 @@
  * Funciones para enviar notificaciones por Telegram.
  */
 
-const TELEGRAM_NOTIFIER_URL = process.env.TELEGRAM_NOTIFIER_URL || 'https://telegram-notifier.onrender.com'
+const TELEGRAM_NOTIFIER_URL = 'https://telegram-notifier-pmcs.onrender.com'
 
 interface NotifyPayload {
   app: string
