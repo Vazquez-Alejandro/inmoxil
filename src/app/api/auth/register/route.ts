@@ -11,10 +11,13 @@ export async function POST(request: NextRequest) {
     if (!allowed) return NextResponse.json({ error: `Demasiados registros. Esperá ${retryAfter}s` }, { status: 429 })
 
     const body = await request.json()
-    const { email, password, name, companyName } = body
+    const { email, password, name, companyName, acceptTerms } = body
 
     if (!email || !password || !name || !companyName) {
       return NextResponse.json({ error: 'Todos los campos son requeridos' }, { status: 400 })
+    }
+    if (!acceptTerms) {
+      return NextResponse.json({ error: 'Debés aceptar los Términos y Condiciones' }, { status: 400 })
     }
     if (password.length < 8) {
       return NextResponse.json({ error: 'La contraseña debe tener al menos 8 caracteres' }, { status: 400 })
