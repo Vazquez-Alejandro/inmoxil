@@ -46,6 +46,12 @@ export async function POST(request: NextRequest) {
       await sendWelcomeEmail(email, name)
     } catch {}
 
+    // Notificar por Telegram
+    try {
+      const { notifyUserRegistered } = await import('@/lib/telegram')
+      await notifyUserRegistered('inmoxil', email, name)
+    } catch {}
+
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })
