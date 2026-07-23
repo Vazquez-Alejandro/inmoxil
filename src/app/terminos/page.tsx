@@ -74,7 +74,21 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">5. Propiedad Intelectual</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">5. Política de Reembolsos</h2>
+            <p className="text-navy-800 leading-relaxed dark:text-navy-200">
+              Inmoxil ofrece un período de prueba gratuito de 14 días para nuevos usuarios. Después del período de prueba:
+            </p>
+            <ul className="list-disc list-inside text-navy-800 space-y-2 ml-4 dark:text-navy-200">
+              <li>Reembolsos completos se otorgan dentro de los primeros 14 días de pago.</li>
+              <li>Después de 14 días, no se ofrecen reembolsos por meses parciales.</li>
+              <li>Los reembolsos se procesan en un plazo de 5-10 días hábiles.</li>
+              <li>El Usuario debe solicitar el reembolso por email a hola@inmoxil.com.</li>
+              <li>Los créditos no utilizados no son reembolsables.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">6. Propiedad Intelectual</h2>
             <p className="text-navy-800 leading-relaxed dark:text-navy-200">
               Todo el contenido, código fuente, diseño, marcas registradas y materiales de la plataforma Inmoxil
               son propiedad exclusiva de Inmoxil y están protegidos por las leyes de propiedad intelectual de Argentina
@@ -85,7 +99,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">6. Uso de la Importación de Datos de Terceros</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">7. Uso de la Importación de Datos de Terceros</h2>
             <p className="text-navy-700 leading-relaxed mb-3 dark:text-navy-300 dark:text-navy-100">
               La plataforma permite recopilar información de propiedades inmobiliarias publicadas en portales web públicos
               (ZonaProp, Argenprop, MercadoLibre, entre otros). El usuario reconoce y acepta que:
@@ -102,7 +116,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">7. Limitación de Responsabilidad</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">8. Limitación de Responsabilidad</h2>
             <p className="text-navy-800 leading-relaxed dark:text-navy-200">
               Inmoxil no será responsable por daños indirectos, incidentales, especiales o consecuentes que resulten
               del uso o imposibilidad de uso de la plataforma. No garantizamos la disponibilidad ininterrumpida del
@@ -112,7 +126,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">8. Terminación</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">9. Terminación</h2>
             <p className="text-navy-800 leading-relaxed dark:text-navy-200">
               Inmoxil se reserva el derecho de suspender o terminar la cuenta del usuario en caso de incumplimiento
               de estos términos, con o sin previo aviso. En caso de terminación por parte del usuario, este podrá
@@ -122,7 +136,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">9. Ley Aplicable y Jurisdicción</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">10. Ley Aplicable y Jurisdicción</h2>
             <p className="text-navy-800 leading-relaxed dark:text-navy-200">
               Estos Términos de Servicio se rigen por las leyes de la República Argentina. Cualquier controversia
               derivada de la interpretación o ejecución de estos términos será sometida a la jurisdicción de los
@@ -131,7 +145,7 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">10. Contacto</h2>
+            <h2 className="text-xl font-bold text-navy-900 mb-3 dark:text-white">11. Contacto</h2>
             <p className="text-navy-800 leading-relaxed dark:text-navy-200">
               Para consultas sobre estos Términos de Servicio, podés contactarnos a través de{' '}
               <a href="mailto:hola@inmoxil.com" className="text-gold-600 hover:text-gold-700 dark:text-gold-400 dark:hover:text-gold-300 underline">

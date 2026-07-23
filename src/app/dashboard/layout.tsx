@@ -114,6 +114,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [ready, setReady] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState<boolean | null>(null)
+  const [onboardingReady, setOnboardingReady] = useState<boolean | null>(null)
   const [showTour, setShowTour] = useState(false)
   const [showFAQ, setShowFAQ] = useState(false)
 
@@ -132,6 +133,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           .then(r => r.json())
           .then(data => setTermsAccepted(data.accepted))
           .catch(() => setTermsAccepted(false))
+        fetch(`/api/user/workspace?userId=${user.id}`)
+          .then(r => r.json())
+          .then(data => {
+            if (data.workspace) {
+              setOnboardingReady(data.workspace.onboarding_completed ?? false)
+            } else {
+              setOnboardingReady(false)
+            }
+          })
+          .catch(() => setOnboardingReady(false))
       }
     }
   }, [user, loading, router])
@@ -140,7 +151,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (termsAccepted === true) setReady(true)
   }, [termsAccepted])
 
-  if (loading || !ready && termsAccepted === null) {
+  useEffect(() => {
+    if (onboardingReady === false) {
+      router.replace('/onboarding')
+    }
+  }, [onboardingReady, router])
+
+  if (loading || onboardingReady === null || onboardingReady === false || (!ready && termsAccepted === null)) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-navy-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">

@@ -1,12 +1,10 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
-import { useAuth } from '@/lib/auth'
+import { signIn } from 'next-auth/react'
 
 export default function RegisterPage() {
-  const { signUp } = useAuth()
-  const formRef = useRef<HTMLFormElement>(null)
   const [formData, setFormData] = useState({
     companyName: '',
     name: '',
@@ -38,7 +36,39 @@ export default function RegisterPage() {
     }
 
     setLoading(true)
-    formRef.current?.submit()
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          companyName: formData.companyName,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Error al registrarse')
+        setLoading(false)
+        return
+      }
+      // Iniciar sesión con NextAuth para que la sesión quede bien establecida
+      const signInRes = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      })
+      if (signInRes?.error) {
+        setError('Cuenta creada, pero hubo un error al iniciar sesión. Redirigiendo al login...')
+        setTimeout(() => { window.location.href = '/login' }, 1500)
+        return
+      }
+      window.location.href = '/onboarding'
+    } catch {
+      setError('Error de conexión. Intentá de nuevo.')
+      setLoading(false)
+    }
   }
 
   return (
@@ -121,7 +151,7 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <form ref={formRef} method="POST" action="/api/auth/register" onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="label">Nombre de la inmobiliaria</label>
               <input

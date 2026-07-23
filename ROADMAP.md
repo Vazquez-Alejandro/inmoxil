@@ -85,6 +85,17 @@
 ### Testing manual
 - [ ] Ejecutar TEST_PLAN.txt (~297 puntos visuales pendientes)
 
+### SEO y Posicionamiento
+- [ ] Meta tags optimizados (título, descripción, keywords)
+- [ ] Open Graph para redes sociales (Facebook, LinkedIn)
+- [ ] Twitter Cards
+- [ ] JSON-LD structured data
+- [ ] sitemap.xml
+- [ ] robots.txt
+- [ ] Google Search Console verificado
+- [ ] Sitemap enviado a Google
+- [ ] Imagen OG para compartir en redes
+
 ### Mejoras
 - [ ] Importacion CSV/JSON de propiedades
 - [ ] Webhooks de salida (integracion con sistemas externos)

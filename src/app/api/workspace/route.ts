@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { workspaceId, name, plan } = await request.json()
+    const { workspaceId, name, plan, onboardingCompleted } = await request.json()
     if (!workspaceId) return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
 
     const { error } = await requireWorkspaceAuth(workspaceId)
@@ -46,6 +46,10 @@ export async function PATCH(request: NextRequest) {
     if (plan) {
       updates.push(`plan = $${idx++}`)
       values.push(plan)
+    }
+    if (onboardingCompleted !== undefined) {
+      updates.push(`onboarding_completed = $${idx++}`)
+      values.push(onboardingCompleted)
     }
 
     if (updates.length > 0) {

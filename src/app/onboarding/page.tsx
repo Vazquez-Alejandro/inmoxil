@@ -59,9 +59,14 @@ export default function OnboardingPage() {
     fetch(`/api/user/workspace?userId=${user.id}`)
       .then(r => r.json())
       .then((data: any) => {
-        if (data.workspace?.id) setWorkspaceId(data.workspace.id)
+        if (data.workspace?.id) {
+          setWorkspaceId(data.workspace.id)
+          if (data.workspace.onboarding_completed) {
+            router.replace('/dashboard')
+          }
+        }
       })
-  }, [user])
+  }, [user, router])
 
   const goTo = useCallback((target: number) => {
     if (target === step || transitioning) return
@@ -99,7 +104,7 @@ export default function OnboardingPage() {
       await fetch('/api/workspace', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ workspaceId, name: companyName, plan: selectedPlan }),
+        body: JSON.stringify({ workspaceId, name: companyName, plan: selectedPlan, onboardingCompleted: true }),
       })
       goTo(4)
     } catch (e) {
@@ -112,7 +117,7 @@ export default function OnboardingPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-navy-950 flex items-center justify-center">
         <div className="logo-mark w-12 h-12">Ix</div>
       </div>
     )
@@ -121,8 +126,8 @@ export default function OnboardingPage() {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="w-full bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-navy-950 flex flex-col">
+      <div className="w-full bg-white dark:bg-navy-900 border-b border-gray-200 dark:border-navy-700">
         <div className="max-w-3xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-3">
             {STEPS.map((label, i) => (
@@ -133,7 +138,7 @@ export default function OnboardingPage() {
                       ? 'bg-green-500 text-white'
                       : i === step
                         ? 'bg-gold-500 text-white'
-                        : 'bg-gray-200 text-gray-500'
+                        : 'bg-gray-200 dark:bg-navy-700 text-gray-500 dark:text-navy-400'
                   }`}
                 >
                   {i < step ? (
@@ -144,13 +149,13 @@ export default function OnboardingPage() {
                     i + 1
                   )}
                 </div>
-                <span className={`text-xs font-medium hidden sm:block ${i === step ? 'text-navy-900' : 'text-navy-800'} dark:text-navy-100`}>
+                <span className={`text-xs font-medium hidden sm:block ${i === step ? 'text-navy-900 dark:text-white' : 'text-navy-600 dark:text-navy-300'}`}>
                   {label}
                 </span>
               </div>
             ))}
           </div>
-          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div className="w-full h-1.5 bg-gray-100 dark:bg-navy-700 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-gold-500 to-gold-400 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${(step / (STEPS.length - 1)) * 100}%` }}
@@ -201,20 +206,22 @@ export default function OnboardingPage() {
 
 function StepWelcome({ onNext }: { onNext: () => void }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12 text-center">
-      <div className="w-20 h-20 rounded-2xl bg-gold-500 flex items-center justify-center text-white font-black text-3xl tracking-tighter mx-auto mb-8 shadow-gold-glow">
-        Ix
+    <div className="bg-white dark:bg-navy-800 rounded-xl shadow-sm border border-gray-200 dark:border-navy-700 p-8 sm:p-12">
+      <div className="text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gold-500 flex items-center justify-center text-white font-black text-3xl tracking-tighter mx-auto mb-8 shadow-gold-glow">
+          Ix
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 dark:text-white mb-4 tracking-tight">
+          Bienvenido/a a <span className="text-gold-600">Inmoxil</span>
+        </h1>
+        <p className="text-navy-600 dark:text-navy-300 text-lg max-w-md mx-auto mb-10 leading-relaxed">
+          Configurá tu inmobiliaria en menos de 2 minutos. Personalizá tu marca,
+          elegí tu plan y empezá a generar propiedades profesionales.
+        </p>
+        <button onClick={onNext} className="btn-gold text-base px-10 py-4">
+          Comenzar configuración
+        </button>
       </div>
-      <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4 tracking-tight dark:text-white">
-        Bienvenido/a a <span className="text-gold-600">Inmoxil</span>
-      </h1>
-      <p className="text-navy-900 text-lg max-w-md mx-auto mb-10 leading-relaxed dark:text-navy-300">
-        Configurá tu inmobiliaria en menos de 2 minutos. Personalizá tu marca,
-        elegí tu plan y empezá a generar propiedades profesionales.
-      </p>
-      <button onClick={onNext} className="btn-gold text-base px-10 py-4">
-        Comenzar configuración
-      </button>
     </div>
   )
 }
@@ -231,16 +238,16 @@ function StepCompany({
   onBack: () => void
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12">
+    <div className="bg-white dark:bg-navy-800 rounded-xl shadow-sm border border-gray-200 dark:border-navy-700 p-8 sm:p-12">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-10">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-white font-black text-2xl mx-auto mb-6 shadow-lg shadow-gold-500/20">
             Ix
           </div>
-          <h2 className="text-3xl font-bold text-navy-900 mb-3 tracking-tight dark:text-white">
+          <h2 className="text-3xl font-bold text-navy-900 dark:text-white mb-3 tracking-tight">
             ¿Cómo se llama tu <span className="text-gold-600">inmobiliaria</span>?
           </h2>
-          <p className="text-navy-900 text-base leading-relaxed dark:text-navy-300">
+          <p className="text-navy-600 dark:text-navy-300 text-base leading-relaxed">
             Este nombre lo van a ver tus clientes en propiedades, publicaciones y más.
           </p>
         </div>
@@ -248,41 +255,41 @@ function StepCompany({
         <div className="space-y-6">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg className="w-5 h-5 text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <svg className="w-5 h-5 text-navy-400 dark:text-navy-300" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
               </svg>
             </div>
             <input
               type="text"
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-navy-200 bg-white text-navy-900 font-medium placeholder:text-navy-300 focus:outline-none focus:border-gold-500 focus:ring-4 focus:ring-gold-500/10 transition-all duration-200 dark:bg-navy-800 dark:text-white"
+              className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-gray-200 dark:border-navy-600 bg-gray-50 dark:bg-navy-700 text-navy-900 dark:text-white font-medium placeholder:text-navy-400 dark:placeholder:text-navy-500 focus:outline-none focus:border-gold-500 focus:ring-4 focus:ring-gold-500/10 transition-all duration-200"
               placeholder="Ej: Inmobiliaria del Sol"
               value={name}
               onChange={(e) => onChange(e.target.value)}
             />
           </div>
 
-          <div className="bg-gradient-to-br from-navy-50 to-white rounded-2xl border border-navy-100 p-6 transition-all duration-300">
+          <div className="bg-gray-50 dark:bg-navy-700 rounded-2xl border border-gray-200 dark:border-navy-600 p-6 transition-all duration-300">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <p className="text-xs font-semibold text-navy-800 uppercase tracking-wider dark:text-navy-400">
+              <p className="text-xs font-semibold text-navy-600 dark:text-navy-300 uppercase tracking-wider">
                 Vista previa en el dashboard
               </p>
             </div>
-            <div className="bg-white rounded-xl border border-navy-100 shadow-sm">
+            <div className="bg-white dark:bg-navy-800 rounded-xl border border-gray-200 dark:border-navy-600 shadow-sm">
               <div className="flex items-center gap-3 px-4 py-3">
                 <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-white font-black text-xs shadow-sm">
                   Ix
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-navy-900 text-sm truncate dark:text-white">{name.trim() || 'Tu inmobiliaria'}</p>
-                  <p className="text-[10px] text-navy-800 dark:text-navy-400">Plataforma Inmoxil</p>
+                  <p className="font-bold text-navy-900 dark:text-white text-sm truncate">{name.trim() || 'Tu inmobiliaria'}</p>
+                  <p className="text-[10px] text-navy-500 dark:text-navy-400">Plataforma Inmoxil</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button onClick={onBack} className="flex-1 px-6 py-3 rounded-xl border-2 border-navy-300 text-navy-800 font-semibold text-sm hover:border-navy-400 hover:bg-navy-50 dark:hover:bg-navy-800 transition-all duration-200 active:scale-[0.98] dark:text-navy-100">
+            <button onClick={onBack} className="flex-1 px-6 py-3 rounded-xl border-2 border-gray-300 dark:border-navy-600 text-navy-800 dark:text-navy-200 font-semibold text-sm hover:border-navy-400 hover:bg-gray-100 dark:hover:bg-navy-700 transition-all duration-200 active:scale-[0.98]">
               <svg className="w-4 h-4 mr-1.5 inline" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
@@ -315,11 +322,11 @@ function StepBrand({
   onBack: () => void
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12">
-      <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center dark:text-white">
+    <div className="bg-white dark:bg-navy-800 rounded-xl shadow-sm border border-gray-200 dark:border-navy-700 p-8 sm:p-12">
+      <h2 className="text-2xl font-bold text-navy-900 dark:text-white mb-2 text-center">
         Elegí tu marca
       </h2>
-      <p className="text-navy-900 text-center mb-8 dark:text-navy-300">
+      <p className="text-navy-600 dark:text-navy-300 text-center mb-8">
         Personalizá los colores de tu inmobiliaria.
       </p>
       <div className="grid sm:grid-cols-2 gap-8 items-start">
@@ -347,7 +354,7 @@ function StepBrand({
                     key={c}
                     onClick={() => onChange({ ...colors, [role]: c })}
                     className={`w-7 h-7 rounded-full border-2 transition-all ${
-                      colors[role] === c ? 'border-navy-900 scale-110' : 'border-transparent'
+                      colors[role] === c ? 'border-navy-900 dark:border-white scale-110' : 'border-transparent'
                     }`}
                     style={{ backgroundColor: c }}
                   />
@@ -429,11 +436,11 @@ function StepPlan({
   saving: boolean
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12">
-      <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center dark:text-white">
+    <div className="bg-white dark:bg-navy-800 rounded-xl shadow-sm border border-gray-200 dark:border-navy-700 p-8 sm:p-12">
+      <h2 className="text-2xl font-bold text-navy-900 dark:text-white mb-2 text-center">
         Elegí tu plan
       </h2>
-      <p className="text-navy-900 text-center mb-8 dark:text-navy-300">
+      <p className="text-navy-600 dark:text-navy-300 text-center mb-8">
         Empezá gratis con el plan Inicial. Cambiá cuando necesites más.
       </p>
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
@@ -444,7 +451,7 @@ function StepPlan({
             className={`card p-6 text-left transition-all duration-200 ${
               selected === plan.id
                 ? 'border-gold-400 ring-2 ring-gold-400/30 -translate-y-1'
-                : 'hover:border-gray-300'
+                : 'hover:border-gray-300 dark:hover:border-navy-500'
             } ${plan.id === 'pro' ? 'relative' : ''}`}
           >
             {plan.id === 'pro' && (
@@ -452,16 +459,16 @@ function StepPlan({
                 Popular
               </span>
             )}
-            <p className="text-xs font-semibold text-navy-800 uppercase tracking-wider mb-1 dark:text-navy-400">
+            <p className="text-xs font-semibold text-navy-600 dark:text-navy-300 uppercase tracking-wider mb-1">
               {plan.name}
             </p>
             <p className="price-tag mb-4">
               {plan.price}
-              <span className="text-sm font-normal text-navy-800 dark:text-navy-400">/mes</span>
+              <span className="text-sm font-normal text-navy-500 dark:text-navy-400">/mes</span>
             </p>
             <ul className="space-y-2">
               {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-navy-900 dark:text-navy-300">
+                <li key={f} className="flex items-center gap-2 text-sm text-navy-600 dark:text-navy-300">
                   <svg className="w-4 h-4 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
@@ -511,7 +518,7 @@ function StepDone() {
   }, [])
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12 text-center relative overflow-hidden">
+    <div className="text-center relative overflow-hidden py-8">
       <div className="absolute inset-0 pointer-events-none">
         {particles.map((p, i) => (
           <div
@@ -540,10 +547,10 @@ function StepDone() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
         </svg>
       </div>
-      <h2 className="text-3xl font-bold text-navy-900 mb-3 relative z-10 dark:text-white">
+      <h2 className="text-3xl font-bold text-navy-900 dark:text-white mb-3 relative z-10">
         ¡Todo listo!
       </h2>
-      <p className="text-navy-900 mb-8 relative z-10 dark:text-navy-300">
+      <p className="text-navy-600 dark:text-navy-300 mb-8 relative z-10">
         Tu inmobiliaria está configurada. ¡Empezá a crear propiedades profesionales!
       </p>
       <button
