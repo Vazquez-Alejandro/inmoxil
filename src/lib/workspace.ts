@@ -28,7 +28,14 @@ export async function createWorkspace(name: string, slug: string, ownerId: strin
 }
 
 export async function updateWorkspaceBrand(workspaceId: string, brand: Record<string, any>): Promise<WorkspaceRow> {
-  const keys = Object.keys(brand).filter(k => brand[k] !== undefined)
+  const ALLOWED_COLUMNS = new Set([
+    'name', 'logo_url', 'primary_color', 'secondary_color', 'accent_color',
+    'public_catalog_enabled', 'pub_catalog_slug', 'contact_email', 'contact_phone',
+    'contact_address', 'social_instagram', 'social_facebook', 'social_twitter',
+    'social_linkedin', 'whatsapp_number', 'timezone',
+  ])
+
+  const keys = Object.keys(brand).filter(k => brand[k] !== undefined && ALLOWED_COLUMNS.has(k))
   if (keys.length === 0) return (await getWorkspace(workspaceId)) as WorkspaceRow
 
   const data: Record<string, any> = {}

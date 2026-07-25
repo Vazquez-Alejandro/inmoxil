@@ -9,8 +9,14 @@ export async function GET(_request: NextRequest, { params }: { params: { path: s
   try {
     const filename = params.path.join('/')
     const filepath = path.join(UPLOAD_DIR, filename)
+    const resolvedUploadDir = path.resolve(UPLOAD_DIR)
+    const resolvedFilepath = path.resolve(filepath)
 
-    if (!existsSync(filepath)) {
+    if (!resolvedFilepath.startsWith(resolvedUploadDir + '/') && resolvedFilepath !== resolvedUploadDir) {
+      return new NextResponse('Forbidden', { status: 403 })
+    }
+
+    if (!existsSync(resolvedFilepath)) {
       return new NextResponse('Not found', { status: 404 })
     }
 

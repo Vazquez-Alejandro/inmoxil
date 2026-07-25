@@ -12,8 +12,15 @@ async function checkMembership(userId: string, workspaceId: string) {
 
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const user = await requireAuth()
+    if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+
     const property = await queryOne('SELECT * FROM properties WHERE id=$1', [params.id])
     if (!property) return NextResponse.json({ error: 'Propiedad no encontrada' }, { status: 404 })
+
+    const membership = await checkMembership(user.id, property.workspace_id)
+    if (!membership) return NextResponse.json({ error: 'No tenés acceso' }, { status: 403 })
+
     return NextResponse.json({ property })
   } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

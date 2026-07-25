@@ -1,16 +1,6 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db'
-import { cookies } from 'next/headers'
-
-function getOwnerFromCookie() {
-  const token = cookies().get('owner_token')?.value
-  if (!token) return null
-  try {
-    const data = JSON.parse(Buffer.from(token, 'base64').toString())
-    if (data.type !== 'owner') return null
-    return data
-  } catch { return null }
-}
+import { getOwnerFromCookie } from '@/lib/owner-auth'
 
 export async function GET() {
   try {

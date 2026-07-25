@@ -32,18 +32,20 @@ export async function PATCH(request: NextRequest) {
     const { workspaceId, name, plan, onboardingCompleted } = await request.json()
     if (!workspaceId) return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
 
-    const { error } = await requireWorkspaceAuth(workspaceId)
+    const { user, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
+
+    const isAdmin = user?.role === 'owner' || user?.role === 'admin' || user?.role_in_workspace === 'owner' || user?.role_in_workspace === 'admin'
 
     const updates: string[] = []
     const values: any[] = []
     let idx = 1
 
-    if (name) {
+    if (name && isAdmin) {
       updates.push(`name = $${idx++}`)
       values.push(name)
     }
-    if (plan) {
+    if (plan && isAdmin) {
       updates.push(`plan = $${idx++}`)
       values.push(plan)
     }

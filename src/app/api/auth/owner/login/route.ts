@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { compare } from 'bcryptjs'
 import { queryOne } from '@/lib/db'
+import { createOwnerToken } from '@/lib/owner-auth'
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
     const valid = await compare(password, owner.password_hash)
     if (!valid) return NextResponse.json({ error: 'Credenciales inválidas' }, { status: 401 })
 
-    const token = Buffer.from(JSON.stringify({ id: owner.id, email: owner.email, name: owner.name, workspaceId: owner.workspace_id, type: 'owner' })).toString('base64')
+    const token = createOwnerToken({ id: owner.id, email: owner.email, name: owner.name, workspaceId: owner.workspace_id })
 
     const response = NextResponse.json({ success: true, owner: { id: owner.id, name: owner.name, email: owner.email } })
     response.cookies.set('owner_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7 })
