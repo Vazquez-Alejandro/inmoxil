@@ -16,12 +16,17 @@ export async function POST(request: NextRequest) {
 
     const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
     const workspace = await createWorkspace(name, cleanSlug, userId)
-    const customer = await createCustomer(email, name)
-    await query('UPDATE workspaces SET stripe_customer_id=$1 WHERE id=$2', [customer.id, workspace.id])
+
+    try {
+      const customer = await createCustomer(email, name)
+      if (customer.id !== 'mp_pending') {
+        await query('UPDATE workspaces SET stripe_customer_id=$1 WHERE id=$2', [customer.id, workspace.id])
+      }
+    } catch {}
 
     try { await sendWelcomeEmail(email, name) } catch {}
 
-    return NextResponse.json({ success: true, workspace: { ...workspace, stripe_customer_id: customer.id } })
+    return NextResponse.json({ success: true, workspace })
   } catch {
     return NextResponse.json({ error: 'Error' }, { status: 500 })
   }

@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { queryOne } from '@/lib/db'
 import { requireAuth, requireWorkspaceAuth } from '@/lib/api-auth'
-import { stripe } from '@/lib/stripe'
+import { stripe, isStripeConfigured } from '@/lib/stripe'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isStripeConfigured()) {
+      return NextResponse.json({ error: 'Stripe no está configurado. Usá MercadoPago para pagos.' }, { status: 503 })
+    }
+
     const user = await requireAuth()
     if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
     const body = await request.json()

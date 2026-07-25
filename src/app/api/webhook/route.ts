@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { constructWebhookEvent, PLANS } from '@/lib/stripe'
+import { constructWebhookEvent, isStripeConfigured, PLANS } from '@/lib/stripe'
 import { query, queryOne } from '@/lib/db'
 import { sendPaymentConfirmation } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isStripeConfigured()) {
+      return NextResponse.json({ error: 'Stripe no está configurado' }, { status: 503 })
+    }
+
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')!
 

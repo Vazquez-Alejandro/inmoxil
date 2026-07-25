@@ -36,28 +36,34 @@
 - [x] Expensas (calculadora, plantillas, CRUD)
 - [x] Multi-idioma (ES/EN/PT con next-intl)
 - [x] Matching IA mejorado (fuzzy matching, barrios preferidos, amenities, nivel de confianza)
+- [x] Seguridad: path traversal, owner auth HMAC, SQL injection, auth checks
+- [x] Stripe opcional (funciona sin STRIPE_SECRET_KEY configurado)
+- [x] MercadoPago integration (preferencias, webhooks, pagos)
+- [x] Modo claro mejorado (loading, error, owner layout)
+- [x] Sidebar reorganizada (secciones más intuitivas)
+- [x] Limpieza de dependencias (@stripe/stripe-js removido, puppeteer en deps)
 
 ## Pendiente — REQUIERE ACCION DEL USUARIO
 
 ### Base de datos (Neon)
-- [ ] Ejecutar migrations en Neon: `supabase/migrations/001_initial_schema.sql`, `002_trial_ends_at.sql`, `003_complete_schema.sql`
-- [ ] Crear tablas nuevas: `expensas`, `expensa_templates`
+- [ ] Ejecutar migrations en Neon: `supabase/migrations/001_initial_schema.sql`, `002_trial_ends_at.sql`, `003_complete_schema.sql`, `004_expensas_tables.sql`, `005_onboarding_completed.sql`
 - [ ] Configurar `DATABASE_URL` en Vercel
 
-### Stripe (pagos)
-- [ ] Configurar webhook en Stripe Dashboard → `https://inmoxil.vercel.app/api/webhooks/stripe`
-- [ ] Agregar `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, price IDs a Vercel
+### MercadoPago (pagos principal)
+- [ ] Configurar webhook en MercadoPago → `https://inmoxil.vercel.app/api/webhooks/mercadopago`
+- [ ] Agregar `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` a Vercel
 
 ### Env vars en Vercel
-- [ ] `NEXTAUTH_SECRET`
-- [ ] `NEXTAUTH_URL`
+- [ ] `NEXTAUTH_SECRET` (generar secreto aleatorio)
+- [ ] `NEXTAUTH_URL` (https://inmoxil.vercel.app)
+- [ ] `OWNER_TOKEN_SECRET` (generar secreto aleatorio)
 - [ ] `APIFY_TOKEN`
-- [ ] `SCRAPINGBEE_API_KEY`
 - [ ] `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
 - [ ] `CHROME_PATH`
 - [ ] `CRON_SECRET`
 - [ ] `RESEND_API_KEY`
-- [ ] `NEXT_PUBLIC_APP_URL`
+- [ ] `NEXT_PUBLIC_APP_URL` (https://inmoxil.vercel.app)
+- [ ] `TELEGRAM_NOTIFIER_URL`
 
 ### Scraping
 - [ ] Verificar scraping de Argenprop (reportado con issues en TEST_PLAN)

@@ -1,4 +1,4 @@
-import { query, queryOne, insertOne, updateOne } from './db'
+import { query, queryOne, insertOne } from './db'
 
 type WorkspaceRow = {
   id: string; name: string; slug: string; logo_url: string | null

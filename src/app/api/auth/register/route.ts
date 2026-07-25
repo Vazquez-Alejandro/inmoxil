@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { queryOne, insertOne, query } from '@/lib/db'
-import { createCustomer } from '@/lib/stripe'
+import { createCustomer, isStripeConfigured } from '@/lib/stripe'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {

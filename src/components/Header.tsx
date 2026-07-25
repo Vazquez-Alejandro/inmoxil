@@ -53,9 +53,9 @@ export default function Header({ title, subtitle, action }: { title: string; sub
             </div>
             <div className="text-left hidden sm:block">
               <p className="text-sm font-medium text-navy-900 dark:text-white">{user?.name || 'Usuario'}</p>
-              <p className="text-xs text-navy-500 dark:text-navy-400 dark:text-navy-300 dark:text-navy-100">{user?.email}</p>
+              <p className="text-xs text-navy-500 dark:text-navy-400">{user?.email}</p>
             </div>
-            <svg className="w-4 h-4 text-navy-400 dark:text-navy-300 dark:text-navy-100" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <svg className="w-4 h-4 text-navy-400 dark:text-navy-300" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
           </button>

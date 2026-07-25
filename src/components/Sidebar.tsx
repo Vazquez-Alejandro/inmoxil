@@ -18,23 +18,25 @@ const navigation = [
   { name: 'MercadoLibre', href: '/dashboard/ml', icon: MLIcon, group: 'propiedades' },
   { name: 'Ads', href: '/dashboard/ads', icon: AdsIcon, group: 'propiedades' },
 
-  // Contratos y Cobranza
-  { name: 'Contratos', href: '/dashboard/contracts', icon: ContractIcon, group: 'contratos' },
-  { name: 'Comisiones', href: '/dashboard/commissions', icon: CashIcon, group: 'contratos' },
-  { name: 'Expensas', href: '/dashboard/expensas', icon: ExpensasIcon, group: 'contratos' },
-  { name: 'Cobranza', href: '/dashboard/pagos', icon: PaymentIcon, group: 'contratos' },
-  { name: 'Facturación', href: '/dashboard/billing', icon: BillingIcon, group: 'contratos' },
+  // Operaciones
+  { name: 'Contratos', href: '/dashboard/contracts', icon: ContractIcon, group: 'operaciones' },
+  { name: 'Cobranza', href: '/dashboard/pagos', icon: PaymentIcon, group: 'operaciones' },
+  { name: 'Comisiones', href: '/dashboard/commissions', icon: CashIcon, group: 'operaciones' },
+  { name: 'Expensas', href: '/dashboard/expensas', icon: ExpensasIcon, group: 'operaciones' },
+  { name: 'Facturación', href: '/dashboard/billing', icon: BillingIcon, group: 'operaciones' },
+  { name: 'Mantenimiento', href: '/dashboard/mantenimiento', icon: WrenchIcon, group: 'operaciones' },
 
   // Herramientas
   { name: 'Importar', href: '/dashboard/scrape', icon: ScrapingIcon, group: 'herramientas' },
   { name: 'Importación Auto.', href: '/dashboard/schedule', icon: ClockIcon, group: 'herramientas' },
-  { name: 'Mantenimiento', href: '/dashboard/mantenimiento', icon: WrenchIcon, group: 'herramientas' },
   { name: 'WhatsApp', href: '/dashboard/whatsapp', icon: ChatIcon, group: 'herramientas' },
   { name: 'Notificaciones', href: '/dashboard/notifications', icon: NotifIcon, group: 'herramientas' },
 
+  // Análisis
+  { name: 'Estadísticas', href: '/dashboard/analytics', icon: AnalyticsIcon, group: 'analisis' },
+  { name: 'Reportes', href: '/dashboard/reports', icon: ChartIcon, group: 'analisis' },
+
   // Configuración
-  { name: 'Estadísticas', href: '/dashboard/analytics', icon: AnalyticsIcon, group: 'config' },
-  { name: 'Reportes', href: '/dashboard/reports', icon: ChartIcon, group: 'config' },
   { name: 'Equipo', href: '/dashboard/team', icon: UsersIcon, group: 'config' },
   { name: 'Mi Marca', href: '/dashboard/brand', icon: BrandIcon, group: 'config' },
   { name: 'Guía', href: '/dashboard/guide', icon: GuideIcon, group: 'config' },
@@ -74,8 +76,9 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         {[
           { key: 'principal', label: null },
           { key: 'propiedades', label: 'Propiedades' },
-          { key: 'contratos', label: 'Contratos y Cobranza' },
+          { key: 'operaciones', label: 'Operaciones' },
           { key: 'herramientas', label: 'Herramientas' },
+          { key: 'analisis', label: 'Análisis' },
           { key: 'config', label: 'Configuración' },
         ].map((section) => {
           const items = navigation.filter(i => i.group === section.key)

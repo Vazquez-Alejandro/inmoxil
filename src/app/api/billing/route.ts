@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createCheckoutSession, createPortalSession, createCustomer, PLANS, type PlanType } from '@/lib/stripe'
+import { createCheckoutSession, createPortalSession, createCustomer, PLANS, isStripeConfigured, type PlanType } from '@/lib/stripe'
 import { getWorkspace } from '@/lib/workspace'
 import { query } from '@/lib/db'
 import { requireWorkspaceAuth } from '@/lib/api-auth'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isStripeConfigured()) {
+      return NextResponse.json({ error: 'Stripe no está configurado. Los pagos están deshabilitados.' }, { status: 503 })
+    }
+
     const { workspaceId, plan, action } = await request.json()
     if (!workspaceId || !action) return NextResponse.json({ error: 'Se requiere workspaceId y action' }, { status: 400 })
 
