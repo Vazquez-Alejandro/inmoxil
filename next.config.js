@@ -3,7 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: 'https://img.zonaprop.com' },
       { protocol: 'https', hostname: 'img.zonaprop.com' },
       { protocol: 'https', hostname: 'cdn.zonaprop.com' },
       { protocol: 'https', hostname: 'assets.argenprop.com' },
