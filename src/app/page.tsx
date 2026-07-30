@@ -35,7 +35,7 @@ const features = [
       </svg>
     ),
     title: 'Planes por Suscripción',
-    description: 'Planes mensuales sin sorpresas. Desde $29/mes con límites claros: propiedades, clientes, contratos y más.',
+    description: 'Planes mensuales sin sorpresas. Desde $15/mes con límites claros: propiedades, clientes, contratos y más.',
   },
   {
     icon: (

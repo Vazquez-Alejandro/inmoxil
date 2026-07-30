@@ -22,19 +22,19 @@ const PLANS = [
   {
     id: 'starter',
     name: 'Inicial',
-    price: '$29',
+    price: '$15',
     features: ['200 propiedades', 'Importación básica', '1 usuario', 'Soporte email'],
   },
   {
     id: 'pro',
     name: 'Profesional',
-    price: '$79',
+    price: '$39',
     features: ['1000 propiedades', 'Importación avanzada', '5 usuarios', 'Soporte prioritario', 'Marca personalizada'],
   },
   {
     id: 'enterprise',
     name: 'Empresarial',
-    price: '$199',
+    price: '$99',
     features: ['Ilimitado', 'Importación multi-portal', 'Usuarios ilimitados', 'Soporte 24/7', 'Acceso desarrolladores', 'Integración MLS'],
   },
 ]

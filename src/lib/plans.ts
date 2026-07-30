@@ -33,7 +33,7 @@ export const PLANS: Record<PlanId, PlanConfig> = {
     name: 'Starter',
     nameEs: 'Básico',
     description: 'Para inmobiliarias chicas que están empezando',
-    price: 29,
+    price: 15,
     limits: {
       properties: 50,
       pipelineLeads: 50,
@@ -59,7 +59,7 @@ export const PLANS: Record<PlanId, PlanConfig> = {
     name: 'Professional',
     nameEs: 'Profesional',
     description: 'Para inmobiliarias en crecimiento',
-    price: 79,
+    price: 39,
     limits: {
       properties: 250,
       pipelineLeads: 250,
@@ -85,7 +85,7 @@ export const PLANS: Record<PlanId, PlanConfig> = {
     name: 'Enterprise',
     nameEs: 'Empresarial',
     description: 'Para grandes inmobiliarias y grupos',
-    price: 199,
+    price: 99,
     limits: {
       properties: -1,
       pipelineLeads: -1,
