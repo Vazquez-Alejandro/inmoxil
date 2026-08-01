@@ -151,15 +151,7 @@ Mensajes de seguimiento programados para no perder leads.
 - **Prevención de duplicados** — no envía el mismo follow-up dos veces
 - **Estadísticas** — cuántos follow-ups enviados, por regla, por prioridad
 
-### 18. 📅 Calendario Inteligente de Visitas
-Gestión completa de visitas con confirmación por WhatsApp.
-- **Agendado de visitas** — crear visitas con fecha, hora y propiedad
-- **Confirmación por WhatsApp** — el cliente confirma/cancela respondiendo SI/NO
-- **Recordatorios 24h** — envío automático de recordatorios la víspera
-- **Vista de próximas** — visitas de los próximos 7 días
-- **Estadísticas** — visitas confirmadas, canceladas, pendientes
-
-### 19. 📝 Firma Digital
+### 18. 📝 Firma Digital
 Solicitá y gestioná firmas de contratos online.
 - **Solicitud de firma** — enviá link de firma al locador o locatario desde el detalle del contrato
 - **Página pública** — el firmante accede a `/firmar/[token]` con resumen del contrato

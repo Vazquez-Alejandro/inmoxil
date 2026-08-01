@@ -60,7 +60,7 @@ const features = [
 const plans = [
   {
     name: 'Básico',
-    price: 29,
+    price: 15,
     description: 'Para inmobiliarias que están empezando',
     features: ['50 propiedades', '50 clientes en pipeline', '10 contratos activos', 'Importación desde 2 portales', '3 plantillas de anuncios', '1 usuario', 'Soporte por email'],
     cta: 'Comenzar ahora',
@@ -68,7 +68,7 @@ const plans = [
   },
   {
     name: 'Profesional',
-    price: 79,
+    price: 39,
     description: 'Para inmobiliarias en crecimiento',
     features: ['250 propiedades', '250 clientes en pipeline', '50 contratos activos', 'Importación de todos los portales', '6 plantillas de anuncios', 'Hasta 5 usuarios', 'Scraping automático diario', 'Marca personalizada', 'Reportes avanzados', 'Soporte prioritario'],
     cta: 'Elegir plan',
@@ -76,7 +76,7 @@ const plans = [
   },
   {
     name: 'Empresarial',
-    price: 199,
+    price: 99,
     description: 'Para grandes inmobiliarias y grupos',
     features: ['Propiedades ilimitadas', 'Clientes ilimitados', 'Contratos ilimitados', 'Importación personalizada', 'Plantillas personalizadas', 'Usuarios ilimitados', 'Scraping en tiempo real', 'Marca completa + dominio', 'API y firma digital', 'Account manager dedicado', 'Disponibilidad 99.9%'],
     cta: 'Comenzar',

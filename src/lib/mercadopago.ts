@@ -1,8 +1,8 @@
 import { query, queryOne } from '@/lib/db'
 
 const MP_BASE_URL = 'https://api.mercadopago.com/v1'
-const MP_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN
-const MP_WEBHOOK_SECRET = process.env.MERCADOPAGO_WEBHOOK_SECRET
+const MP_TOKEN = process.env.MP_ACCESS_TOKEN
+const MP_WEBHOOK_SECRET = process.env.MP_WEBHOOK_SECRET
 
 export interface PaymentPreference {
   contractId: string

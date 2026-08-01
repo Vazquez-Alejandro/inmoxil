@@ -6,7 +6,7 @@ import {
 } from './email-templates'
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-const FROM = 'Inmoxil <onboarding@resend.dev>'
+const FROM = 'Inmoxil <onboarding@inmoxil.com>'
 const RESEND_ENDPOINT = 'https://api.resend.com/emails'
 
 async function sendEmail(to: string, subject: string, html: string) {

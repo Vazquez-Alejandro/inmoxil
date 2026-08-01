@@ -8,8 +8,8 @@ const CRON_SECRET = process.env.CRON_SECRET || 'inmoxil-cron-secret'
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = request.headers.get('authorization')
-    if (auth !== `Bearer ${CRON_SECRET}`) {
+    const secret = request.nextUrl.searchParams.get('secret')
+    if (secret !== CRON_SECRET) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 

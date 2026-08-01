@@ -6,7 +6,7 @@
   "regions": ["gru1"],
   "crons": [
     {
-      "path": "/api/cron/scrape",
+      "path": "/api/cron/scrape?secret=9f8e7d6c5b4a3210fedcba9876543210",
       "schedule": "0 9 * * *"
     }
   ],
