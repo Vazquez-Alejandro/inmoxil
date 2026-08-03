@@ -99,6 +99,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
 function generateReportHtml(data: any) {
   const s = data.stats
   return `
@@ -122,7 +131,7 @@ td{padding:8px 12px;border-bottom:1px solid #f1f5f9;}
 </style></head>
 <body>
 <div class="card">
-<h1>${data.workspaceName}</h1>
+<h1>${escapeHtml(data.workspaceName)}</h1>
 <p style="color:#64748b;margin:0;">${data.reportType} · ${data.date}</p>
 </div>
 <div class="card">
@@ -140,7 +149,7 @@ ${data.payments.length ? `
 <tr><th>Concepto</th><th>Monto</th><th>Estado</th><th>Fecha</th></tr>
 ${data.payments.map((p:any) => `
 <tr>
-<td>${p.concept || 'Alquiler'}</td>
+<td>${escapeHtml(p.concept || 'Alquiler')}</td>
 <td>${new Intl.NumberFormat('es-AR',{style:'currency',currency:p.currency||'ARS',maximumFractionDigits:0}).format(p.amount)}</td>
 <td><span class="badge ${p.status==='paid'?'bg-green':'bg-yellow'}">${p.status==='paid'?'Pagado':'Pendiente'}</span></td>
 <td>${p.date ? new Date(p.date).toLocaleDateString('es-AR') : '-'}</td>

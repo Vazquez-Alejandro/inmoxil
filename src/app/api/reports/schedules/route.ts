@@ -65,6 +65,12 @@ export async function DELETE(request: NextRequest) {
     const { scheduleId } = body
     if (!scheduleId) return NextResponse.json({ error: 'Faltan datos' }, { status: 400 })
 
+    const schedule = await queryOne('SELECT * FROM report_schedules WHERE id=$1', [scheduleId])
+    if (!schedule) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+    const workspace = await queryOne('SELECT id FROM workspaces WHERE id=$1 AND user_id=$2', [schedule.workspace_id, user.id])
+    if (!workspace) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+
     await queryOne('DELETE FROM report_schedules WHERE id=$1', [scheduleId])
     return NextResponse.json({ success: true })
   } catch (err: any) {

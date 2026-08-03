@@ -4,7 +4,8 @@ import { scrapeUrls } from '@/lib/scrapingbee'
 import { createNotification } from '@/lib/notifications/db'
 import { upsertProperty } from '@/lib/properties'
 
-const CRON_SECRET = process.env.CRON_SECRET || 'inmoxil-cron-secret'
+const CRON_SECRET = process.env.CRON_SECRET
+if (!CRON_SECRET) throw new Error('CRON_SECRET environment variable is required')
 
 export async function GET(request: NextRequest) {
   try {

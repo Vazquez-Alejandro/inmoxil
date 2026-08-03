@@ -1,7 +1,8 @@
 import { createHmac, timingSafeEqual } from 'crypto'
 import { cookies } from 'next/headers'
 
-const SECRET = process.env.OWNER_TOKEN_SECRET || process.env.NEXTAUTH_SECRET || 'fallback-owner-token-secret'
+const SECRET = process.env.OWNER_TOKEN_SECRET || process.env.NEXTAUTH_SECRET
+if (!SECRET) throw new Error('OWNER_TOKEN_SECRET or NEXTAUTH_SECRET environment variable is required')
 
 type OwnerPayload = {
   id: string

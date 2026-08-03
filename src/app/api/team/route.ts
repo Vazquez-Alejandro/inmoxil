@@ -39,6 +39,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Ya existe un usuario con ese email' }, { status: 400 })
     }
 
+    function escapeHtml(str: string): string {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+    }
+
     const bcrypt = await import('bcryptjs')
     const tempPass = Math.random().toString(36).slice(-8)
     const hashed = await bcrypt.hash(tempPass, 10)
@@ -59,7 +68,7 @@ export async function POST(request: NextRequest) {
           from: 'Inmoxil <noreply@traceless.com.ar>',
           to: email,
           subject: 'Te invitaron a unirte a Inmoxil',
-          html: `<p>Hola ${name},</p><p>Te invitaron a unirte a <strong>${workspace.name || 'tu workspace'}</strong> en Inmoxil.</p><p>Tu acceso temporal:<br>Email: ${email}<br>Contraseña: <strong>${tempPass}</strong></p><p><a href="https://inmoxil.vercel.app/login">Iniciar sesión</a></p><p>Cambiá tu contraseña después de entrar.</p>`,
+          html: `<p>Hola ${escapeHtml(name)},</p><p>Te invitaron a unirte a <strong>${escapeHtml(workspace.name || 'tu workspace')}</strong> en Inmoxil.</p><p>Tu acceso temporal:<br>Email: ${escapeHtml(email)}<br>Contraseña: <strong>${escapeHtml(tempPass)}</strong></p><p><a href="https://inmoxil.vercel.app/login">Iniciar sesión</a></p><p>Cambiá tu contraseña después de entrar.</p>`,
         })
       }
     } catch {}

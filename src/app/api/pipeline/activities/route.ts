@@ -7,6 +7,15 @@ import { queryOne } from '@/lib/db'
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -49,14 +58,14 @@ async function sendVisitEmail(lead: any, activity: any, workspaceName: string) {
           </div>
           <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px">
             <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6">
-              Se registró una nueva visita para <strong>${lead.fullName}</strong> en <strong>${workspaceName}</strong>.
+              Se registró una nueva visita para <strong>${escapeHtml(lead.fullName)}</strong> en <strong>${escapeHtml(workspaceName)}</strong>.
             </p>
             <table style="width:100%;border-collapse:collapse">
-              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Cliente</td><td style="padding:8px 0;font-size:13px;font-weight:600">${lead.fullName}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Teléfono</td><td style="padding:8px 0;font-size:13px">${lead.phone}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Fecha/Hora</td><td style="padding:8px 0;font-size:13px;font-weight:600">${visitDate}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Descripción</td><td style="padding:8px 0;font-size:13px">${activity.description}</td></tr>
-              ${activity.outcome ? `<tr><td style="padding:8px 0;color:#64748b;font-size:13px">Resultado</td><td style="padding:8px 0;font-size:13px">${activity.outcome}</td></tr>` : ''}
+              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Cliente</td><td style="padding:8px 0;font-size:13px;font-weight:600">${escapeHtml(lead.fullName)}</td></tr>
+              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Teléfono</td><td style="padding:8px 0;font-size:13px">${escapeHtml(lead.phone)}</td></tr>
+              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Fecha/Hora</td><td style="padding:8px 0;font-size:13px;font-weight:600">${escapeHtml(visitDate)}</td></tr>
+              <tr><td style="padding:8px 0;color:#64748b;font-size:13px">Descripción</td><td style="padding:8px 0;font-size:13px">${escapeHtml(activity.description)}</td></tr>
+              ${activity.outcome ? `<tr><td style="padding:8px 0;color:#64748b;font-size:13px">Resultado</td><td style="padding:8px 0;font-size:13px">${escapeHtml(activity.outcome)}</td></tr>` : ''}
             </table>
           </div>
           <p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:24px">Inmoxil — Plataforma SaaS para Inmobiliarias</p>
