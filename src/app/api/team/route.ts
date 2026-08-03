@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       if (mod?.Resend && process.env.RESEND_API_KEY) {
         const resend = new mod.Resend(process.env.RESEND_API_KEY)
         await resend.emails.send({
-          from: 'Inmoxil <onboarding@resend.dev>',
+          from: 'Inmoxil <noreply@traceless.com.ar>',
           to: email,
           subject: 'Te invitaron a unirte a Inmoxil',
           html: `<p>Hola ${name},</p><p>Te invitaron a unirte a <strong>${workspace.name || 'tu workspace'}</strong> en Inmoxil.</p><p>Tu acceso temporal:<br>Email: ${email}<br>Contraseña: <strong>${tempPass}</strong></p><p><a href="https://inmoxil.vercel.app/login">Iniciar sesión</a></p><p>Cambiá tu contraseña después de entrar.</p>`,

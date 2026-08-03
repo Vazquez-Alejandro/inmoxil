@@ -39,7 +39,7 @@ async function sendVisitEmail(lead: any, activity: any, workspaceName: string) {
     const mod = await import('resend')
     const resend = new mod.Resend(RESEND_API_KEY)
     await resend.emails.send({
-      from: 'Inmoxil <notificaciones@inmoxil.com>',
+      from: 'Inmoxil <noreply@traceless.com.ar>',
       to: ['alejandrovazquez.dev@gmail.com'],
       subject: `📅 Visita agendada - ${lead.fullName}`,
       html: `

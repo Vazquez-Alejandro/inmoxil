@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       const recipient = email || ws?.contact_email || user.email
 
       await resend.emails.send({
-        from: 'Inmoxil <reportes@inmoxil.com>',
+        from: 'Inmoxil <noreply@traceless.com.ar>',
         to: [recipient],
         subject: `${reportData.reportType} - ${reportData.workspaceName} - ${reportData.date}`,
         html,
