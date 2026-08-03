@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { queryOne } from '@/lib/db'
 
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;')
+}
+
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const property = await queryOne('SELECT * FROM properties WHERE id=$1', [params.id])
@@ -19,9 +23,9 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${property.title || 'Propiedad'} | Inmoxil</title>
-  <meta property="og:title" content="${property.title || 'Propiedad en venta/alquiler'}">
-  <meta property="og:description" content="${(property.description || '').slice(0, 200)} - ${price}">
+  <title>${escapeHtml(property.title || 'Propiedad')} | Inmoxil</title>
+  <meta property="og:title" content="${escapeHtml(property.title || 'Propiedad en venta/alquiler')}">
+  <meta property="og:description" content="${escapeHtml((property.description || '').slice(0, 200))} - ${escapeHtml(price)}">
   <meta property="og:image" content="${photos[0] || ''}">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">

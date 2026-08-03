@@ -123,6 +123,11 @@ function generateResponse(
 
 export async function POST(request: NextRequest) {
   try {
+    const verifyToken = request.headers.get('x-webhook-secret') || new URL(request.url).searchParams.get('secret')
+    if (verifyToken !== process.env.WHATSAPP_WEBHOOK_SECRET) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const body = await request.json()
     const { workspaceId, phone, message, propertyId } = body
 

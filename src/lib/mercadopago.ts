@@ -113,8 +113,7 @@ export async function processWebhookNotification(body: any, headers: any): Promi
 
   await query(
     `UPDATE payments SET status=$1, paid_at=$2, payment_method=$3, notes=$4
-     WHERE contract_id=$5 AND status='pending'
-     ORDER BY created_at DESC LIMIT 1`,
+     WHERE id=(SELECT id FROM payments WHERE contract_id=$5 AND status='pending' ORDER BY created_at DESC LIMIT 1)`,
     [
       dbStatus,
       mpStatus === 'approved' ? new Date().toISOString() : null,
