@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query, queryOne } from '@/lib/db'
+import { requireWorkspaceAuth } from '@/lib/api-auth'
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,6 +10,9 @@ export async function POST(request: NextRequest) {
     if (!workspaceId) {
       return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
     }
+
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
 
     // Find visits happening in the next 24-48 hours that haven't been reminded
     const visits = await query(
@@ -97,6 +101,9 @@ export async function GET(request: NextRequest) {
     if (!workspaceId) {
       return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
     }
+
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
 
     // Get upcoming visits needing reminders
     const upcomingVisits = await query(

@@ -26,7 +26,7 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
   <title>${escapeHtml(property.title || 'Propiedad')} | Inmoxil</title>
   <meta property="og:title" content="${escapeHtml(property.title || 'Propiedad en venta/alquiler')}">
   <meta property="og:description" content="${escapeHtml((property.description || '').slice(0, 200))} - ${escapeHtml(price)}">
-  <meta property="og:image" content="${photos[0] || ''}">
+  <meta property="og:image" content="${escapeHtml(photos[0] || '')}">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -80,14 +80,14 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
   </div>
   <div class="content">
     <div class="price">${price}</div>
-    <div class="address">${[property.address, property.neighborhood, property.city].filter(Boolean).join(', ') || 'Dirección no disponible'}</div>
+    <div class="address">${[property.address, property.neighborhood, property.city].filter(Boolean).map(escapeHtml).join(', ') || 'Dirección no disponible'}</div>
     <div class="features">
       ${property.beds ? '<div class="feature"><div class="value">'+property.beds+'</div><div class="label">Ambientes</div></div>' : ''}
       ${property.baths ? '<div class="feature"><div class="value">'+property.baths+'</div><div class="label">Baños</div></div>' : ''}
       ${property.sqm ? '<div class="feature"><div class="value">'+property.sqm+'</div><div class="label">m²</div></div>' : ''}
-      ${property.property_type ? '<div class="feature"><div class="value" style="font-size:14px;text-transform:capitalize">'+property.property_type+'</div><div class="label">Tipo</div></div>' : ''}
+      ${property.property_type ? '<div class="feature"><div class="value" style="font-size:14px;text-transform:capitalize">'+escapeHtml(property.property_type)+'</div><div class="label">Tipo</div></div>' : ''}
     </div>
-    ${property.description ? '<div class="desc"><h3>Descripción</h3><p>'+property.description+'</p></div>' : ''}
+    ${property.description ? '<div class="desc"><h3>Descripción</h3><p>'+escapeHtml(property.description)+'</p></div>' : ''}
     ${hasCoords ? '<div style="margin-bottom:24px;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0"><iframe width="100%" height="250" style="border:0" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox='+(parseFloat(property.lng)-0.01)+','+(parseFloat(property.lat)-0.01)+','+(parseFloat(property.lng)+0.01)+','+(parseFloat(property.lat)+0.01)+'&amp;layer=mapnik&amp;marker='+property.lat+','+property.lng+'"></iframe></div>' : ''}
     <a class="whatsapp" href="https://wa.me/?text=${encodeURIComponent('Hola, vi esta propiedad y me interesa:\n\n' + (property.title || '') + '\n' + price + '\n' + (property.address || '') + '\n\nPodés ver más info acá: https://inmoxil.vercel.app/p/' + params.id)}" target="_blank" rel="noopener">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
@@ -121,7 +121,7 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
   </div>
   <div class="footer">Publicado por Inmoxil © ${new Date().getFullYear()}</div>
   <script>
-    const propertyId = ${params.id};
+    const propertyId = ${JSON.stringify(params.id)};
     function toggleForm() {
       const form = document.getElementById('ticketForm');
       const btn = document.getElementById('reportBtn');

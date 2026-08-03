@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query, queryOne } from '@/lib/db'
+import { requireWorkspaceAuth } from '@/lib/api-auth'
 
 interface BotResponse {
   message: string
@@ -214,6 +215,9 @@ export async function GET(request: NextRequest) {
     if (!workspaceId) {
       return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
     }
+
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
 
     let property = null
     if (propertyId) {

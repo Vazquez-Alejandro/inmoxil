@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query, queryOne } from '@/lib/db'
+import { requireWorkspaceAuth } from '@/lib/api-auth'
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,6 +10,9 @@ export async function POST(request: NextRequest) {
     if (!workspaceId || !leadId || !propertyId || !date || !time) {
       return NextResponse.json({ error: 'Faltan datos requeridos' }, { status: 400 })
     }
+
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
 
     // Create visit
     const visit = await queryOne(
@@ -80,6 +84,9 @@ export async function GET(request: NextRequest) {
     if (!workspaceId) {
       return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
     }
+
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
 
     let queryStr = `
       SELECT pa.*, pl.full_name as lead_name, pl.phone as lead_phone,

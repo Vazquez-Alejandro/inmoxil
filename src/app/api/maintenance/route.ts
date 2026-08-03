@@ -43,6 +43,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'workspaceId, tenantName y description requeridos' }, { status: 400 })
     }
 
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
+
     const ticket = await queryOne(
       `INSERT INTO maintenance_tickets (workspace_id, property_id, tenant_name, tenant_phone, tenant_email, description, priority)
        VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,

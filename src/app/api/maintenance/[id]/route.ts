@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query, queryOne } from '@/lib/db'
+import { requireWorkspaceAuth } from '@/lib/api-auth'
 
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -9,6 +10,10 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
       [params.id]
     )
     if (!ticket) return NextResponse.json({ error: 'Ticket no encontrado' }, { status: 404 })
+
+    const { error } = await requireWorkspaceAuth(ticket.workspace_id)
+    if (error) return error
+
     return NextResponse.json({ ticket })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
@@ -17,6 +22,12 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const ticket = await queryOne('SELECT workspace_id FROM maintenance_tickets WHERE id=$1', [params.id])
+    if (!ticket) return NextResponse.json({ error: 'Ticket no encontrado' }, { status: 404 })
+
+    const { error } = await requireWorkspaceAuth(ticket.workspace_id)
+    if (error) return error
+
     const body = await request.json()
     const allowed = ['status', 'assigned_to', 'notes', 'priority', 'description']
     const sets: string[] = []
@@ -47,6 +58,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const ticket = await queryOne('SELECT workspace_id FROM maintenance_tickets WHERE id=$1', [params.id])
+    if (!ticket) return NextResponse.json({ error: 'Ticket no encontrado' }, { status: 404 })
+
+    const { error } = await requireWorkspaceAuth(ticket.workspace_id)
+    if (error) return error
+
     await query('DELETE FROM maintenance_tickets WHERE id=$1', [params.id])
     return NextResponse.json({ success: true })
   } catch (err: any) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query, queryOne } from '@/lib/db'
+import { requireWorkspaceAuth } from '@/lib/api-auth'
 
 interface FollowUpRule {
   daysInactive: number
@@ -41,6 +42,9 @@ export async function POST(request: NextRequest) {
     if (!workspaceId) {
       return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
     }
+
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
 
     // Get workspace info
     const workspace = await queryOne('SELECT * FROM workspaces WHERE id=$1', [workspaceId])
@@ -172,6 +176,9 @@ export async function GET(request: NextRequest) {
     if (!workspaceId) {
       return NextResponse.json({ error: 'workspaceId requerido' }, { status: 400 })
     }
+
+    const { error } = await requireWorkspaceAuth(workspaceId)
+    if (error) return error
 
     // Get follow-up stats
     const stats = await queryOne(
