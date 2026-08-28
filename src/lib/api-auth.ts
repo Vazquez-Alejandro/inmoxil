@@ -43,3 +43,19 @@ export async function requireAdmin() {
 
   return { user, error: null }
 }
+
+export async function requireWorkspaceOwner(workspaceId: string) {
+  const user = await requireAuth()
+  if (!user) return { owner: null, error: NextResponse.json({ error: 'No autenticado' }, { status: 401 }) }
+
+  const membership = await queryOne(
+    'SELECT role_in_workspace, role FROM users WHERE id = $1 AND workspace_id = $2',
+    [user.id, workspaceId]
+  )
+  const isOwner = membership && (membership.role_in_workspace === 'owner' || membership.role === 'owner')
+  if (!isOwner) {
+    return { owner: null, error: NextResponse.json({ error: 'Solo el dueño del workspace puede realizar esta acción' }, { status: 403 }) }
+  }
+
+  return { owner: user, error: null }
+}

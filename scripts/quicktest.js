@@ -1,5 +1,5 @@
 const cheerio = require('cheerio');
-const API_KEY = 'ZWDG32N1IUJHAK15ROIMSIK8ZYB86YUAQSJ6ZHB3G9FINACGFWL2BK1P6P2ECY5IRAJAPCFYIFE6FL6N';
+const API_KEY = process.env.SCRAPINGBEE_API_KEY || '';
 
 async function test(url, name) {
   console.log('---', name, '---');

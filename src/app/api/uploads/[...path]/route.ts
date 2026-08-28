@@ -24,12 +24,15 @@ export async function GET(_request: NextRequest, { params }: { params: { path: s
     const ext = filename.split('.').pop()?.toLowerCase()
     const mime: Record<string, string> = {
       jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
-      gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml',
+      gif: 'image/gif', webp: 'image/webp',
     }
+    const contentType = mime[ext || ''] || 'application/octet-stream'
 
     return new NextResponse(buffer, {
       headers: {
-        'Content-Type': mime[ext || ''] || 'application/octet-stream',
+        'Content-Type': contentType,
+        'X-Content-Type-Options': 'nosniff',
+        'Content-Disposition': contentType.startsWith('image/') ? 'inline' : 'attachment',
         'Cache-Control': 'public, max-age=86400',
       },
     })

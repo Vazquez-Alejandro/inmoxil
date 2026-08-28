@@ -55,8 +55,8 @@ export async function getSchedule(workspaceId: string, portal: string): Promise<
   return result ? mapSchedule(result) : null
 }
 
-export async function deleteSchedule(id: string): Promise<boolean> {
-  const result = await queryOne('DELETE FROM scrape_schedules WHERE id=$1 RETURNING id', [id])
+export async function deleteSchedule(id: string, workspaceId: string): Promise<boolean> {
+  const result = await queryOne('DELETE FROM scrape_schedules WHERE id=$1 AND workspace_id=$2 RETURNING id', [id, workspaceId])
   return !!result
 }
 

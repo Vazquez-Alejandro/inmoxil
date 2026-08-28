@@ -68,9 +68,15 @@ export async function GET(request: NextRequest) {
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
 
+    const contract = await queryOne(
+      'SELECT id FROM contracts WHERE id=$1 AND workspace_id=$2',
+      [contractId, workspaceId]
+    )
+    if (!contract) return NextResponse.json({ error: 'Contrato no encontrado' }, { status: 404 })
+
     const tokens = await query(
-      'SELECT id, email, token, last_access_at, created_at FROM tenant_access_tokens WHERE contract_id=$1 ORDER BY created_at DESC',
-      [contractId]
+      'SELECT id, email, token, last_access_at, created_at FROM tenant_access_tokens WHERE contract_id=$1 AND workspace_id=$2 ORDER BY created_at DESC',
+      [contractId, workspaceId]
     )
 
     return NextResponse.json({ tokens: tokens || [] })

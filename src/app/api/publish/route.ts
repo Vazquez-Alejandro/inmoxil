@@ -50,7 +50,7 @@ export async function DELETE(request: NextRequest) {
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
 
-    await deleteChannel(id)
+    await deleteChannel(id, workspaceId)
     return NextResponse.json({ success: true })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 })

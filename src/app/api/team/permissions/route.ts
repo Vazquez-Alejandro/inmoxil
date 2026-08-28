@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query, queryOne } from '@/lib/db'
-import { requireAuth, requireWorkspaceAuth } from '@/lib/api-auth'
+import { requireAuth, requireWorkspaceAuth, requireWorkspaceOwner } from '@/lib/api-auth'
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,6 +26,8 @@ export async function PUT(request: NextRequest) {
     if (!workspaceId) return NextResponse.json({ error: 'Falta workspaceId' }, { status: 400 })
     const wsId = workspaceId
     await requireWorkspaceAuth(wsId)
+    const { error: ownerError } = await requireWorkspaceOwner(wsId)
+    if (ownerError) return ownerError
     await query('DELETE FROM role_permissions WHERE workspace_id=$1 AND role=$2', [wsId, role])
     for (const perm of permissions) {
       await query('INSERT INTO role_permissions (workspace_id, role, permission) VALUES ($1, $2, $3)', [wsId, role, perm])

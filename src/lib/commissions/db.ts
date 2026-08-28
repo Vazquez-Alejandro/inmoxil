@@ -50,7 +50,7 @@ export async function getCommission(id: string): Promise<Commission | null> {
   return result ? mapRow(result) : null
 }
 
-export async function updateCommission(id: string, data: Partial<Commission>): Promise<Commission | null> {
+export async function updateCommission(id: string, data: Partial<Commission>, workspaceId: string): Promise<Commission | null> {
   const fields: string[] = []
   const values: any[] = []
   let idx = 1
@@ -62,13 +62,13 @@ export async function updateCommission(id: string, data: Partial<Commission>): P
   if (data.description !== undefined) { fields.push(`description=$${idx++}`); values.push(data.description) }
 
   if (!fields.length) return null
-  values.push(id)
-  const result = await queryOne(`UPDATE commissions SET ${fields.join(',')}, updated_at=NOW() WHERE id=$${idx} RETURNING *`, values)
+  values.push(id, workspaceId)
+  const result = await queryOne(`UPDATE commissions SET ${fields.join(',')}, updated_at=NOW() WHERE id=$${idx} AND workspace_id=$${idx + 1} RETURNING *`, values)
   return result ? mapRow(result) : null
 }
 
-export async function deleteCommission(id: string): Promise<boolean> {
-  const result = await queryOne('DELETE FROM commissions WHERE id=$1 RETURNING id', [id])
+export async function deleteCommission(id: string, workspaceId: string): Promise<boolean> {
+  const result = await queryOne('DELETE FROM commissions WHERE id=$1 AND workspace_id=$2 RETURNING id', [id, workspaceId])
   return !!result
 }
 

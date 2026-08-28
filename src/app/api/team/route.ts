@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireWorkspaceAuth } from '@/lib/api-auth'
+import { requireWorkspaceAuth, requireWorkspaceOwner } from '@/lib/api-auth'
 import { query } from '@/lib/db'
 
 export async function GET(request: NextRequest) {
@@ -33,6 +33,9 @@ export async function POST(request: NextRequest) {
 
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
+
+    const { error: ownerError } = await requireWorkspaceOwner(workspaceId)
+    if (ownerError) return ownerError
 
     const existing = await query('SELECT id FROM users WHERE email=$1', [email])
     if (existing?.length > 0) {
@@ -87,7 +90,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'workspaceId, userId y role requeridos' }, { status: 400 })
     }
 
-    const { workspace, error } = await requireWorkspaceAuth(workspaceId)
+    const { error } = await requireWorkspaceOwner(workspaceId)
     if (error) return error
 
     await query('UPDATE users SET role_in_workspace=$1 WHERE id=$2 AND workspace_id=$3', [role, userId, workspaceId])
@@ -104,7 +107,7 @@ export async function DELETE(request: NextRequest) {
     const userId = searchParams.get('userId')
     if (!workspaceId || !userId) return NextResponse.json({ error: 'workspaceId y userId requeridos' }, { status: 400 })
 
-    const { workspace, error } = await requireWorkspaceAuth(workspaceId)
+    const { error } = await requireWorkspaceOwner(workspaceId)
     if (error) return error
 
     await query('DELETE FROM users WHERE id=$1 AND workspace_id=$2', [userId, workspaceId])

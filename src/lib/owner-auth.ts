@@ -1,8 +1,11 @@
 import { createHmac, timingSafeEqual } from 'crypto'
 import { cookies } from 'next/headers'
 
-const SECRET = process.env.OWNER_TOKEN_SECRET || process.env.NEXTAUTH_SECRET
-if (!SECRET) throw new Error('OWNER_TOKEN_SECRET or NEXTAUTH_SECRET environment variable is required')
+function getSecret(): string {
+  const s = process.env.OWNER_TOKEN_SECRET || process.env.NEXTAUTH_SECRET
+  if (!s) throw new Error('OWNER_TOKEN_SECRET or NEXTAUTH_SECRET environment variable is required')
+  return s
+}
 
 type OwnerPayload = {
   id: string
@@ -13,7 +16,7 @@ type OwnerPayload = {
 }
 
 function sign(payload: string): string {
-  return createHmac('sha256', SECRET).update(payload).digest('hex')
+  return createHmac('sha256', getSecret()).update(payload).digest('hex')
 }
 
 export function createOwnerToken(data: Omit<OwnerPayload, 'type'>): string {

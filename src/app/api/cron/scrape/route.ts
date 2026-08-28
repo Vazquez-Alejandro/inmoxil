@@ -4,13 +4,16 @@ import { scrapeUrls } from '@/lib/scrapingbee'
 import { createNotification } from '@/lib/notifications/db'
 import { upsertProperty } from '@/lib/properties'
 
-const CRON_SECRET = process.env.CRON_SECRET
-if (!CRON_SECRET) throw new Error('CRON_SECRET environment variable is required')
+function getCronSecret(): string {
+  const s = process.env.CRON_SECRET
+  if (!s) throw new Error('CRON_SECRET environment variable is required')
+  return s
+}
 
 export async function GET(request: NextRequest) {
   try {
     const secret = request.nextUrl.searchParams.get('secret')
-    if (secret !== CRON_SECRET) {
+    if (secret !== getCronSecret()) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 

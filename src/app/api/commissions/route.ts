@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
 
-    const commission = await updateCommission(id, data)
+    const commission = await updateCommission(id, data, workspaceId)
     return NextResponse.json({ success: true, commission })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 })
@@ -66,7 +66,7 @@ export async function DELETE(request: NextRequest) {
     const { workspace, error } = await requireWorkspaceAuth(workspaceId)
     if (error) return error
 
-    await deleteCommission(id)
+    await deleteCommission(id, workspaceId)
     return NextResponse.json({ success: true })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 })

@@ -11,15 +11,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'path es requerido' }, { status: 400 })
     }
 
-    if (!filePath.startsWith('/tmp/inmoxil-ads/')) {
+    const rootDir = '/tmp/inmoxil-ads/'
+    const resolvedRoot = path.resolve(rootDir)
+    const resolvedPath = path.resolve(filePath)
+
+    if (resolvedPath !== resolvedRoot && !resolvedPath.startsWith(resolvedRoot + '/')) {
       return NextResponse.json({ error: 'Ruta no permitida' }, { status: 403 })
     }
 
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(resolvedPath)) {
       return NextResponse.json({ error: 'Imagen no encontrada' }, { status: 404 })
     }
 
-    const buffer = fs.readFileSync(filePath)
+    const buffer = fs.readFileSync(resolvedPath)
     return new NextResponse(buffer, {
       headers: {
         'Content-Type': 'image/png',

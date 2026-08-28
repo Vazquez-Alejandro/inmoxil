@@ -29,8 +29,8 @@ export async function getChannel(workspaceId: string, type: string): Promise<Pub
   return result ? mapChannel(result) : null
 }
 
-export async function deleteChannel(id: string): Promise<boolean> {
-  const result = await queryOne('DELETE FROM publish_channels WHERE id=$1 RETURNING id', [id])
+export async function deleteChannel(id: string, workspaceId: string): Promise<boolean> {
+  const result = await queryOne('DELETE FROM publish_channels WHERE id=$1 AND workspace_id=$2 RETURNING id', [id, workspaceId])
   return !!result
 }
 
